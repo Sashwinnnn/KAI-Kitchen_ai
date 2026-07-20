@@ -4,7 +4,7 @@ import { initDatabase, getDbConnection } from './database.js';
 import 'dotenv/config';
 
 const app = express();
-const PORT = 4000;
+const PORT = process.env.PORT || 4000;
 
 app.use(express.json({ limit: '12mb' }));
 app.use(express.static('public'));
@@ -12,7 +12,6 @@ app.use(express.static('public'));
 const apiKey = process.env.GEMINI_API_KEY || "";
 console.log(`🔑 Checking API Key: Starts with: ${apiKey.slice(0, 6)}...`);
 
-// Initialize Gemini Client
 const ai = new GoogleGenAI({ apiKey: apiKey });
 
 initDatabase().then(() => {
@@ -68,7 +67,7 @@ app.post('/api/pantry', async (req, res) => {
     }
 });
 
-// 📸 POST: Analyze image with Gemini
+// 📸 POST: Analyze image with Gemini (Food/Pantry Scan)
 app.post('/api/pantry/scan', async (req, res) => {
     const { image } = req.body;
     if (!image) {
@@ -77,7 +76,7 @@ app.post('/api/pantry/scan', async (req, res) => {
 
     try {
         const base64Data = image.replace(/^data:image\/\w+;base64,/, "");
-        console.log("🤖 Sending image to Gemini...");
+        console.log("🤖 Sending image to Gemini for food analysis...");
 
         const response = await ai.models.generateContent({
             model: 'gemini-3.5-flash',
@@ -94,28 +93,27 @@ app.post('/api/pantry/scan', async (req, res) => {
                 2. The approximate quantity or pack volume.
                 3. The expiration date. 
                 
-                CRITICAL INSTRUCTION: If no expiration date is physically printed or visible, estimate a highly realistic date counting forward from today's date (${new Date().toISOString().split('T')[0]}) using standard shelf-life guidelines.`
+                CRITICAL INSTRUCTION: If no expiration date is physically printed or visible, estimate a highly realistic date counting forward from today's date (${new Date().toISOString().split('T')[0]}). For example, milk expires in ~10 days, avocados in ~5 days, chicken in ~3 days.
+                
+                Return a JSON object with fields: name, quantity, expiry_date, storage (Fridge/Freezer/Pantry). Return as a SINGLE object, not an array.`,
             ],
             config: {
                 responseMimeType: "application/json",
                 responseSchema: {
-                    type: Type.ARRAY,
-                    items: {
-                        type: Type.OBJECT,
-                        properties: {
-                            name: { type: Type.STRING },
-                            quantity: { type: Type.STRING },
-                            expiry_date: { type: Type.STRING }
-                        },
-                        required: ["name", "quantity", "expiry_date"]
-                    }
+                    type: Type.OBJECT,
+                    properties: {
+                        name: { type: Type.STRING },
+                        quantity: { type: Type.STRING },
+                        expiry_date: { type: Type.STRING },
+                        storage: { type: Type.STRING }
+                    },
+                    required: ["name", "quantity", "expiry_date"]
                 }
             }
         });
 
-        const recognizedItems = JSON.parse(response.text);
-        // Do not auto-insert into DB here; return items so user can review and edit in verification modal
-        res.json({ success: true, items: recognizedItems, item: recognizedItems[0] || null });
+        const scannedItem = JSON.parse(response.text);
+        res.json({ success: true, item: scannedItem });
     } catch (error) {
         console.error("AI Scan Error:", error);
         res.status(500).json({ error: "Failed to process image with AI: " + error.message });
@@ -135,36 +133,43 @@ app.post('/api/chat', async (req, res) => {
 
         const systemInstruction = `You are KAI, a helpful, witty, and highly knowledgeable AI kitchen companion ("Kitchen AI").
         
-        ${pantryContext}
-
         CRITICAL CONVERSATIONAL RULES:
-        - Keep responses brief, snappy, text-style, and match the user's energy.
+        - Keep the "reply" brief, snappy, text-style, and match the user's energy.
         - NEVER ask the user what ingredients they have. You have live database access.
         
-        DYNAMIC CULINARY LOGIC (FUTURE-PROOF):
-        Before writing the "steps" array, evaluate the physical state of every item used:
+        CRITICAL RECIPE STEP GENERATION RULES:
+        - When "isRecipe" is true, the "steps" array MUST contain detailed, specific cooking instructions ONLY for the dish they requested.
+        - Each step should be clear and actionable: timing, temperature, techniques. NO generic steps like "put everything in a bowl."
+        - Detect cooking durations in your instructions (e.g., "Simmer for 10 minutes") and include them in steps.
+        - Use EXACT measurements and ingredient order, not vague language.
+        - If a step involves a time duration, extract it and mention it prominently (e.g., "Bake for 25 minutes at 350°F").
         
-        1. NO-COOK / READY-TO-EAT INGREDIENTS:
-           - If ingredients are pre-packaged treats, snacks, dairy, fruits, raw vegetables, or ready-to-eat items (e.g., ice cream, cookies, chips, yogurt, berries, bread, nuts, deli meats), applying heat is strictly FORBIDDEN.
-           - Instead, you MUST use physical preparation and assembly verbs: "Crush," "Chop," "Slice," "Dice," "Layer," "Dollop," "Drizzle," "Toss," "Chill," or "Assemble."
-
-        2. COOKED INGREDIENTS:
-           - Only use heat verbs ("heat," "simmer," "boil," "fry") if the user is explicitly cooking raw foods that require heat to be edible.
-
+        STRICT DEDUPLICATION: NEVER repeat ingredients in the "ingredients" array. Each ingredient should appear exactly ONCE.
+        
         INGREDIENT DEFICIT FLOW:
-        If user requests a meal that available pantry ingredients cannot support:
+        If the user requests a meal that their available pantry ingredients cannot plausibly support:
         1. Set "isRecipe" to false.
-        2. Populate "shoppingList" with needed items.
-        3. Populate "pantryAlternative" with a title and steps for something they CAN make right now using live pantry items.`;
+        2. Populate the "missingIngredients" array with the specific, crucial items they need to buy.
+        3. Populate the "pantryAlternative" object with a title and step-by-step assembly instructions for something they CAN make right now.`;
 
-        const contextualizedUserMessage = `[SYSTEM NOTE: Live pantry database supplied] User's message: ${message}`;
+        const contextualizedUserMessage = `[SYSTEM NOTE: Live pantry database supplied]\n${pantryContext}\n\nUser's message: ${message}`;
 
         const contents = [];
         if (history && history.length > 0) {
-            history.forEach(turn => {
+            const recentHistory = history.slice(-4);
+            recentHistory.forEach(turn => {
+                let contentText = "";
+                if (typeof turn.content === 'string') {
+                    contentText = turn.content;
+                } else if (turn.content && turn.content.reply) {
+                    contentText = turn.content.reply;
+                } else {
+                    contentText = JSON.stringify(turn.content);
+                }
+
                 contents.push({
                     role: turn.role === "assistant" ? "model" : "user",
-                    parts: [{ text: typeof turn.content === 'string' ? turn.content : JSON.stringify(turn.content) }]
+                    parts: [{ text: contentText }]
                 });
             });
         }
@@ -176,7 +181,7 @@ app.post('/api/chat', async (req, res) => {
             contents: contents,
             config: {
                 systemInstruction: systemInstruction, 
-                temperature: 0.1, 
+                temperature: 0.2, 
                 responseMimeType: "application/json",
                 responseSchema: {
                     type: Type.OBJECT,
@@ -184,22 +189,15 @@ app.post('/api/chat', async (req, res) => {
                         reply: { type: Type.STRING },
                         isRecipe: { type: Type.BOOLEAN },
                         recipeTitle: { type: Type.STRING },
-                        usedIngredients: {
+                        ingredients: {
                             type: Type.ARRAY,
-                            items: {
-                                type: Type.OBJECT,
-                                properties: {
-                                    id: { type: Type.INTEGER },
-                                    name: { type: Type.STRING }
-                                },
-                                required: ["id", "name"]
-                            }
+                            items: { type: Type.STRING }
                         },
                         steps: {
                             type: Type.ARRAY,
                             items: { type: Type.STRING }
                         },
-                        shoppingList: {
+                        missingIngredients: {
                             type: Type.ARRAY,
                             items: { type: Type.STRING }
                         },
@@ -211,8 +209,7 @@ app.post('/api/chat', async (req, res) => {
                                     type: Type.ARRAY,
                                     items: { type: Type.STRING }
                                 }
-                            },
-                            required: ["title", "steps"]
+                            }
                         }
                     },
                     required: ["reply", "isRecipe"]
@@ -221,47 +218,29 @@ app.post('/api/chat', async (req, res) => {
         });
 
         const parsedResult = JSON.parse(response.text);
-
-        const pantryNames = (pantry || []).map(p => (p.name || '').toLowerCase());
-        let rawUsedIngredients = parsedResult.usedIngredients || [];
-
-        const seenNames = new Set();
-        let uniqueUsedIngredients = [];
-
-        for (const item of rawUsedIngredients) {
-            if (!item) continue;
-            const itemName = typeof item === 'string' ? item : (item.name || '').toString();
-            if (!itemName || seenNames.has(itemName.toLowerCase())) continue;
-            
-            seenNames.add(itemName.toLowerCase());
-            uniqueUsedIngredients.push({
-                name: itemName,
-                id: typeof item === 'object' ? item.id : null
-            });
-        }
-
-        const matched = uniqueUsedIngredients.filter(ui => pantryNames.some(pn => ui.name.toLowerCase().includes(pn) || pn.includes(ui.name.toLowerCase())));
-        const minNeeded = Math.max(1, Math.ceil(uniqueUsedIngredients.length * 0.5));
         
-        let finalIsRecipe = parsedResult.isRecipe === true && (matched.length >= minNeeded || pantryNames.length === 0);
-
-        const usedWithIds = uniqueUsedIngredients.map(ui => {
-            const match = (pantry || []).find(p => {
-                const pn = (p.name || '').toLowerCase();
-                return pn.includes(ui.name.toLowerCase()) || ui.name.toLowerCase().includes(pn);
-            });
-            return { id: match ? match.id : ui.id, name: ui.name };
+        // STRICT DEDUPLICATION ON BACKEND: Remove duplicate ingredients
+        const uniqueIngredients = Array.from(new Set(
+            (parsedResult.ingredients || []).map(i => i.trim().toLowerCase())
+        )).map(i => {
+            // Restore original casing by finding first match in parsed ingredients
+            const original = (parsedResult.ingredients || []).find(orig => orig.trim().toLowerCase() === i);
+            return original ? original.trim() : i;
         });
 
-        const updatedHistory = [...(history || []), { role: 'user', content: message }, { role: 'assistant', content: parsedResult.reply }];
+        const updatedHistory = [
+            ...(history || []).slice(-4),
+            { role: 'user', content: message },
+            { role: 'assistant', content: parsedResult.reply || "Recipe loaded!" }
+        ];
 
         res.json({
             reply: parsedResult.reply || "Here is what I found!",
-            isRecipe: finalIsRecipe,
-            recipeTitle: finalIsRecipe ? (parsedResult.recipeTitle || '') : '',
-            usedIngredients: finalIsRecipe ? usedWithIds : [],
-            steps: parsedResult.steps || [],
-            shoppingList: parsedResult.shoppingList || [],
+            isRecipe: parsedResult.isRecipe || false,
+            recipeTitle: parsedResult.recipeTitle || '',
+            ingredients: uniqueIngredients,
+            steps: parsedResult.steps && parsedResult.steps.length > 0 ? parsedResult.steps : [],
+            missingIngredients: parsedResult.missingIngredients || [],
             pantryAlternative: parsedResult.pantryAlternative || null,
             history: updatedHistory
         });
@@ -323,17 +302,26 @@ app.get('/api/history', async (req, res) => {
     }
 });
 
-// POST: Log history of a completed meal
+// POST: Log history of a completed meal (with recipe logs)
 app.post('/api/history', async (req, res) => {
-    const { recipe_name, ingredients_used } = req.body;
+    const { recipe_name, ingredients_used, recipe_steps, time_taken_minutes } = req.body;
     if (!recipe_name) return res.status(400).json({ error: "Missing recipe name." });
     
     try {
         const db = await getDbConnection();
+        
+        // Log to history table
         await db.run(
             "INSERT INTO history (recipe_name, ingredients_used) VALUES (?, ?)",
             [recipe_name, ingredients_used || '']
         );
+        
+        // Also log to recipe_logs with detailed info
+        await db.run(
+            "INSERT INTO recipe_logs (recipe_name, recipe_steps, ingredients_used, time_taken_minutes) VALUES (?, ?, ?, ?)",
+            [recipe_name, recipe_steps || '', ingredients_used || '', time_taken_minutes || 0]
+        );
+        
         res.json({ success: true });
     } catch (error) {
         res.status(500).json({ error: error.message });
@@ -352,11 +340,13 @@ app.delete('/api/history/:id', async (req, res) => {
     }
 });
 
-// 📋 GET: Fetch all active shopping list items
+// 🛒 SHOPPING LIST ENDPOINTS
+
+// GET: Fetch all shopping list items (organized by category)
 app.get('/api/shopping-list', async (req, res) => {
     try {
         const db = await getDbConnection();
-        const rows = await db.all(`SELECT * FROM shopping_list ORDER BY added_date DESC`);
+        const rows = await db.all(`SELECT * FROM shopping_list ORDER BY category, added_date DESC`);
         res.json(rows);
     } catch (err) {
         console.error("❌ Error fetching shopping list:", err);
@@ -364,29 +354,29 @@ app.get('/api/shopping-list', async (req, res) => {
     }
 });
 
-// ➕ POST: Manually add a single item to the shopping list
+// POST: Manually add single item to shopping list
 app.post('/api/shopping-list', async (req, res) => {
     try {
-        const { name, quantity } = req.body;
+        const { name, quantity, category, is_essential } = req.body;
         if (!name) return res.status(400).json({ error: "Item name is required" });
 
         const db = await getDbConnection();
         const result = await db.run(
-            `INSERT INTO shopping_list (name, quantity) VALUES (?, ?)`,
-            [name, quantity || '1']
+            `INSERT INTO shopping_list (name, quantity, category, is_essential) VALUES (?, ?, ?, ?)`,
+            [name, quantity || '1', category || 'Custom Items', is_essential ? 1 : 0]
         );
         
-        res.json({ id: result.lastID, name, quantity: quantity || '1' });
+        res.json({ id: result.lastID, name, quantity: quantity || '1', category: category || 'Custom Items', is_essential: is_essential ? 1 : 0 });
     } catch (err) {
         console.error("❌ Error adding item:", err);
         res.status(500).json({ error: err.message });
     }
 });
 
-// ⚡ POST: Batch add missing items generated by KAI's chat output
+// POST: Batch add missing ingredients from chat (auto-categorized as "Recipe Essentials")
 app.post('/api/shopping-list/batch', async (req, res) => {
     try {
-        const { items } = req.body;
+        const { items } = req.body; 
         
         if (!items || !Array.isArray(items) || items.length === 0) {
             return res.status(400).json({ error: "No items provided to add" });
@@ -394,11 +384,12 @@ app.post('/api/shopping-list/batch', async (req, res) => {
 
         const db = await getDbConnection();
         
-        const stmt = await db.prepare(`INSERT INTO shopping_list (name, quantity) VALUES (?, '1')`);
         for (const item of items) {
-            await stmt.run([item]);
+            await db.run(
+                `INSERT INTO shopping_list (name, quantity, category, is_essential) VALUES (?, ?, ?, ?)`,
+                [item, '1', 'Recipe Essentials', 1]
+            );
         }
-        await stmt.finalize();
         
         res.json({ success: true, message: `Added ${items.length} items to your shopping list.` });
     } catch (err) {
@@ -407,7 +398,47 @@ app.post('/api/shopping-list/batch', async (req, res) => {
     }
 });
 
-// ❌ DELETE: Remove an item when bought or cleared
+// PUT: Update shopping list item (toggle checked, toggle essential, update quantity)
+app.put('/api/shopping-list/:id', async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { is_checked, is_essential, quantity } = req.body;
+        const db = await getDbConnection();
+
+        let updateFields = [];
+        let values = [];
+
+        if (is_checked !== undefined) {
+            updateFields.push("is_checked = ?");
+            values.push(is_checked ? 1 : 0);
+        }
+        if (is_essential !== undefined) {
+            updateFields.push("is_essential = ?");
+            values.push(is_essential ? 1 : 0);
+        }
+        if (quantity !== undefined) {
+            updateFields.push("quantity = ?");
+            values.push(quantity);
+        }
+
+        if (updateFields.length === 0) {
+            return res.status(400).json({ error: "No fields to update" });
+        }
+
+        values.push(id);
+        await db.run(
+            `UPDATE shopping_list SET ${updateFields.join(", ")} WHERE id = ?`,
+            values
+        );
+
+        res.json({ success: true, message: "Item updated" });
+    } catch (err) {
+        console.error("❌ Error updating item:", err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// DELETE: Remove shopping list item
 app.delete('/api/shopping-list/:id', async (req, res) => {
     try {
         const { id } = req.params;
@@ -421,7 +452,36 @@ app.delete('/api/shopping-list/:id', async (req, res) => {
     }
 });
 
-// 📸 POST: Multi-modal Whole Receipt Scan parsing
+// POST: Move checked items from shopping list to pantry
+app.post('/api/shopping-list/checkout', async (req, res) => {
+    try {
+        const db = await getDbConnection();
+        
+        // Get all checked items
+        const checkedItems = await db.all("SELECT * FROM shopping_list WHERE is_checked = 1");
+        
+        const today = new Date().toISOString().split('T')[0];
+        const futureDate = new Date();
+        futureDate.setDate(futureDate.getDate() + 14);
+        
+        for (const item of checkedItems) {
+            await db.run(
+                `INSERT INTO pantry (name, quantity, expiry_date, added_date, storage) VALUES (?, ?, ?, ?, ?)`,
+                [item.name, item.quantity, futureDate.toISOString().split('T')[0], today, 'Pantry']
+            );
+        }
+
+        // Delete checked items from shopping list
+        await db.run("DELETE FROM shopping_list WHERE is_checked = 1");
+        
+        res.json({ success: true, message: `Moved ${checkedItems.length} items to pantry` });
+    } catch (err) {
+        console.error("❌ Error checking out items:", err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// 📸 POST: Multi-modal Receipt Scan parsing
 app.post('/api/pantry/scan-receipt', async (req, res) => {
     try {
         const { imageBase64 } = req.body; 
@@ -442,7 +502,7 @@ app.post('/api/pantry/scan-receipt', async (req, res) => {
         2. Cleanly ignore non-food items entirely (like bags, taxes, structural codes).
         3. Guess a realistic, conservative 'days_until_expiry' integer based on typical ingredient decay cycles.
         
-        Return an array under a root 'items' key matching this exact format:
+        Return a JSON object with an array called 'items' matching this exact format:
         {
           "items": [
              { "name": "Organic Banana", "quantity": "1 bunch", "days_until_expiry": 5 },
@@ -465,7 +525,33 @@ app.post('/api/pantry/scan-receipt', async (req, res) => {
     }
 });
 
+// POST: Budget trimmer - ask KAI to trim shopping list
+app.post('/api/shopping-list/trim', async (req, res) => {
+    try {
+        const { budget, items } = req.body;
+        if (!budget || !items || items.length === 0) {
+            return res.status(400).json({ error: "Budget and items required" });
+        }
+
+        const itemsList = items.map(i => `- ${i.name} (${i.quantity})`).join('\n');
+        
+        const response = await ai.models.generateContent({
+            model: "gemini-3.5-flash",
+            contents: [{
+                text: `You are a smart shopping budget advisor. The user has a budget of $${budget} and wants to buy these items:\n\n${itemsList}\n\nWhich items are ESSENTIAL and which can be skipped to stay under budget? Return a JSON object with "essential" and "optional" arrays of item names.`
+            }],
+            config: { responseMimeType: "application/json" }
+        });
+
+        const advice = JSON.parse(response.text);
+        res.json(advice);
+    } catch (err) {
+        console.error("❌ Error trimming list:", err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
 // Listener Setup
 app.listen(PORT, () => {
-    console.log(`🚀 Server running at http://localhost:${PORT}`);
+    console.log(`🚀 Server running on port ${PORT}`);
 });
