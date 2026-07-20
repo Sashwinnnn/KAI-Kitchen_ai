@@ -139,7 +139,7 @@ CRITICAL CONVERSATIONAL RULES:
 
 CRITICAL RECIPE STEP GENERATION RULES:
 - When "isRecipe" is true, the "steps" array MUST contain detailed, specific cooking instructions ONLY for the dish requested.
-- When "isRecipe" is false and a "pantryAlternative" is provided, "pantryAlternative.steps" MUST contain at least 3-5 specific, step-by-step instructions on how to prepare that alternative dish using available pantry items. Never use generic filler text like "combine ingredients according to taste".
+- When "isRecipe" is false and a "pantryAlternative" is provided, you MUST provide both "pantryAlternative.ingredients" (listing the exact pantry items used) and "pantryAlternative.steps" (containing 3-5 specific step-by-step instructions for that dish). Never use generic instructions or filler text.
 - Include measurements, times, and specific heat settings where appropriate.
 
 STRICT DEDUPLICATION:
@@ -212,6 +212,10 @@ STRICT DEDUPLICATION:
                                     type: Type.OBJECT,
                                     properties: {
                                         title: { type: Type.STRING },
+                                        ingredients: {
+                                            type: Type.ARRAY,
+                                            items: { type: Type.STRING }
+                                        },
                                         steps: {
                                             type: Type.ARRAY,
                                             items: { type: Type.STRING }
