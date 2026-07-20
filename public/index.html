@@ -1252,34 +1252,48 @@ async function loadActivityHistory() {
             dot.classList.toggle('hidden', !expired);
         }
 
-        async function sendChatMessage() {
-            const inputEl = document.getElementById('chat-input');
-            const chatContainer = document.getElementById('chat-messages');
-            if (!inputEl || !chatContainer) return;
+        /* BULLETPROOF CHAT HANDLER */
+async function sendChatMessage() {
+    const inputEl = document.getElementById('chat-input');
+    const chatContainer = document.getElementById('chat-messages');
+    if (!inputEl || !chatContainer) return;
 
-            const userMsg = inputEl.value.trim();
-            if (!userMsg) return;
+    const userMsg = inputEl.value.trim();
+    if (!userMsg) return;
 
-            appendChatMessage('user', userMsg);
-            inputEl.value = '';
+    appendChatMessage('user', userMsg);
+    inputEl.value = '';
 
-            try {
-                const response = await fetch('/api/chat', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ message: userMsg, history: chatHistory, pantry: currentPantryItems })
-                });
+    try {
+        const response = await fetch('/api/chat', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ message: userMsg, history: chatHistory, pantry: currentPantryItems })
+        });
 
-                const data = await response.json();
-                appendChatMessage('assistant', data.reply);
+        const data = await response.json();
 
-                if (data.isRecipe) {
-                    renderRecipeTriggerCard(data);
-                }
-            } catch (err) {
-                console.error("Chat Error:", err);
-            }
+        // Safe fallback for response text key name
+        const botReply = data.reply || data.response || data.message || (typeof data === 'string' ? data : null);
+
+        if (botReply) {
+            appendChatMessage('assistant', botReply);
+            
+            // Maintain chat history context
+            chatHistory.push({ role: 'user', content: userMsg });
+            chatHistory.push({ role: 'assistant', content: botReply });
+        } else {
+            appendChatMessage('assistant', "I'm having trouble coming up with a recipe right now. Try asking again!");
         }
+
+        if (data.isRecipe) {
+            renderRecipeTriggerCard(data);
+        }
+    } catch (err) {
+        console.error("Chat Error:", err);
+        appendChatMessage('assistant', "Sorry, I couldn't reach the server. Please check your connection!");
+    }
+}
 
         function appendChatMessage(role, text) {
             const chatContainer = document.getElementById('chat-messages');
