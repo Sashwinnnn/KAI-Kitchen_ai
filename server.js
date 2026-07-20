@@ -141,6 +141,9 @@ CRITICAL RECIPE STEP GENERATION RULES:
 - When "isRecipe" is true, the "steps" array MUST contain detailed, specific cooking instructions ONLY for the dish requested.
 - When "isRecipe" is false and a "pantryAlternative" is provided, you MUST provide both "pantryAlternative.ingredients" (listing the exact pantry items used) and "pantryAlternative.steps" (containing 3-5 specific step-by-step instructions for that dish). Never use generic instructions or filler text.
 - Include measurements, times, and specific heat settings where appropriate.
+- "steps" MUST NOT be vague (e.g., NEVER say "Cook ingredients according to taste" or "Prepare as usual").
+- EVERY step inside "steps" or "pantryAlternative.steps" MUST be a concrete, detailed action (e.g., "Heat 1 tbsp oil in a skillet over medium heat for 2 minutes", "Sauté chopped onions and garlic until translucent").
+- Minimum 4 detailed, sequential steps are required for both the main recipe and the "pantryAlternative".
 
 STRICT DEDUPLICATION:
 - Return all required ingredients for the requested dish in the "ingredients" array.
@@ -214,12 +217,14 @@ STRICT DEDUPLICATION:
                                         title: { type: Type.STRING },
                                         ingredients: {
                                             type: Type.ARRAY,
-                                            items: { type: Type.STRING }
+                                            items: { type: Type.STRING },
+                                            description: "Specific list of available pantry ingredients needed for this alternative."
                                         },
                                         steps: {
-                                            type: Type.ARRAY,
-                                            items: { type: Type.STRING }
-                                        }
+                                    type: Type.ARRAY,
+                                    items: { type: Type.STRING },
+                                    description: "Detailed step-by-step preparation and cooking instructions for the primary recipe."
+                                },
                                     }
                                 }
                             },
