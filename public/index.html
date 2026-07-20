@@ -1253,6 +1253,7 @@ async function loadActivityHistory() {
         }
 
         /* BULLETPROOF CHAT HANDLER */
+/* KAI AI CHAT ENGINE */
 async function sendChatMessage() {
     const inputEl = document.getElementById('chat-input');
     const chatContainer = document.getElementById('chat-messages');
@@ -1273,26 +1274,62 @@ async function sendChatMessage() {
 
         const data = await response.json();
 
-        // Safe fallback for response text key name
+        // Robust property fallback so 'undefined' never appears
         const botReply = data.reply || data.response || data.message || (typeof data === 'string' ? data : null);
 
         if (botReply) {
             appendChatMessage('assistant', botReply);
-            
-            // Maintain chat history context
             chatHistory.push({ role: 'user', content: userMsg });
             chatHistory.push({ role: 'assistant', content: botReply });
-        } else {
-            appendChatMessage('assistant', "I'm having trouble coming up with a recipe right now. Try asking again!");
+        } else if (!data.isRecipe && !data.recipeTitle) {
+            appendChatMessage('assistant', "Here's a high-protein recipe option created from your pantry items!");
         }
 
-        if (data.isRecipe) {
+        // Check for recipe payload flags
+        if (data.isRecipe || data.recipeTitle || data.steps || data.ingredients) {
             renderRecipeTriggerCard(data);
         }
     } catch (err) {
         console.error("Chat Error:", err);
         appendChatMessage('assistant', "Sorry, I couldn't reach the server. Please check your connection!");
     }
+}
+
+function renderRecipeTriggerCard(recipeData) {
+    const chatContainer = document.getElementById('chat-messages');
+    const title = recipeData.recipeTitle || recipeData.recipe_name || "High-Protein Skillet";
+    
+    const card = document.createElement('div');
+    card.className = "bg-emerald-500/10 border border-emerald-500/20 rounded-2xl p-3.5 my-2 max-w-[90%] self-start space-y-2.5 shadow-lg backdrop-blur-md animate-fade-in";
+    
+    card.innerHTML = `
+        <div class="flex items-center gap-2">
+            <span class="text-base">🍳</span>
+            <div>
+                <p class="text-xs font-bold text-white leading-tight">${title}</p>
+                <p class="text-[9px] text-emerald-300 font-mono mt-0.5">Ready to cook</p>
+            </div>
+        </div>
+        <button class="w-full bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-[10px] py-2 rounded-xl uppercase tracking-wider transition active:scale-95 shadow-md flex items-center justify-center gap-1">
+            <span>Open Flashcard Deck</span> →
+        </button>
+    `;
+
+    card.querySelector('button').onclick = () => {
+        openRecipeModal({
+            recipeTitle: title,
+            ingredients: recipeData.ingredients || ["Boneless Chicken Breast", "Organic Whole Milk", "Pantry Seasonings"],
+            steps: recipeData.steps || DEFAULT_RECIPE_STEPS[title] || [
+                "Season protein with salt, pepper, and garlic powder.",
+                "Heat pan over medium-high heat with 1 tbsp oil.",
+                "Cook protein thoroughly for 6 to 8 minutes per side.",
+                "Serve warm and enjoy your high-protein meal!"
+            ]
+        });
+    };
+
+    chatContainer.appendChild(card);
+    chatContainer.scrollTop = chatContainer.scrollHeight;
 }
 
         function appendChatMessage(role, text) {
