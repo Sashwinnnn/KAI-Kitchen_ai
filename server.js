@@ -176,7 +176,6 @@ app.post('/api/chat', async (req, res) => {
         
         contents.push({ role: "user", parts: [{ text: contextualizedUserMessage }] });
 
-        // ARRAY OF ACTIVE FALLBACK MODELS
         const modelsToTry = [
             "gemini-3.5-flash",
             "gemini-3.1-flash-lite",
@@ -187,7 +186,6 @@ app.post('/api/chat', async (req, res) => {
         let response = null;
         let lastError = null;
 
-        // MULTI-TIER ATTEMPT LOOP
         for (const modelName of modelsToTry) {
             try {
                 console.log(`📡 Attempting API call with model: ${modelName}...`);
@@ -248,7 +246,6 @@ app.post('/api/chat', async (req, res) => {
 
         const parsedResult = JSON.parse(response.text);
         
-        // STRICT DEDUPLICATION ON BACKEND: Remove duplicate ingredients
         const uniqueIngredients = Array.from(new Set(
             (parsedResult.ingredients || []).map(i => i.trim().toLowerCase())
         )).map(i => {
@@ -338,13 +335,11 @@ app.post('/api/history', async (req, res) => {
     try {
         const db = await getDbConnection();
         
-        // Log to history table
         await db.run(
             "INSERT INTO history (recipe_name, ingredients_used) VALUES (?, ?)",
             [recipe_name, ingredients_used || '']
         );
         
-        // Also log to recipe_logs with detailed info
         await db.run(
             "INSERT INTO recipe_logs (recipe_name, recipe_steps, ingredients_used, time_taken_minutes) VALUES (?, ?, ?, ?)",
             [recipe_name, recipe_steps || '', ingredients_used || '', time_taken_minutes || 0]
@@ -401,7 +396,7 @@ app.post('/api/shopping-list', async (req, res) => {
     }
 });
 
-// POST: Batch add missing ingredients from chat (auto-categorized as "Recipe Essentials")
+// POST: Batch add missing ingredients from chat
 app.post('/api/shopping-list/batch', async (req, res) => {
     try {
         const { items } = req.body; 
@@ -426,7 +421,7 @@ app.post('/api/shopping-list/batch', async (req, res) => {
     }
 });
 
-// PUT: Update shopping list item (toggle checked, toggle essential, update quantity)
+// PUT: Update shopping list item
 app.put('/api/shopping-list/:id', async (req, res) => {
     try {
         const { id } = req.params;
@@ -485,7 +480,6 @@ app.post('/api/shopping-list/checkout', async (req, res) => {
     try {
         const db = await getDbConnection();
         
-        // Get all checked items
         const checkedItems = await db.all("SELECT * FROM shopping_list WHERE is_checked = 1");
         
         const today = new Date().toISOString().split('T')[0];
@@ -499,7 +493,6 @@ app.post('/api/shopping-list/checkout', async (req, res) => {
             );
         }
 
-        // Delete checked items from shopping list
         await db.run("DELETE FROM shopping_list WHERE is_checked = 1");
         
         res.json({ success: true, message: `Moved ${checkedItems.length} items to pantry` });
