@@ -79,7 +79,7 @@ app.post('/api/pantry/scan', async (req, res) => {
         console.log("🤖 Sending image to Gemini for food analysis...");
 
         const response = await ai.models.generateContent({
-            model: 'gemini-3.5-flash',
+            model: 'gemini-2.5-flash',
             contents: [
                 {
                     inlineData: {
@@ -142,7 +142,6 @@ app.post('/api/chat', async (req, res) => {
         - Each step should be clear and actionable: timing, temperature, techniques. NO generic steps like "put everything in a bowl."
         - Detect cooking durations in your instructions (e.g., "Simmer for 10 minutes") and include them in steps.
         - Use EXACT measurements and ingredient order, not vague language.
-        - If a step involves a time duration, extract it and mention it prominently (e.g., "Bake for 25 minutes at 350°F").
         
         STRICT DEDUPLICATION: NEVER repeat ingredients in the "ingredients" array. Each ingredient should appear exactly ONCE.
         
@@ -177,10 +176,9 @@ app.post('/api/chat', async (req, res) => {
         contents.push({ role: "user", parts: [{ text: contextualizedUserMessage }] });
 
         const modelsToTry = [
-            "gemini-3.5-flash",
-            "gemini-3.1-flash-lite",
             "gemini-2.5-flash",
-            "gemini-flash-latest"
+            "gemini-2.5-pro",
+            "gemini-1.5-flash"
         ];
 
         let response = null;
@@ -365,7 +363,7 @@ app.delete('/api/history/:id', async (req, res) => {
 
 // 🛒 SHOPPING LIST ENDPOINTS
 
-// GET: Fetch all shopping list items (organized by category)
+// GET: Fetch all shopping list items
 app.get('/api/shopping-list', async (req, res) => {
     try {
         const db = await getDbConnection();
@@ -532,7 +530,7 @@ app.post('/api/pantry/scan-receipt', async (req, res) => {
         }`;
 
         const response = await ai.models.generateContent({
-            model: "gemini-3.5-flash", 
+            model: "gemini-2.5-flash", 
             contents: [prompt, imagePart],
             config: { responseMimeType: "application/json" }
         });
@@ -557,7 +555,7 @@ app.post('/api/shopping-list/trim', async (req, res) => {
         const itemsList = items.map(i => `- ${i.name} (${i.quantity})`).join('\n');
         
         const response = await ai.models.generateContent({
-            model: "gemini-3.5-flash",
+            model: "gemini-2.5-flash",
             contents: [{
                 text: `You are a smart shopping budget advisor. The user has a budget of $${budget} and wants to buy these items:\n\n${itemsList}\n\nWhich items are ESSENTIAL and which can be skipped to stay under budget? Return a JSON object with "essential" and "optional" arrays of item names.`
             }],
@@ -572,7 +570,6 @@ app.post('/api/shopping-list/trim', async (req, res) => {
     }
 });
 
-// Listener Setup
 app.listen(PORT, () => {
     console.log(`🚀 Server running on port ${PORT}`);
 });
