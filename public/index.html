@@ -30,20 +30,6 @@
             box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.1);
         }
 
-        /* High-contrast frosted glass capture button */
-        .capture-pill {
-            background: rgba(255, 255, 255, 0.12);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.15);
-        }
-        
-        .capture-pill:hover {
-            background: rgba(255, 255, 255, 0.18);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-        }
-
         .tab-content {
             display: none;
         }
@@ -51,7 +37,7 @@
             display: block;
         }
 
-        /* Smooth scrollbar for glass panel */
+        /* Custom Scrollbar */
         ::-webkit-scrollbar {
             width: 4px;
         }
@@ -86,99 +72,6 @@
             width: 100%;
             max-width: 28rem;
             box-shadow: 0 24px 60px rgba(0, 0, 0, 0.6);
-        }
-        .modal-header h2 {
-            font-size: 1.25rem;
-            font-weight: 800;
-            color: #ffffff;
-            letter-spacing: -0.025em;
-        }
-        .modal-header .subtitle {
-            font-size: 0.75rem;
-            color: #94a3b8;
-            margin-top: 0.25rem;
-            margin-bottom: 1.25rem;
-        }
-        .modal-form {
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
-        }
-        .input-group {
-            display: flex;
-            flex-direction: column;
-            gap: 0.375rem;
-        }
-        .input-group label {
-            font-size: 10px;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            color: #94a3b8;
-        }
-        .input-group input, .select-wrapper select {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 0.75rem;
-            padding: 0.625rem 0.875rem;
-            font-size: 0.75rem;
-            color: #ffffff;
-            outline: none;
-            transition: border-color 0.15s;
-        }
-        .input-group input:focus, .select-wrapper select:focus {
-            border-color: rgba(255, 255, 255, 0.25);
-        }
-        .form-row {
-            display: flex;
-            gap: 1rem;
-        }
-        .form-row .half {
-            flex: 1;
-        }
-        .select-wrapper {
-            position: relative;
-            display: flex;
-            flex-direction: column;
-        }
-        .select-wrapper select {
-            appearance: none;
-            cursor: pointer;
-            padding-right: 2rem;
-        }
-        .modal-actions {
-            display: flex;
-            justify-content: flex-end;
-            gap: 0.75rem;
-            margin-top: 0.5rem;
-        }
-        .btn-primary {
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            color: #ffffff;
-            font-weight: 700;
-            font-size: 0.75rem;
-            padding: 0.625rem 1.25rem;
-            border-radius: 0.75rem;
-            transition: background 0.15s, transform 0.1s;
-        }
-        .btn-primary:hover {
-            background: rgba(255, 255, 255, 0.15);
-        }
-        .btn-primary:active, .btn-secondary:active {
-            transform: scale(0.97);
-        }
-        .btn-secondary {
-            background: transparent;
-            color: #64748b;
-            font-weight: 600;
-            font-size: 0.75rem;
-            padding: 0.625rem 1.25rem;
-            border-radius: 0.75rem;
-            transition: color 0.15s, transform 0.1s;
-        }
-        .btn-secondary:hover {
-            color: #94a3b8;
         }
         
         /* Smooth Fade Animation */
@@ -230,7 +123,7 @@
                     </div>
                 </div>
                 <div class="border-t border-white/5 pt-4">
-                    <button onclick="toggleNotificationTray()" class="w-full btn-secondary text-center py-3 rounded-xl font-bold text-slate-400 hover:text-white transition bg-white/[0.02] border border-white/10">
+                    <button onclick="toggleNotificationTray()" class="w-full text-center py-3 rounded-xl font-bold text-slate-400 hover:text-white transition bg-white/[0.02] border border-white/10">
                         Return to Kitchen
                     </button>
                 </div>
@@ -274,44 +167,54 @@
                 </div>
             </div>
 
-            <!-- TAB 2: HISTORY SCREEN -->
-            <div id="tab-history" class="tab-content">
-                <div class="glass-panel rounded-3xl p-6 space-y-4">
-                    <h3 class="font-bold text-base text-white">Activity History</h3>
-                    <div id="history-log" class="space-y-3">
-                        <div class="bg-white/5 border border-white/10 p-5 rounded-2xl space-y-4 shadow-[0_10px_30px_rgba(0,0,0,0.2)]">
-                            <div class="flex items-start justify-between gap-4 w-full">
-                                <div class="flex items-start gap-3 min-w-0 flex-1">
-                                    <span class="text-lg shrink-0 mt-0.5">🍳</span>
-                                    <div class="min-w-0">
-                                        <h4 class="font-bold text-sm text-white break-words pr-1 leading-snug">Your recent meals will appear here</h4>
-                                        <p class="text-[10px] text-slate-500 font-medium mt-1">Cook something and it will show up with room to revisit or remove it.</p>
-                                    </div>
-                                </div>
-                                <span class="inline-flex shrink-0 bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 font-black tracking-wider text-[9px] uppercase px-2.5 py-1 rounded-full">
-                                    Cooked <span class="text-[10px]">✓</span>
-                                </span>
-                            </div>
-                            <div class="space-y-2">
-                                <span class="text-[9px] font-bold text-slate-400 tracking-wider uppercase block">Ingredients Used</span>
-                                <div class="bg-slate-950/40 border border-white/5 rounded-xl p-3 text-xs text-slate-300 leading-relaxed">
-                                    Ingredients from your pantry will appear here once you cook a meal.
-                                </div>
-                            </div>
-                            <div class="flex flex-col gap-2 pt-1 sm:flex-row">
-                                <button class="w-full sm:flex-1 bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 border border-emerald-500/20 font-bold text-xs py-2.5 rounded-xl transition active:scale-95">
-                                    Cook Again <span class="text-[10px]">↺</span>
-                                </button>
-                                <button class="w-full sm:w-auto bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 border border-rose-500/20 font-bold text-xs py-2.5 px-4 rounded-xl transition active:scale-95">
-                                    Delete <span class="text-[10px]">✕</span>
-                                </button>
-                            </div>
+            <!-- TAB 2: SHOPPING LIST SCREEN (NEW) -->
+            <div id="tab-shopping" class="tab-content">
+                <div class="glass-panel rounded-3xl p-5 space-y-4">
+                    <div class="flex items-center justify-between border-b border-white/5 pb-3">
+                        <div>
+                            <h3 class="font-bold text-base text-white">Smart Shopping List</h3>
+                            <p class="text-[10px] text-slate-400">Manage items to buy & balance budget</p>
                         </div>
+                        <button onclick="checkoutShoppingList()" class="bg-emerald-500/20 text-emerald-300 hover:bg-emerald-500/30 border border-emerald-500/30 px-3 py-1.5 rounded-xl text-xs font-bold transition active:scale-95">
+                            Move Checked to Pantry 📦
+                        </button>
+                    </div>
+
+                    <!-- Add Item Input -->
+                    <div class="flex gap-2">
+                        <input type="text" id="shopping-input" placeholder="Add item (e.g., Almond Milk)..." class="flex-1 bg-white/[0.03] border border-white/10 rounded-xl px-3 py-2 text-xs text-white placeholder-slate-500">
+                        <button onclick="addShoppingItem()" class="bg-white/10 hover:bg-white/15 border border-white/15 px-4 rounded-xl font-bold text-xs">Add</button>
+                    </div>
+
+                    <!-- AI Budget Trimmer Section -->
+                    <div class="bg-indigo-950/20 border border-indigo-500/20 rounded-2xl p-3 flex items-center justify-between gap-2">
+                        <div class="flex items-center gap-2">
+                            <span class="text-base">💰</span>
+                            <input type="number" id="budget-input" placeholder="Budget $" class="w-20 bg-black/40 border border-white/10 rounded-lg px-2 py-1 text-xs text-white text-center">
+                        </div>
+                        <button onclick="trimShoppingListWithAI()" class="bg-indigo-500/20 hover:bg-indigo-500/30 border border-indigo-500/30 text-indigo-300 font-bold text-[11px] px-3 py-1.5 rounded-xl transition active:scale-95">
+                            AI Budget Trim ✨
+                        </button>
+                    </div>
+
+                    <!-- Shopping List Items Container -->
+                    <div id="shopping-list-container" class="space-y-2 pt-2">
+                        <!-- Loaded dynamically -->
                     </div>
                 </div>
             </div>
 
-            <!-- TAB 3: KAI AI SCREEN (GLASS CHAT) -->
+            <!-- TAB 3: HISTORY SCREEN -->
+            <div id="tab-history" class="tab-content">
+                <div class="glass-panel rounded-3xl p-6 space-y-4">
+                    <h3 class="font-bold text-base text-white">Activity History</h3>
+                    <div id="history-log" class="space-y-3">
+                        <!-- Loaded dynamically -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB 4: KAI AI SCREEN (GLASS CHAT) -->
             <div id="tab-kai" class="tab-content">
                 <div class="glass-panel rounded-3xl p-4 flex flex-col h-[460px]">
                     <div class="border-b border-white/5 pb-3 mb-3 flex items-center gap-3">
@@ -342,7 +245,7 @@
                 </div>
             </div>
 
-            <!-- 💰 RESTORED HIGH-CONTRAST SAVINGS DASHBOARD -->
+            <!-- TAB 5: SAVINGS DASHBOARD -->
             <div id="tab-stats" class="tab-content">
                 <div id="savings-dashboard" class="space-y-4"></div>
             </div>
@@ -350,17 +253,55 @@
         </main>
     </div>
 
+    <!-- 📷 CAPTURE OPTION SELECTOR MODAL (NEW FEATURE) -->
+    <div id="capture-choice-modal" class="modal-backdrop hidden">
+        <div class="modal-card animate-fade-in w-full max-w-sm space-y-4">
+            <div class="flex justify-between items-center pb-2 border-b border-white/10">
+                <div>
+                    <h2 class="text-lg font-bold text-white">Capture Mode</h2>
+                    <p class="text-[11px] text-slate-400">Choose how you want to add groceries</p>
+                </div>
+                <button onclick="closeCaptureChoiceModal()" class="text-slate-400 hover:text-white text-base">✕</button>
+            </div>
+
+            <!-- Option 1: Single Item Camera -->
+            <button onclick="startSingleItemScan()" class="w-full text-left p-3.5 rounded-2xl bg-white/5 hover:bg-white/10 border border-white/10 transition active:scale-98">
+                <div class="flex items-center gap-3">
+                    <span class="text-2xl p-2 bg-emerald-500/10 rounded-xl border border-emerald-500/20">🍎</span>
+                    <div>
+                        <h3 class="font-bold text-sm text-emerald-400">Single Pantry Item</h3>
+                        <p class="text-[10px] text-slate-300">Scan food directly using your camera.</p>
+                    </div>
+                </div>
+                <div class="mt-2 text-[10px] grid grid-cols-2 gap-2 bg-black/30 p-2 rounded-lg border border-white/5">
+                    <div><span class="text-emerald-400 font-bold">✓ Pro:</span> High expiration accuracy.</div>
+                    <div><span class="text-amber-400 font-bold">✗ Con:</span> Scan items one by one.</div>
+                </div>
+            </button>
+
+            <!-- Option 2: Receipt Snapshot -->
+            <button onclick="triggerReceiptUpload()" class="w-full text-left p-3.5 rounded-2xl bg-white/5 hover:bg-white/10 border border-white/10 transition active:scale-98">
+                <div class="flex items-center gap-3">
+                    <span class="text-2xl p-2 bg-indigo-500/10 rounded-xl border border-indigo-500/20">🧾</span>
+                    <div>
+                        <h3 class="font-bold text-sm text-indigo-400">Full Grocery Receipt</h3>
+                        <p class="text-[10px] text-slate-300">Snap paper receipt to batch import items.</p>
+                    </div>
+                </div>
+                <div class="mt-2 text-[10px] grid grid-cols-2 gap-2 bg-black/30 p-2 rounded-lg border border-white/5">
+                    <div><span class="text-emerald-400 font-bold">✓ Pro:</span> Imports dozens instantly.</div>
+                    <div><span class="text-amber-400 font-bold">✗ Con:</span> Quick manual date check.</div>
+                </div>
+            </button>
+            <input type="file" id="receipt-file-input" accept="image/*" capture="environment" class="hidden" onchange="handleReceiptFileSelected(event)">
+        </div>
+    </div>
+
     <!-- 📷 CAMERA OVERLAY MODAL -->
     <div id="camera-modal" class="fixed inset-0 bg-slate-950/95 z-[100] flex flex-col justify-between hidden p-6 backdrop-blur-xl">
         <div class="text-center pt-4">
             <span class="text-slate-400 font-bold tracking-widest text-[10px] uppercase block mb-1">KAI Vision</span>
             <p class="text-white font-black text-xl">Position food item below</p>
-            <div class="mt-3 px-6 py-3 bg-white/[0.02] rounded-2xl border border-white/5 inline-block max-w-xs mx-auto">
-                <p class="text-slate-400 text-[11px] leading-relaxed">
-                    📸 <strong>Make sure to capture the expiration date!</strong> <br> 
-                    <span class="text-slate-500">If the item doesn't have one printed, just take a clear pic of the food and we'll estimate it.</span>
-                </p>
-            </div>
         </div>
         <div class="relative w-full max-w-md mx-auto aspect-square bg-slate-900/50 rounded-3xl overflow-hidden border border-white/10 flex items-center justify-center">
             <video id="video" class="absolute w-full h-full object-cover" autoplay playsinline></video>
@@ -379,38 +320,35 @@
     </div>
 
     <!-- FLOATING LIQUID GLASS DOCK -->
-    <div id="navigation-dock" class="fixed bottom-6 left-1/2 -translate-x-1/2 w-[94%] max-w-sm z-50">
-        <div class="liquid-glass-dock rounded-[2.5rem] p-3 flex flex-col items-center gap-3">
-            <button id="btn-capture-pill" onclick="openCamera()" class="flex items-center gap-2 bg-slate-900/80 hover:bg-slate-800 backdrop-blur-md border border-white/10 text-white font-bold py-2 px-4 rounded-xl transition">
-                <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+    <div id="navigation-dock" class="fixed bottom-6 left-1/2 -translate-x-1/2 w-[96%] max-w-sm z-50">
+        <div class="liquid-glass-dock rounded-[2.5rem] p-2.5 flex flex-col items-center gap-2">
+            <button id="btn-capture-pill" onclick="openCaptureChoiceModal()" class="flex items-center gap-2 bg-slate-900/80 hover:bg-slate-800 backdrop-blur-md border border-white/10 text-white font-bold py-2 px-4 rounded-xl transition active:scale-95">
+                <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M6.827 6.175A2.31 2.31 0 0 1 5.186 7.23c-.38.054-.757.112-1.134.175C2.999 7.58 2.25 8.507 2.25 9.574V18a2.25 2.25 0 0 0 2.25 2.25h12A2.25 2.25 0 0 0 21 18V9.574c0-1.067-.75-1.994-1.802-2.169a47.865 47.865 0 0 0-1.134-.175 2.31 2.31 0 0 1-1.641-1.055l-.822-1.316a2.192 2.192 0 0 0-1.736-1.039 48.774 48.774 0 0 0-5.231 0 2.192 2.192 0 0 0-1.736 1.039l-.821 1.316Z"></path>
                     <path stroke-linecap="round" stroke-linejoin="round" d="M12 16.5a3.75 3.75 0 1 0 0-7.5 3.75 3.75 0 0 0 0 7.5Z"></path>
                 </svg>
                 <span>Capture</span>
             </button>
-            <div class="w-full grid grid-cols-4 gap-1 px-1">
-                <button id="nav-dashboard" onclick="switchTab('dashboard', 'My Pantry')" class="liquid-active-pill flex flex-col items-center justify-center py-2 rounded-2xl text-white transition duration-200">
+            <div class="w-full grid grid-cols-5 gap-1 px-1">
+                <button id="nav-dashboard" onclick="switchTab('dashboard', 'My Pantry')" class="liquid-active-pill flex flex-col items-center justify-center py-2 rounded-2xl text-white transition">
                     <span class="text-base">📋</span>
-                    <span class="text-[9px] font-bold uppercase tracking-widest mt-1">Pantry</span>
+                    <span class="text-[8px] font-bold uppercase tracking-wider mt-0.5">Pantry</span>
                 </button>
-                <button id="nav-history" onclick="switchTab('history', 'Activity')" class="flex flex-col items-center justify-center py-2 rounded-2xl text-slate-500 hover:text-white transition duration-200">
+                <button id="nav-shopping" onclick="switchTab('shopping', 'Shopping List')" class="flex flex-col items-center justify-center py-2 rounded-2xl text-slate-500 hover:text-white transition">
+                    <span class="text-base">🛒</span>
+                    <span class="text-[8px] font-bold uppercase tracking-wider mt-0.5">List</span>
+                </button>
+                <button id="nav-history" onclick="switchTab('history', 'Activity')" class="flex flex-col items-center justify-center py-2 rounded-2xl text-slate-500 hover:text-white transition">
                     <span class="text-base">📖</span>
-                    <span class="text-[9px] font-bold uppercase tracking-widest mt-1">History</span>
+                    <span class="text-[8px] font-bold uppercase tracking-wider mt-0.5">History</span>
                 </button>
-                <button id="nav-kai" onclick="switchTab('kai', 'KAI AI')" class="flex flex-col items-center justify-center py-2 rounded-2xl text-slate-500 hover:text-white transition duration-200">
-                    <div class="relative w-8 h-8 flex items-center justify-center mb-1">
-                        <svg class="w-6 h-6 text-emerald-400" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.5" stroke-dasharray="4 2" />
-                            <circle cx="12" cy="12" r="5" stroke="currentColor" stroke-width="1" opacity="0.6" />
-                            <circle cx="12" cy="12" r="2" fill="currentColor" />
-                            <path d="M12 1v3M12 20v3M1 12h3M20 12h3" stroke="currentColor" stroke-width="1" opacity="0.4" />
-                        </svg>
-                    </div>
-                    <span class="text-[9px] font-bold uppercase tracking-widest mt-1">KAI AI</span>
+                <button id="nav-kai" onclick="switchTab('kai', 'KAI AI')" class="flex flex-col items-center justify-center py-2 rounded-2xl text-slate-500 hover:text-white transition">
+                    <span class="text-base">🤖</span>
+                    <span class="text-[8px] font-bold uppercase tracking-wider mt-0.5">KAI AI</span>
                 </button>
-                <button id="nav-stats" onclick="switchTab('stats', 'Savings')" class="flex flex-col items-center justify-center py-2 rounded-2xl text-slate-500 hover:text-white transition duration-200">
+                <button id="nav-stats" onclick="switchTab('stats', 'Savings')" class="flex flex-col items-center justify-center py-2 rounded-2xl text-slate-500 hover:text-white transition">
                     <span class="text-base">💰</span>
-                    <span class="text-[9px] font-bold uppercase tracking-widest mt-1">Savings</span>
+                    <span class="text-[8px] font-bold uppercase tracking-wider mt-0.5">Savings</span>
                 </button>
             </div>
         </div>
@@ -420,46 +358,61 @@
     <div id="confirmModal" class="modal-backdrop hidden">
       <div class="modal-card">
         <div class="modal-header">
-          <h2>Verify Item</h2>
-          <p class="subtitle">Double-check the details before adding to your kitchen.</p>
+          <h2 class="text-white font-bold text-lg">Verify Item</h2>
+          <p class="text-xs text-slate-400 mb-4">Double-check the details before adding to your kitchen.</p>
         </div>
-        <form id="confirmItemForm" class="modal-form">
-          <div class="input-group">
-            <label for="modalItemName">Item Name</label>
-            <input type="text" id="modalItemName" required placeholder="e.g., Organic Whole Milk">
+        <form id="confirmItemForm" class="space-y-3">
+          <div class="flex flex-col gap-1">
+            <label class="text-[10px] font-bold text-slate-400 uppercase">Item Name</label>
+            <input type="text" id="modalItemName" required class="bg-white/5 border border-white/10 rounded-xl p-2 text-xs text-white">
           </div>
-          <div class="form-row">
-            <div class="input-group half">
-              <label for="modalQuantity">Quantity</label>
-              <input type="text" id="modalQuantity" required placeholder="e.g., 1 carton, 500g">
+          <div class="grid grid-cols-2 gap-2">
+            <div class="flex flex-col gap-1">
+              <label class="text-[10px] font-bold text-slate-400 uppercase">Quantity</label>
+              <input type="text" id="modalQuantity" required class="bg-white/5 border border-white/10 rounded-xl p-2 text-xs text-white">
             </div>
-            <div class="input-group half">
-              <label for="modalStorage">Storage Location</label>
-              <div class="select-wrapper">
-                <select id="modalStorage">
-                  <option value="Fridge">Fridge ❄️</option>
-                  <option value="Pantry">Pantry 🪵</option>
-                  <option value="Freezer">Freezer 🥶</option>
-                </select>
-              </div>
+            <div class="flex flex-col gap-1">
+              <label class="text-[10px] font-bold text-slate-400 uppercase">Storage</label>
+              <select id="modalStorage" class="bg-slate-900 border border-white/10 rounded-xl p-2 text-xs text-white">
+                <option value="Fridge">Fridge ❄️</option>
+                <option value="Pantry">Pantry 🪵</option>
+                <option value="Freezer">Freezer 🥶</option>
+              </select>
             </div>
           </div>
-          <div class="form-row">
-            <div class="input-group half">
-              <label for="modalAddedDate">Added Date</label>
-              <input type="date" id="modalAddedDate" required>
+          <div class="grid grid-cols-2 gap-2">
+            <div class="flex flex-col gap-1">
+              <label class="text-[10px] font-bold text-slate-400 uppercase">Added Date</label>
+              <input type="date" id="modalAddedDate" required class="bg-white/5 border border-white/10 rounded-xl p-2 text-xs text-white">
             </div>
-            <div class="input-group half">
-              <label for="modalExpiryDate">Expiration Date</label>
-              <input type="date" id="modalExpiryDate" required>
+            <div class="flex flex-col gap-1">
+              <label class="text-[10px] font-bold text-slate-400 uppercase">Expiration Date</label>
+              <input type="date" id="modalExpiryDate" required class="bg-white/5 border border-white/10 rounded-xl p-2 text-xs text-white">
             </div>
           </div>
-          <div class="modal-actions">
-            <button type="button" id="cancelModalBtn" onclick="closeConfirmModal()" class="btn-secondary">Cancel</button>
-            <button type="submit" class="btn-primary">Confirm & Add</button>
+          <div class="flex justify-end gap-2 pt-2">
+            <button type="button" onclick="closeConfirmModal()" class="px-4 py-2 text-xs text-slate-400">Cancel</button>
+            <button type="submit" class="bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 px-4 py-2 rounded-xl text-xs font-bold">Confirm & Add</button>
           </div>
         </form>
       </div>
+    </div>
+
+    <!-- Batch Receipt Scanned Items Review Modal (NEW) -->
+    <div id="receiptModal" class="modal-backdrop hidden">
+        <div class="modal-card max-w-sm space-y-4">
+            <div class="flex justify-between items-center border-b border-white/10 pb-2">
+                <h2 class="text-white font-bold text-base">Receipt Items Extracted</h2>
+                <button onclick="closeReceiptModal()" class="text-slate-400 text-sm">✕</button>
+            </div>
+            <p class="text-[11px] text-slate-400">Items extracted from receipt. Review and save to pantry:</p>
+            <div id="receipt-items-list" class="space-y-2 max-h-60 overflow-y-auto pr-1">
+                <!-- Dynamically Populated -->
+            </div>
+            <button onclick="saveBatchReceiptItems()" class="w-full bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black py-2.5 rounded-xl text-xs uppercase tracking-wider">
+                Add All Items To Pantry 🎉
+            </button>
+        </div>
     </div>
 
     <!-- Glassmorphic Flashcard Recipe View Modal -->
@@ -483,8 +436,8 @@
                 </div>
             </div>
             <div class="border-t border-white/5 pt-3 flex gap-2">
-                <button type="button" id="btnDeckPrev" onclick="navigateDeck(-1)" class="btn-secondary flex-1 !text-slate-400 border border-white/5 bg-white/[0.02] hover:bg-white/5 hover:!text-white h-10 rounded-lg">← Back</button>
-                <button type="button" id="btnDeckNext" onclick="navigateDeck(1)" class="btn-primary flex-1 bg-emerald-500/20 border-emerald-500/30 text-emerald-300 hover:bg-emerald-500/40 py-2.5 rounded-lg font-semibold h-10">Next →</button>
+                <button type="button" id="btnDeckPrev" onclick="navigateDeck(-1)" class="btn-secondary flex-1 text-slate-400 border border-white/5 bg-white/[0.02] hover:bg-white/5 hover:text-white h-10 rounded-lg">← Back</button>
+                <button type="button" id="btnDeckNext" onclick="navigateDeck(1)" class="btn-primary flex-1 bg-emerald-500/20 border border-emerald-500/30 text-emerald-300 hover:bg-emerald-500/40 py-2.5 rounded-lg font-semibold h-10">Next →</button>
                 <button type="button" id="btnDeckClose" onclick="closeRecipeModal()" class="btn-secondary text-[11px] font-semibold text-slate-500 hover:text-slate-400 py-2.5 px-3">Close</button>
             </div>
         </div>
@@ -492,65 +445,234 @@
 
     <!-- FRONT-END APP SCRIPTS -->
     <script>
-        /* ---------------------------------------------------- */
-        /* ⚙️ GLOBAL RUNTIME STATE & ENGINES                     */
-        /* ---------------------------------------------------- */
         let streamInstance = null;
         let currentPantryItems = [];
         let activeDeckRecipe = null;
         let currentDeckIndex = 0;
         let chatHistory = [];
+        let tempReceiptItems = [];
 
         /* ---------------------------------------------------- */
         /* 🗺️ NAVIGATION & TAB SWITCHING SYSTEM                  */
         /* ---------------------------------------------------- */
         function switchTab(tabId, displayTitle) {
-            document.querySelectorAll('.tab-content').forEach(pane => {
-                pane.classList.remove('active');
-            });
+            document.querySelectorAll('.tab-content').forEach(pane => pane.classList.remove('active'));
             
             const targetPane = document.getElementById(`tab-${tabId}`);
             if (targetPane) targetPane.classList.add('active');
             
             document.getElementById('screen-title').innerText = displayTitle;
 
-            const buttons = ['nav-dashboard', 'nav-history', 'nav-kai', 'nav-stats'];
+            const buttons = ['nav-dashboard', 'nav-shopping', 'nav-history', 'nav-kai', 'nav-stats'];
             buttons.forEach(id => {
                 const btn = document.getElementById(id);
-                if (btn) {
-                    btn.className = "flex flex-col items-center justify-center py-2 rounded-2xl text-slate-400 hover:text-white transition duration-200";
-                }
+                if (btn) btn.className = "flex flex-col items-center justify-center py-2 rounded-2xl text-slate-400 hover:text-white transition duration-200";
             });
 
             const activeBtn = document.getElementById(`nav-${tabId}`);
-            if (activeBtn) {
-                activeBtn.className = "liquid-active-pill flex flex-col items-center justify-center py-2 rounded-2xl text-white transition duration-200";
-            }
+            if (activeBtn) activeBtn.className = "liquid-active-pill flex flex-col items-center justify-center py-2 rounded-2xl text-white transition duration-200";
 
-            if (tabId === 'stats' || tabId === 'savings') {
-                loadSavingsDashboard();
-            } else if (tabId === 'history') {
-                loadActivityHistory();
-            }
+            if (tabId === 'stats') loadSavingsDashboard();
+            else if (tabId === 'history') loadActivityHistory();
+            else if (tabId === 'shopping') loadShoppingList();
+        }
 
-            const capturePill = document.getElementById('btn-capture-pill');
-            if (capturePill) {
-                if (tabId === 'dashboard') {
-                    capturePill.style.display = 'flex';
-                    setTimeout(() => {
-                        capturePill.style.opacity = '1';
-                        capturePill.style.transform = 'scale(1)';
-                    }, 10);
-                } else {
-                    capturePill.style.opacity = '0';
-                    capturePill.style.transform = 'scale(0.9)';
-                    setTimeout(() => {
-                        const dashboard = document.getElementById('tab-dashboard');
-                        if (dashboard && !dashboard.classList.contains('active')) {
-                            capturePill.style.display = 'none';
-                        }
-                    }, 150);
+        /* ---------------------------------------------------- */
+        /* 📷 CAPTURE MODE CHOOSER & RECEIPT HANDLERS           */
+        /* ---------------------------------------------------- */
+        function openCaptureChoiceModal() {
+            document.getElementById('capture-choice-modal').classList.remove('hidden');
+        }
+        function closeCaptureChoiceModal() {
+            document.getElementById('capture-choice-modal').classList.add('hidden');
+        }
+        function startSingleItemScan() {
+            closeCaptureChoiceModal();
+            openCamera();
+        }
+        function triggerReceiptUpload() {
+            closeCaptureChoiceModal();
+            document.getElementById('receipt-file-input').click();
+        }
+
+        async function handleReceiptFileSelected(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = async (e) => {
+                const imageBase64 = e.target.result;
+                try {
+                    alert("⏳ Processing receipt with Gemini AI...");
+                    const response = await fetch('/api/pantry/scan-receipt', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ imageBase64 })
+                    });
+                    const result = await response.json();
+                    if (response.ok && result.items) {
+                        tempReceiptItems = result.items;
+                        renderReceiptReviewModal();
+                    } else {
+                        alert("Could not extract items from receipt.");
+                    }
+                } catch (err) {
+                    console.error("Receipt Scan Error:", err);
+                    alert("Error reaching receipt scanner service.");
                 }
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function renderReceiptReviewModal() {
+            const container = document.getElementById('receipt-items-list');
+            container.innerHTML = '';
+            
+            const today = new Date();
+
+            tempReceiptItems.forEach((item, idx) => {
+                const expDate = new Date();
+                expDate.setDate(today.getDate() + (item.days_until_expiry || 7));
+                const formattedExp = expDate.toISOString().split('T')[0];
+                item.computedExpiry = formattedExp;
+
+                const row = document.createElement('div');
+                row.className = "bg-white/5 p-2.5 rounded-xl flex items-center justify-between text-xs";
+                row.innerHTML = `
+                    <div>
+                        <p class="font-bold text-white">${item.name}</p>
+                        <p class="text-[10px] text-slate-400">Qty: ${item.quantity || '1'} • Exp: ${formattedExp}</p>
+                    </div>
+                    <button onclick="removeTempReceiptItem(${idx})" class="text-rose-400 font-bold px-2">✕</button>
+                `;
+                container.appendChild(row);
+            });
+
+            document.getElementById('receiptModal').classList.remove('hidden');
+        }
+
+        function removeTempReceiptItem(idx) {
+            tempReceiptItems.splice(idx, 1);
+            renderReceiptReviewModal();
+        }
+
+        function closeReceiptModal() {
+            document.getElementById('receiptModal').classList.add('hidden');
+        }
+
+        async function saveBatchReceiptItems() {
+            const todayStr = new Date().toISOString().split('T')[0];
+            for (const item of tempReceiptItems) {
+                await fetch('/api/pantry', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        name: item.name,
+                        quantity: item.quantity || '1',
+                        expiry_date: item.computedExpiry,
+                        added_date: todayStr,
+                        storage: 'Pantry'
+                    })
+                });
+            }
+            closeReceiptModal();
+            fetchPantryItems();
+            alert(`🎉 Successfully added ${tempReceiptItems.length} items to your pantry!`);
+        }
+
+        /* ---------------------------------------------------- */
+        /* 🛒 SHOPPING LIST MANAGEMENT                          */
+        /* ---------------------------------------------------- */
+        async function loadShoppingList() {
+            const container = document.getElementById('shopping-list-container');
+            if (!container) return;
+            
+            try {
+                const res = await fetch('/api/shopping-list');
+                const items = await res.json();
+                
+                if (items.length === 0) {
+                    container.innerHTML = `<p class="text-xs text-slate-500 text-center py-6">Your shopping list is empty.</p>`;
+                    return;
+                }
+
+                container.innerHTML = '';
+                items.forEach(item => {
+                    const el = document.createElement('div');
+                    el.className = `p-3 rounded-2xl flex items-center justify-between text-xs ${item.is_checked ? 'bg-white/2 opacity-50' : 'bg-white/5 border border-white/5'}`;
+                    el.innerHTML = `
+                        <div class="flex items-center gap-3">
+                            <input type="checkbox" ${item.is_checked ? 'checked' : ''} onchange="toggleShoppingChecked(${item.id}, this.checked)" class="w-4 h-4 rounded accent-emerald-400">
+                            <div>
+                                <p class="font-bold text-white ${item.is_checked ? 'line-through' : ''}">${item.name}</p>
+                                <span class="text-[9px] text-slate-400">${item.category} • Qty: ${item.quantity}</span>
+                            </div>
+                        </div>
+                        <button onclick="deleteShoppingItem(${item.id})" class="text-slate-500 hover:text-rose-400 text-xs">✕</button>
+                    `;
+                    container.appendChild(el);
+                });
+            } catch (e) {
+                console.error("Error loading shopping list:", e);
+            }
+        }
+
+        async function addShoppingItem() {
+            const input = document.getElementById('shopping-input');
+            const name = input.value.trim();
+            if (!name) return;
+
+            await fetch('/api/shopping-list', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ name, category: 'Custom Items' })
+            });
+            input.value = '';
+            loadShoppingList();
+        }
+
+        async function toggleShoppingChecked(id, is_checked) {
+            await fetch(`/api/shopping-list/${id}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ is_checked })
+            });
+            loadShoppingList();
+        }
+
+        async function deleteShoppingItem(id) {
+            await fetch(`/api/shopping-list/${id}`, { method: 'DELETE' });
+            loadShoppingList();
+        }
+
+        async function checkoutShoppingList() {
+            await fetch('/api/shopping-list/checkout', { method: 'POST' });
+            loadShoppingList();
+            fetchPantryItems();
+            alert("Checked items moved to your pantry! 📦");
+        }
+
+        async function trimShoppingListWithAI() {
+            const budget = document.getElementById('budget-input').value;
+            if (!budget) {
+                alert("Please enter a target dollar budget!");
+                return;
+            }
+
+            const res = await fetch('/api/shopping-list');
+            const items = await res.json();
+            if (items.length === 0) return;
+
+            alert("🧠 Consulting KAI to optimize list to fit $" + budget + "...");
+            const trimRes = await fetch('/api/shopping-list/trim', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ budget, items })
+            });
+            const advice = await trimRes.json();
+            
+            if (advice.essential) {
+                alert(`🎯 Budget Trimmer Advice:\n\nEssentials to buy:\n${advice.essential.join('\n')}\n\nOptional to skip:\n${(advice.optional || []).join('\n')}`);
             }
         }
 
@@ -604,9 +726,7 @@
                             <p class="text-[10px] text-slate-400 mt-0.5">Qty: ${item.quantity || '1'} • Expires: ${item.expiry_date}</p>
                         </div>
                         <button onclick="removeItem(${item.id})" class="p-1.5 hover:bg-white/10 rounded-lg text-slate-400 hover:text-rose-500 transition active:scale-95">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3m6 0v3m0 0H9m4 0h4"></path>
-                            </svg>
+                            ✕
                         </button>
                     `;
 
@@ -703,8 +823,6 @@
                     if (response.ok) {
                         closeConfirmModal();
                         fetchPantryItems();
-                    } else {
-                        alert("Failed to save checked item info.");
                     }
                 } catch (err) {
                     console.error("Save item error:", err);
@@ -750,7 +868,6 @@
                 }
             } catch (err) {
                 console.error("Scan network error:", err);
-                alert("Failed to reach server.");
             } finally {
                 if (indicator) indicator.classList.add('hidden');
                 if (shutter) shutter.disabled = false;
@@ -760,16 +877,10 @@
         /* ---------------------------------------------------- */
         /* 🍳 DEDUPLICATED INGREDIENT ENGINE & FLASHCARD DECK    */
         /* ---------------------------------------------------- */
-        /**
-         * Deduplicate ingredients strictly (case-insensitive).
-         * Prevents the "doubling" bug where Cook Again would repeat ingredients.
-         */
         function deduplicateIngredients(ingredientsList) {
             if (!Array.isArray(ingredientsList)) return [];
-            
             const seen = new Set();
             const result = [];
-            
             ingredientsList.forEach(ingredient => {
                 const cleaned = ingredient.trim().toLowerCase();
                 if (cleaned && !seen.has(cleaned)) {
@@ -777,63 +888,22 @@
                     result.push(ingredient.trim());
                 }
             });
-            
             return result;
         }
 
-        /**
-         * Open recipe modal with full deduplication and structured fallbacks.
-         * Ensures clean ingredients, proper title detection, and dish-specific steps.
-         */
         function openRecipeModal(recipe) {
             if (!recipe) return;
             
             let rawText = recipe.reply || '';
-            
-            // 1. TITLE RESOLUTION: Try JSON fields first, then parse raw text
-            let detectedTitle = recipe.recipeTitle || recipe.recipe_name || '';
-            if (!detectedTitle && rawText) {
-                const lines = rawText.split('\n').map(l => l.trim()).filter(l => l.length > 0);
-                if (lines[0]) {
-                    detectedTitle = lines[0].replace(/Let's whip up (some|a )?/i, '').replace(/!+$/, '').replace(/\*\*+/g, '');
-                }
-            }
-            if (!detectedTitle) detectedTitle = "KAI Custom Dish";
+            let detectedTitle = recipe.recipeTitle || recipe.recipe_name || "KAI Custom Dish";
 
-            // 2. INGREDIENTS: Parse from arrays first, then fall back to text
-            let rawIngredients = [];
-            if (Array.isArray(recipe.ingredients) && recipe.ingredients.length > 0) {
-                rawIngredients = recipe.ingredients;
-            } else if (typeof recipe.ingredients_used === 'string') {
-                rawIngredients = recipe.ingredients_used.split(',');
-            }
-
-            // CRITICAL: Deduplicate ingredients STRICTLY before parsing steps
+            let rawIngredients = Array.isArray(recipe.ingredients) ? recipe.ingredients : [];
             let parsedIngredients = deduplicateIngredients(rawIngredients);
+            let parsedSteps = Array.isArray(recipe.steps) ? recipe.steps : [];
 
-            // 3. STEPS: Use structured steps if available
-            let parsedSteps = [];
-            if (Array.isArray(recipe.steps) && recipe.steps.length > 0) {
-                parsedSteps = recipe.steps;
-            }
+            if (parsedIngredients.length === 0) parsedIngredients = ["Assorted Pantry Ingredients"];
+            if (parsedSteps.length === 0) parsedSteps = ["Prep ingredients and cook over medium heat until done."];
 
-            // Fallback: Parse steps from raw text if not provided as array
-            if (rawText && parsedSteps.length === 0) {
-                parsedSteps = parseStepsFromText(rawText, parsedIngredients, detectedTitle);
-            }
-
-            // 4. CLEAN FALLBACKS: Use pantry data if nothing else worked
-            if (parsedIngredients.length === 0) {
-                parsedIngredients = currentPantryItems.slice(0, 3).map(i => i.name);
-                if (parsedIngredients.length === 0) parsedIngredients = ["Assorted Pantry Ingredients"];
-            }
-
-            // 5. DISH-SPECIFIC FALLBACK STEPS: Analyze title & ingredients to generate contextual instructions
-            if (parsedSteps.length === 0) {
-                parsedSteps = generateContextualSteps(detectedTitle, parsedIngredients);
-            }
-
-            // Mount cleaned state to global
             activeDeckRecipe = {
                 title: detectedTitle,
                 ingredients: parsedIngredients,
@@ -857,99 +927,12 @@
             document.getElementById('recipeModal').classList.remove('hidden');
         }
 
-        /**
-         * Parse cooking steps from raw text with strict regex patterns.
-         */
-        function parseStepsFromText(rawText, ingredientsList, dishTitle) {
-            const lines = rawText.split('\n').map(l => l.trim()).filter(l => l.length > 0);
-            let parsedSteps = [];
-            let parsingStepsSection = false;
-
-            lines.forEach(line => {
-                // Identify steps/directions header
-                if (/directions:|steps:|instructions:/i.test(line)) {
-                    parsingStepsSection = true;
-                    return;
-                }
-
-                // Extract steps in current section
-                if (parsingStepsSection) {
-                    let cleaned = line.replace(/^[\s\-\*\•\d\.]+\s*/, '').trim();
-                    if (cleaned && !cleaned.toLowerCase().includes('recipe')) {
-                        parsedSteps.push(cleaned);
-                    }
-                }
-            });
-
-            return parsedSteps;
-        }
-
-        /**
-         * Generate contextual cooking instructions based on dish title and ingredients.
-         */
-        function generateContextualSteps(dishTitle, ingredientsList) {
-            const titleLower = (dishTitle || '').toLowerCase();
-            const ingredientsText = ingredientsList.join(' ').toLowerCase();
-
-            // Detect cold/no-cook desserts
-            const coldKeywords = [
-                'ice cream', 'frozen', 'chill', 'chilled', 'no-bake', 'no bake',
-                'scoop', 'cold', 'deconstructed', 'dessert', 'chocolate', 'mousse',
-                'pudding', 'parfait', 'whip', 'sundae', 'gelato', 'tiramisu',
-                'cheesecake', 'trifle', 'mousse', 'panna cotta', 'smoothie bowl'
-            ];
-            const isColdDessert = coldKeywords.some(k => titleLower.includes(k) || ingredientsText.includes(k));
-
-            // Detect salads & fresh preparations
-            const saladKeywords = ['salad', 'slaw', 'fresh', 'raw', 'vinaigrette', 'dressing', 'chopped', 'mixed greens'];
-            const isSaladDish = saladKeywords.some(k => titleLower.includes(k) || ingredientsText.includes(k));
-
-            // Detect slow-cook/braise dishes
-            const slowCookKeywords = ['braise', 'slow', 'stew', 'curry', 'tagine', 'cassoulet', 'risotto', 'ragu'];
-            const isSlowCook = slowCookKeywords.some(k => titleLower.includes(k) || ingredientsText.includes(k));
-
-            let steps = [];
-            const ingredientLine = ingredientsList.slice(0, 3).join(', ');
-
-            if (isColdDessert) {
-                steps = [
-                    `Prep your ingredients: ${ingredientLine}.`,
-                    `Assemble components without heating—layer in a bowl or glass, arrange items, or fold gently as desired.`,
-                    `Add toppings, sauces, or crumbles; chill briefly if needed, and serve cold!`
-                ];
-            } else if (isSaladDish) {
-                steps = [
-                    `Wash and dry your fresh ingredients: ${ingredientLine}.`,
-                    `Chop or slice ingredients to desired sizes and place in a large bowl.`,
-                    `Toss with dressing, season to taste, and serve immediately while fresh.`
-                ];
-            } else if (isSlowCook) {
-                steps = [
-                    `Prep and season your ingredients: ${ingredientLine}.`,
-                    `Combine in a pot or slow cooker and cook over low-medium heat for 30–60 minutes until flavors meld.`,
-                    `Adjust seasoning, plate, and serve with your favorite sides!`
-                ];
-            } else {
-                // Default: standard cooking flow
-                steps = [
-                    `Prep your ingredients: ${ingredientLine}.`,
-                    `Heat a pan to medium and combine ingredients. Cook, stirring occasionally, until done (5–15 min).`,
-                    `Season to taste, plate, and serve warm!`
-                ];
-            }
-
-            return steps;
-        }
-
         function renderDeckState() {
             const tracker = document.getElementById('recipeStepTracker');
             const ingredientsView = document.getElementById('deckIngredientsContainer');
             const stepsView = document.getElementById('deckStepsContainer');
-            
             const btnPrev = document.getElementById('btnDeckPrev');
             const btnNext = document.getElementById('btnDeckNext');
-
-            if (!tracker || !ingredientsView || !stepsView || !btnPrev || !btnNext) return;
 
             if (currentDeckIndex === 0) {
                 tracker.innerText = "Recipe Overview";
@@ -957,25 +940,20 @@
                 stepsView.classList.add('hidden');
                 btnPrev.classList.add('hidden');
                 btnNext.innerText = "START COOKING!";
-                btnNext.className = "w-full bg-emerald-500 text-slate-950 font-black tracking-widest py-3 rounded-xl text-xs uppercase transition active:scale-95";
             } else {
                 ingredientsView.classList.add('hidden');
                 stepsView.classList.remove('hidden');
                 btnPrev.classList.remove('hidden');
 
-                const localizedStepNum = currentDeckIndex - 1;
                 const totalStepsCount = activeDeckRecipe.steps.length;
-
                 tracker.innerText = `Step ${currentDeckIndex} / ${totalStepsCount}`;
-                document.getElementById('deckStepNumberBadge').innerText = `Direction Step ${currentDeckIndex}`;
-                document.getElementById('deckStepBodyText').innerText = activeDeckRecipe.steps[localizedStepNum];
+                document.getElementById('deckStepNumberBadge').innerText = `Step ${currentDeckIndex}`;
+                document.getElementById('deckStepBodyText').innerText = activeDeckRecipe.steps[currentDeckIndex - 1];
 
                 if (currentDeckIndex >= totalStepsCount) {
                     btnNext.innerText = "Log Final Dish!";
-                    btnNext.className = "flex-1 bg-blue-500 text-white font-black tracking-widest py-3 rounded-xl text-xs uppercase transition active:scale-95";
                 } else {
                     btnNext.innerText = "Next Step →";
-                    btnNext.className = "flex-1 bg-emerald-500 text-slate-950 font-bold py-3 rounded-xl text-xs transition active:scale-95";
                 }
             }
         }
@@ -994,209 +972,167 @@
         }
 
         function closeRecipeModal() {
-            const modal = document.getElementById('recipeModal');
-            if (modal) modal.classList.add('hidden');
+            document.getElementById('recipeModal').classList.add('hidden');
             activeDeckRecipe = null;
             currentDeckIndex = 0;
         }
 
         /* ---------------------------------------------------- */
-        /* 📖 ACTIVITY LOG HISTORY HANDLERS                    */
+        /* 📖 HISTORY & SAVINGS                                  */
         /* ---------------------------------------------------- */
         async function commitRecipeToHistoryLog() {
             if (!activeDeckRecipe) return;
 
-            let fallbackLog = JSON.parse(localStorage.getItem('kai_history_fallback') || '[]');
-            const isDuplicate = fallbackLog.some(r => 
-                r.recipe_name.toLowerCase().trim() === activeDeckRecipe.title.toLowerCase().trim()
-            );
-
-            // Deduplicate ingredients before deducting from pantry
-            const cleanIngredients = deduplicateIngredients(activeDeckRecipe.ingredients);
-
-            cleanIngredients.forEach(ing => {
-                const ingLower = ing.toLowerCase();
-                const matchingItem = currentPantryItems.find(pantryItem => 
-                    ingLower.includes(pantryItem.name.toLowerCase()) || 
-                    pantryItem.name.toLowerCase().includes(ingLower)
-                );
-                
-                if (matchingItem) {
-                    fetch(`/api/pantry/${matchingItem.id}`, { method: 'DELETE' })
-                        .catch(err => console.warn("Failed to delete pantry asset backend:", err));
-                }
-            });
-
-            setTimeout(() => { fetchPantryItems(); }, 300);
-
-            if (isDuplicate) {
-                closeRecipeModal();
-                loadActivityHistory();
-                alert("Delicious! Ingredients deducted. (Recipe already logged, skipping duplicate list entry) 🍳");
-                return;
-            }
-
-            const targetDateStr = new Date().toISOString().split('T')[0];
             const record = {
-                id: Date.now(),
                 recipe_name: activeDeckRecipe.title,
-                ingredients_used: cleanIngredients.join(', '),
-                steps: activeDeckRecipe.steps,
-                cooked_date: targetDateStr
+                ingredients_used: activeDeckRecipe.ingredients.join(', '),
+                recipe_steps: activeDeckRecipe.steps.join(' | ')
             };
 
-            fallbackLog.unshift(record);
-            localStorage.setItem('kai_history_fallback', JSON.stringify(fallbackLog));
-
-            try {
-                await fetch('/api/history', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(record)
-                });
-            } catch (err) {
-                console.warn("Synced offline to local storage client:", err);
-            }
+            await fetch('/api/history', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(record)
+            });
 
             closeRecipeModal();
             loadActivityHistory();
-            alert("Recipe safely logged and ingredients deducted from pantry! 🎉");
-        }
-
-        async function getRecipeHistory() {
-            let recipes = [];
-            try {
-                const response = await fetch('/api/history');
-                if (response.ok) recipes = await response.json();
-            } catch (e) {
-                console.warn("Using fallback local log registry stream.");
-            }
-
-            const localBackup = JSON.parse(localStorage.getItem('kai_history_fallback') || '[]');
-            localBackup.forEach(localItem => {
-                if (!recipes.some(r => r.recipe_name === localItem.recipe_name && r.cooked_date === localItem.cooked_date)) {
-                    recipes.push(localItem);
-                }
-            });
-
-            return recipes;
+            alert("Recipe safely logged! 🎉");
         }
 
         async function loadActivityHistory() {
-            const recipes = await getRecipeHistory();
             const historyLog = document.getElementById('history-log');
             if (!historyLog) return;
 
-            historyLog.innerHTML = '';
+            try {
+                const res = await fetch('/api/history');
+                const recipes = await res.json();
+                historyLog.innerHTML = '';
 
-            if (recipes.length === 0) {
-                historyLog.innerHTML = `
-                    <div class="text-center py-12 text-slate-600">
-                        <span class="text-3xl block mb-2">📋</span>
-                        <p class="text-xs font-semibold">No recipes cooked yet.</p>
-                        <p class="text-[10px] text-slate-700 mt-1">Start cooking and your recipes will appear here!</p>
-                    </div>
-                `;
-                return;
-            }
+                if (recipes.length === 0) {
+                    historyLog.innerHTML = `<p class="text-xs text-slate-500 text-center py-6">No history recorded yet.</p>`;
+                    return;
+                }
 
-            recipes.forEach(recipe => {
-                // Deduplicate ingredients when displaying
-                const ingredients = Array.isArray(recipe.ingredients_used) 
-                    ? recipe.ingredients_used 
-                    : recipe.ingredients_used.split(',');
-                
-                const cleanIngredients = deduplicateIngredients(ingredients);
-
-                const card = document.createElement('div');
-                card.className = "bg-white/5 border border-white/10 p-5 rounded-2xl space-y-4 shadow-[0_10px_30px_rgba(0,0,0,0.2)]";
-                card.innerHTML = `
-                    <div class="flex items-start justify-between gap-4 w-full">
-                        <div class="flex items-start gap-3 min-w-0 flex-1">
-                            <span class="text-lg shrink-0 mt-0.5">🍳</span>
-                            <div class="min-w-0">
-                                <h4 class="font-bold text-sm text-white break-words pr-1 leading-snug">${recipe.recipe_name}</h4>
-                                <p class="text-[10px] text-slate-500 font-medium mt-1">Cooked on ${recipe.cooked_date}</p>
-                            </div>
+                recipes.forEach(recipe => {
+                    const card = document.createElement('div');
+                    card.className = "bg-white/5 border border-white/10 p-4 rounded-2xl space-y-2";
+                    card.innerHTML = `
+                        <div class="flex justify-between items-center">
+                            <h4 class="font-bold text-sm text-white">${recipe.recipe_name}</h4>
+                            <span class="text-[10px] text-emerald-400 font-bold">Cooked ✓</span>
                         </div>
-                        <span class="inline-flex shrink-0 bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 font-black tracking-wider text-[9px] uppercase px-2.5 py-1 rounded-full">
-                            Cooked <span class="text-[10px]">✓</span>
-                        </span>
-                    </div>
-                    <div class="space-y-2">
-                        <span class="text-[9px] font-bold text-slate-400 tracking-wider uppercase block">Ingredients Used</span>
-                        <div class="bg-slate-950/40 border border-white/5 rounded-xl p-3 text-xs text-slate-300 leading-relaxed">
-                            ${cleanIngredients.join(', ')}
-                        </div>
-                    </div>
-                    <div class="flex flex-col gap-2 pt-1 sm:flex-row">
-                        <button onclick="recipeHistoryCookAgain(${JSON.stringify(recipe).replace(/"/g, '&quot;')})" class="w-full sm:flex-1 bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 border border-emerald-500/20 font-bold text-xs py-2.5 rounded-xl transition active:scale-95">
-                            Cook Again <span class="text-[10px]">↺</span>
-                        </button>
-                        <button onclick="deleteRecipeFromHistory('${recipe.recipe_name}')" class="w-full sm:w-auto bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 border border-rose-500/20 font-bold text-xs py-2.5 px-4 rounded-xl transition active:scale-95">
-                            Delete <span class="text-[10px]">✕</span>
-                        </button>
-                    </div>
-                `;
-                historyLog.appendChild(card);
-            });
-        }
-
-        function recipeHistoryCookAgain(recipeData) {
-            // Ensure clean state and deduplicated ingredients when reopening
-            const cleanedRecipe = {
-                ...recipeData,
-                ingredients: deduplicateIngredients(
-                    Array.isArray(recipeData.ingredients_used) 
-                        ? recipeData.ingredients_used 
-                        : recipeData.ingredients_used.split(',')
-                ),
-                steps: recipeData.steps || []
-            };
-            openRecipeModal(cleanedRecipe);
-        }
-
-        function deleteRecipeFromHistory(recipeName) {
-            if (confirm(`Delete "${recipeName}" from history?`)) {
-                let fallbackLog = JSON.parse(localStorage.getItem('kai_history_fallback') || '[]');
-                fallbackLog = fallbackLog.filter(r => r.recipe_name !== recipeName);
-                localStorage.setItem('kai_history_fallback', JSON.stringify(fallbackLog));
-                loadActivityHistory();
+                        <p class="text-[10px] text-slate-400">${recipe.ingredients_used || 'Standard Pantry Ingredients'}</p>
+                    `;
+                    historyLog.appendChild(card);
+                });
+            } catch (e) {
+                console.error("Error loading history:", e);
             }
         }
 
-        function loadSavingsDashboard() {
-            // Placeholder for savings dashboard loading
-            console.log("Loading savings dashboard...");
+        async function loadSavingsDashboard() {
+            const container = document.getElementById('savings-dashboard');
+            if (!container) return;
+
+            const res = await fetch('/api/history');
+            const history = await res.json();
+            const cookedCount = history.length;
+            const estimatedSavings = (cookedCount * 8.50).toFixed(2);
+
+            container.innerHTML = `
+                <div class="glass-panel rounded-3xl p-6 space-y-4 animate-fade-in">
+                    <h3 class="font-bold text-lg text-white">Savings & Analytics</h3>
+                    <div class="grid grid-cols-2 gap-3">
+                        <div class="bg-emerald-500/10 border border-emerald-500/20 p-4 rounded-2xl">
+                            <span class="text-[10px] font-bold text-emerald-400 uppercase">Est. Saved</span>
+                            <span class="text-2xl font-black text-white mt-1 block">$${estimatedSavings}</span>
+                        </div>
+                        <div class="bg-blue-500/10 border border-blue-500/20 p-4 rounded-2xl">
+                            <span class="text-[10px] font-bold text-blue-400 uppercase">Meals Prepared</span>
+                            <span class="text-2xl font-black text-white mt-1 block">${cookedCount}</span>
+                        </div>
+                    </div>
+                </div>
+            `;
         }
 
+        /* ---------------------------------------------------- */
+        /* 🔔 NOTIFICATIONS & CHAT                              */
+        /* ---------------------------------------------------- */
         function toggleNotificationTray() {
-            const tray = document.getElementById('notification-tray');
-            if (tray) {
-                tray.classList.toggle('hidden');
-            }
+            document.getElementById('notification-tray').classList.toggle('hidden');
         }
-
         function clearAllNotifications() {
-            const tray = document.getElementById('notification-tray');
-            if (tray) {
-                tray.classList.add('hidden');
+            document.getElementById('notification-dot').classList.add('hidden');
+        }
+        function checkPantryExpirations() {
+            const dot = document.getElementById('notification-dot');
+            if (!dot) return;
+            const today = new Date();
+            const expired = currentPantryItems.some(i => new Date(i.expiry_date) < today);
+            dot.classList.toggle('hidden', !expired);
+        }
+
+        async function sendChatMessage() {
+            const inputEl = document.getElementById('chat-input');
+            const chatContainer = document.getElementById('chat-messages');
+            if (!inputEl || !chatContainer) return;
+
+            const userMsg = inputEl.value.trim();
+            if (!userMsg) return;
+
+            appendChatMessage('user', userMsg);
+            inputEl.value = '';
+
+            try {
+                const response = await fetch('/api/chat', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ message: userMsg, history: chatHistory, pantry: currentPantryItems })
+                });
+
+                const data = await response.json();
+                appendChatMessage('assistant', data.reply);
+
+                if (data.isRecipe) {
+                    renderRecipeTriggerCard(data);
+                }
+            } catch (err) {
+                console.error("Chat Error:", err);
             }
         }
 
-        function sendChatMessage() {
-            // Placeholder for chat functionality
-            console.log("Chat message sent");
+        function appendChatMessage(role, text) {
+            const chatContainer = document.getElementById('chat-messages');
+            const msgDiv = document.createElement('div');
+            msgDiv.className = role === 'user' 
+                ? "bg-emerald-500/10 border border-emerald-500/20 text-emerald-100 rounded-2xl p-3 max-w-[85%] self-end text-xs"
+                : "bg-white/[0.02] rounded-2xl p-3 border border-white/5 text-slate-300 max-w-[85%] self-start text-xs";
+            msgDiv.innerText = text;
+            chatContainer.appendChild(msgDiv);
+            chatContainer.scrollTop = chatContainer.scrollHeight;
         }
 
-        function checkPantryExpirations() {
-            // Placeholder for expiration checks
-            console.log("Checking pantry expirations...");
+        function renderRecipeTriggerCard(recipeData) {
+            const chatContainer = document.getElementById('chat-messages');
+            const card = document.createElement('div');
+            card.className = "bg-emerald-950/30 border border-emerald-500/30 rounded-2xl p-3 my-1 max-w-[85%] self-start space-y-2";
+            card.innerHTML = `
+                <p class="text-xs font-bold text-emerald-400">🍳 ${recipeData.recipeTitle || "Custom Recipe"}</p>
+                <button class="w-full bg-emerald-500 text-slate-950 font-bold text-[10px] py-1.5 rounded-xl uppercase">Open Cooking Deck →</button>
+            `;
+            card.querySelector('button').onclick = () => openRecipeModal(recipeData);
+            chatContainer.appendChild(card);
+            chatContainer.scrollTop = chatContainer.scrollHeight;
         }
 
-        // Initialize on page load
+        /* 🚀 INITIALIZATION ON PAGE LOAD */
         window.addEventListener('DOMContentLoaded', () => {
             fetchPantryItems();
+            document.getElementById('chat-input')?.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') sendChatMessage();
+            });
         });
     </script>
 </body>
