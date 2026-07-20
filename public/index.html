@@ -137,37 +137,18 @@
 
         <!-- MAIN APP SCREENS -->
         <main class="flex-1 w-full pb-8">
-            
-            <!-- TAB 1: PANTRY DASHBOARD SCREEN -->
-            <div id="tab-dashboard" class="tab-content active">
-                <div class="space-y-6">
-                    <div id="section-expired" class="hidden">
-                        <h4 class="text-[10px] font-bold text-rose-500/80 uppercase tracking-widest mb-3 flex items-center gap-2">
-                            <span class="w-1.5 h-1.5 rounded-full bg-rose-500 animate-pulse"></span> Expired Items
-                        </h4>
-                        <div id="list-expired" class="space-y-2"></div>
-                    </div>
-                    <div id="section-soon" class="hidden">
-                        <h4 class="text-[10px] font-bold text-amber-500/80 uppercase tracking-widest mb-3 flex items-center gap-2">
-                            <span class="w-1.5 h-1.5 rounded-full bg-amber-500 animate-bounce"></span> Expiring Soon
-                        </h4>
-                        <div id="list-soon" class="space-y-2"></div>
-                    </div>
-                    <div id="section-fresh" class="hidden">
-                        <h4 class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-3 flex items-center gap-2">
-                            <span class="w-1.5 h-1.5 rounded-full bg-slate-500"></span> Fresh & Safe
-                        </h4>
-                        <div id="list-fresh" class="space-y-2"></div>
-                    </div>
-                    <div id="pantry-empty" class="hidden text-center py-12 text-slate-600">
-                        <span class="text-3xl block mb-2">🧊</span>
-                        <p class="text-xs font-semibold">Your pantry is empty.</p>
-                        <p class="text-[10px] text-slate-700 mt-1">Tap the Capture button below to scan items!</p>
+
+            <!-- TAB 1: HISTORY SCREEN -->
+            <div id="tab-history" class="tab-content">
+                <div class="glass-panel rounded-3xl p-6 space-y-4">
+                    <h3 class="font-bold text-base text-white">Activity History</h3>
+                    <div id="history-log" class="space-y-3">
+                        <!-- Loaded dynamically -->
                     </div>
                 </div>
             </div>
 
-            <!-- TAB 2: SHOPPING LIST SCREEN (NEW) -->
+            <!-- TAB 2: SHOPPING LIST SCREEN -->
             <div id="tab-shopping" class="tab-content">
                 <div class="glass-panel rounded-3xl p-5 space-y-4">
                     <div class="flex items-center justify-between border-b border-white/5 pb-3">
@@ -204,12 +185,31 @@
                 </div>
             </div>
 
-            <!-- TAB 3: HISTORY SCREEN -->
-            <div id="tab-history" class="tab-content">
-                <div class="glass-panel rounded-3xl p-6 space-y-4">
-                    <h3 class="font-bold text-base text-white">Activity History</h3>
-                    <div id="history-log" class="space-y-3">
-                        <!-- Loaded dynamically -->
+            <!-- TAB 3: PANTRY DASHBOARD SCREEN (DEFAULT ACTIVE) -->
+            <div id="tab-dashboard" class="tab-content active">
+                <div class="space-y-6">
+                    <div id="section-expired" class="hidden">
+                        <h4 class="text-[10px] font-bold text-rose-500/80 uppercase tracking-widest mb-3 flex items-center gap-2">
+                            <span class="w-1.5 h-1.5 rounded-full bg-rose-500 animate-pulse"></span> Expired Items
+                        </h4>
+                        <div id="list-expired" class="space-y-2"></div>
+                    </div>
+                    <div id="section-soon" class="hidden">
+                        <h4 class="text-[10px] font-bold text-amber-500/80 uppercase tracking-widest mb-3 flex items-center gap-2">
+                            <span class="w-1.5 h-1.5 rounded-full bg-amber-500 animate-bounce"></span> Expiring Soon
+                        </h4>
+                        <div id="list-soon" class="space-y-2"></div>
+                    </div>
+                    <div id="section-fresh" class="hidden">
+                        <h4 class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-3 flex items-center gap-2">
+                            <span class="w-1.5 h-1.5 rounded-full bg-slate-500"></span> Fresh & Safe
+                        </h4>
+                        <div id="list-fresh" class="space-y-2"></div>
+                    </div>
+                    <div id="pantry-empty" class="hidden text-center py-12 text-slate-600">
+                        <span class="text-3xl block mb-2">🧊</span>
+                        <p class="text-xs font-semibold">Your pantry is empty.</p>
+                        <p class="text-[10px] text-slate-700 mt-1">Tap the Capture button below to scan items!</p>
                     </div>
                 </div>
             </div>
@@ -253,7 +253,7 @@
         </main>
     </div>
 
-    <!-- 📷 CAPTURE OPTION SELECTOR MODAL (NEW FEATURE) -->
+    <!-- 📷 CAPTURE OPTION SELECTOR MODAL -->
     <div id="capture-choice-modal" class="modal-backdrop hidden">
         <div class="modal-card animate-fade-in w-full max-w-sm space-y-4">
             <div class="flex justify-between items-center pb-2 border-b border-white/10">
@@ -319,7 +319,7 @@
         </div>
     </div>
 
-    <!-- FLOATING LIQUID GLASS DOCK -->
+    <!-- FLOATING LIQUID GLASS DOCK (NAVIGATION ORDER: History -> List -> Pantry -> KAI AI -> Savings) -->
     <div id="navigation-dock" class="fixed bottom-6 left-1/2 -translate-x-1/2 w-[96%] max-w-sm z-50">
         <div class="liquid-glass-dock rounded-[2.5rem] p-2.5 flex flex-col items-center gap-2">
             <button id="btn-capture-pill" onclick="openCaptureChoiceModal()" class="flex items-center gap-2 bg-slate-900/80 hover:bg-slate-800 backdrop-blur-md border border-white/10 text-white font-bold py-2 px-4 rounded-xl transition active:scale-95">
@@ -330,22 +330,27 @@
                 <span>Capture</span>
             </button>
             <div class="w-full grid grid-cols-5 gap-1 px-1">
-                <button id="nav-dashboard" onclick="switchTab('dashboard', 'My Pantry')" class="liquid-active-pill flex flex-col items-center justify-center py-2 rounded-2xl text-white transition">
-                    <span class="text-base">📋</span>
-                    <span class="text-[8px] font-bold uppercase tracking-wider mt-0.5">Pantry</span>
+                <!-- 1. History -->
+                <button id="nav-history" onclick="switchTab('history', 'Activity History')" class="flex flex-col items-center justify-center py-2 rounded-2xl text-slate-500 hover:text-white transition">
+                    <span class="text-base">📖</span>
+                    <span class="text-[8px] font-bold uppercase tracking-wider mt-0.5">History</span>
                 </button>
+                <!-- 2. List -->
                 <button id="nav-shopping" onclick="switchTab('shopping', 'Shopping List')" class="flex flex-col items-center justify-center py-2 rounded-2xl text-slate-500 hover:text-white transition">
                     <span class="text-base">🛒</span>
                     <span class="text-[8px] font-bold uppercase tracking-wider mt-0.5">List</span>
                 </button>
-                <button id="nav-history" onclick="switchTab('history', 'Activity')" class="flex flex-col items-center justify-center py-2 rounded-2xl text-slate-500 hover:text-white transition">
-                    <span class="text-base">📖</span>
-                    <span class="text-[8px] font-bold uppercase tracking-wider mt-0.5">History</span>
+                <!-- 3. Pantry (Default Active) -->
+                <button id="nav-dashboard" onclick="switchTab('dashboard', 'My Pantry')" class="liquid-active-pill flex flex-col items-center justify-center py-2 rounded-2xl text-white transition">
+                    <span class="text-base">🥦</span>
+                    <span class="text-[8px] font-bold uppercase tracking-wider mt-0.5">Pantry</span>
                 </button>
+                <!-- 4. KAI AI -->
                 <button id="nav-kai" onclick="switchTab('kai', 'KAI AI')" class="flex flex-col items-center justify-center py-2 rounded-2xl text-slate-500 hover:text-white transition">
                     <span class="text-base">🤖</span>
                     <span class="text-[8px] font-bold uppercase tracking-wider mt-0.5">KAI AI</span>
                 </button>
+                <!-- 5. Savings -->
                 <button id="nav-stats" onclick="switchTab('stats', 'Savings')" class="flex flex-col items-center justify-center py-2 rounded-2xl text-slate-500 hover:text-white transition">
                     <span class="text-base">💰</span>
                     <span class="text-[8px] font-bold uppercase tracking-wider mt-0.5">Savings</span>
@@ -359,7 +364,7 @@
       <div class="modal-card">
         <div class="modal-header">
           <h2 class="text-white font-bold text-lg">Verify Item</h2>
-          <p class="text-xs text-slate-400 mb-4">Double-check the details before adding to your kitchen.</p>
+          <p class="text-xs text-slate-400 mb-4">Double-check details before adding to your kitchen.</p>
         </div>
         <form id="confirmItemForm" class="space-y-3">
           <div class="flex flex-col gap-1">
@@ -398,7 +403,7 @@
       </div>
     </div>
 
-    <!-- Batch Receipt Scanned Items Review Modal (NEW) -->
+    <!-- Batch Receipt Scanned Items Review Modal -->
     <div id="receiptModal" class="modal-backdrop hidden">
         <div class="modal-card max-w-sm space-y-4">
             <div class="flex justify-between items-center border-b border-white/10 pb-2">
@@ -463,10 +468,10 @@
             
             document.getElementById('screen-title').innerText = displayTitle;
 
-            const buttons = ['nav-dashboard', 'nav-shopping', 'nav-history', 'nav-kai', 'nav-stats'];
+            const buttons = ['nav-history', 'nav-shopping', 'nav-dashboard', 'nav-kai', 'nav-stats'];
             buttons.forEach(id => {
                 const btn = document.getElementById(id);
-                if (btn) btn.className = "flex flex-col items-center justify-center py-2 rounded-2xl text-slate-400 hover:text-white transition duration-200";
+                if (btn) btn.className = "flex flex-col items-center justify-center py-2 rounded-2xl text-slate-500 hover:text-white transition duration-200";
             });
 
             const activeBtn = document.getElementById(`nav-${tabId}`);
@@ -475,6 +480,7 @@
             if (tabId === 'stats') loadSavingsDashboard();
             else if (tabId === 'history') loadActivityHistory();
             else if (tabId === 'shopping') loadShoppingList();
+            else if (tabId === 'dashboard') fetchPantryItems();
         }
 
         /* ---------------------------------------------------- */
@@ -605,7 +611,7 @@
                             <input type="checkbox" ${item.is_checked ? 'checked' : ''} onchange="toggleShoppingChecked(${item.id}, this.checked)" class="w-4 h-4 rounded accent-emerald-400">
                             <div>
                                 <p class="font-bold text-white ${item.is_checked ? 'line-through' : ''}">${item.name}</p>
-                                <span class="text-[9px] text-slate-400">${item.category} • Qty: ${item.quantity}</span>
+                                <span class="text-[9px] text-slate-400">${item.category || 'Pantry'} • Qty: ${item.quantity || '1'}</span>
                             </div>
                         </div>
                         <button onclick="deleteShoppingItem(${item.id})" class="text-slate-500 hover:text-rose-400 text-xs">✕</button>
@@ -677,7 +683,7 @@
         }
 
         /* ---------------------------------------------------- */
-        /* 🍱 PANTRY INVENTORY MANAGEMENT & SCANNING            */
+        /* 🍱 PANTRY INVENTORY MANAGEMENT & EXPIRATION FIX      */
         /* ---------------------------------------------------- */
         async function fetchPantryItems() {
             try {
@@ -706,20 +712,21 @@
                 }
                 emptyState.classList.add('hidden');
 
+                // Standardize dates to midnight (00:00:00) to prevent timezone off-by-one errors
                 const today = new Date();
-                today.setHours(0,0,0,0);
+                today.setHours(0, 0, 0, 0);
 
                 let hasExpired = false, hasSoon = false, hasFresh = false;
 
                 items.forEach(item => {
-                    const expiry = new Date(item.expiry_date);
-                    expiry.setHours(0,0,0,0);
-                    
-                    const diffTime = expiry - today;
-                    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+                    const expiryParts = item.expiry_date.split('-');
+                    const expiry = new Date(expiryParts[0], expiryParts[1] - 1, expiryParts[2]);
+                    expiry.setHours(0, 0, 0, 0);
+
+                    const diffDays = Math.round((expiry - today) / (1000 * 60 * 60 * 24));
 
                     const card = document.createElement('div');
-                    card.className = "liquid-active-pill p-4 flex justify-between items-center rounded-2xl border border-white/5";
+                    card.className = "glass-panel p-4 flex justify-between items-center rounded-2xl border border-white/5";
                     card.innerHTML = `
                         <div>
                             <p class="font-bold text-sm text-white">${item.name}</p>
@@ -894,7 +901,6 @@
         function openRecipeModal(recipe) {
             if (!recipe) return;
             
-            let rawText = recipe.reply || '';
             let detectedTitle = recipe.recipeTitle || recipe.recipe_name || "KAI Custom Dish";
 
             let rawIngredients = Array.isArray(recipe.ingredients) ? recipe.ingredients : [];
@@ -1001,96 +1007,35 @@
         }
 
         async function loadActivityHistory() {
-    const historyLog = document.getElementById('history-log');
-    if (!historyLog) return;
+            const historyLog = document.getElementById('history-log');
+            if (!historyLog) return;
 
-    try {
-        const res = await fetch('/api/history');
-        const recipes = await res.json();
-        historyLog.innerHTML = '';
+            try {
+                const res = await fetch('/api/history');
+                const recipes = await res.json();
+                historyLog.innerHTML = '';
 
-        if (!recipes || recipes.length === 0) {
-            historyLog.innerHTML = `
-                <div class="text-center py-8">
-                    <span class="text-2xl block mb-2 opacity-50">📖</span>
-                    <p class="text-xs text-slate-500 font-semibold">No saved recipes in history yet.</p>
-                    <p class="text-[10px] text-slate-600 mt-1">Cook a dish with KAI to log it here!</p>
-                </div>`;
-            return;
-        }
+                if (!recipes || recipes.length === 0) {
+                    historyLog.innerHTML = `<p class="text-xs text-slate-500 text-center py-6">No history recorded yet.</p>`;
+                    return;
+                }
 
-        recipes.forEach((recipe, index) => {
-            // Parse steps into array if stored as delimited string
-            const stepsArray = typeof recipe.recipe_steps === 'string' 
-                ? recipe.recipe_steps.split(' | ') 
-                : (recipe.steps || ["Follow standard preparation."]);
-
-            // Parse ingredients into array
-            const ingredientsArray = typeof recipe.ingredients_used === 'string' 
-                ? recipe.ingredients_used.split(', ') 
-                : (recipe.ingredients || ["Assorted Pantry Items"]);
-
-            const card = document.createElement('div');
-            card.className = "glass-panel rounded-2xl border border-white/10 overflow-hidden transition-all duration-200";
-            
-            card.innerHTML = `
-                <!-- Card Header (Click to Expand/Collapse) -->
-                <div onclick="toggleHistoryCard(${index})" class="p-4 flex items-center justify-between cursor-pointer hover:bg-white/[0.02] transition">
-                    <div class="flex items-center gap-3">
-                        <span class="text-lg">🍳</span>
-                        <div>
-                            <h4 class="font-bold text-sm text-white">${recipe.recipe_name || 'Custom KAI Recipe'}</h4>
-                            <p class="text-[10px] text-emerald-400 font-semibold mt-0.5">Cooked ✓</p>
+                recipes.forEach(recipe => {
+                    const card = document.createElement('div');
+                    card.className = "bg-white/5 border border-white/10 p-4 rounded-2xl space-y-2";
+                    card.innerHTML = `
+                        <div class="flex justify-between items-center">
+                            <h4 class="font-bold text-sm text-white">${recipe.recipe_name || 'Cooked Dish'}</h4>
+                            <span class="text-[10px] text-emerald-400 font-bold">Cooked ✓</span>
                         </div>
-                    </div>
-                    <span id="chevron-${index}" class="text-slate-500 text-xs transition-transform duration-200">▼</span>
-                </div>
-
-                <!-- Expandable Details Section -->
-                <div id="details-${index}" class="hidden px-4 pb-4 pt-1 border-t border-white/5 space-y-3 bg-black/20">
-                    <div>
-                        <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block mb-1">Ingredients:</span>
-                        <p class="text-xs text-slate-300 leading-relaxed">${ingredientsArray.join(', ')}</p>
-                    </div>
-                    
-                    <!-- Cook Again Action Button -->
-                    <button id="cook-again-btn-${index}" class="w-full bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-300 border border-emerald-500/30 py-2 rounded-xl text-xs font-bold transition active:scale-95 flex items-center justify-center gap-1.5">
-                        <span>🍳</span> Cook Again
-                    </button>
-                </div>
-            `;
-
-            // Attach event listener directly to prevent inline escaping bugs
-            const cookBtn = card.querySelector(`#cook-again-btn-${index}`);
-            if (cookBtn) {
-                cookBtn.onclick = (e) => {
-                    e.stopPropagation(); // Don't trigger card toggle
-                    openRecipeModal({
-                        recipeTitle: recipe.recipe_name,
-                        ingredients: ingredientsArray,
-                        steps: stepsArray
-                    });
-                };
+                        <p class="text-[10px] text-slate-400">${recipe.ingredients_used || 'Standard Pantry Ingredients'}</p>
+                    `;
+                    historyLog.appendChild(card);
+                });
+            } catch (e) {
+                console.error("Error loading history:", e);
             }
-
-            historyLog.appendChild(card);
-        });
-    } catch (e) {
-        console.error("Error loading history:", e);
-        historyLog.innerHTML = `<p class="text-xs text-rose-400 text-center py-4">Failed to load history items.</p>`;
-    }
-}
-
-/* Helper function to expand/collapse history cards */
-function toggleHistoryCard(index) {
-    const details = document.getElementById(`details-${index}`);
-    const chevron = document.getElementById(`chevron-${index}`);
-    if (details && chevron) {
-        const isHidden = details.classList.contains('hidden');
-        details.classList.toggle('hidden', !isHidden);
-        chevron.style.transform = isHidden ? 'rotate(180deg)' : 'rotate(0deg)';
-    }
-}
+        }
 
         async function loadSavingsDashboard() {
             const container = document.getElementById('savings-dashboard');
@@ -1131,7 +1076,12 @@ function toggleHistoryCard(index) {
             const dot = document.getElementById('notification-dot');
             if (!dot) return;
             const today = new Date();
-            const expired = currentPantryItems.some(i => new Date(i.expiry_date) < today);
+            today.setHours(0,0,0,0);
+            const expired = currentPantryItems.some(i => {
+                const parts = i.expiry_date.split('-');
+                const exp = new Date(parts[0], parts[1]-1, parts[2]);
+                return exp < today;
+            });
             dot.classList.toggle('hidden', !expired);
         }
 
