@@ -7,41 +7,41 @@
     <!-- Tailwind CSS via CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        /* Ultra-Refined Liquid Glass UI Classes */
+        /* Modern Premium Glass UI (Ultra-sleek, subtle dark frosting) */
         .glass-panel {
             background: rgba(255, 255, 255, 0.03);
-            backdrop-filter: blur(25px);
-            -webkit-backdrop-filter: blur(25px);
+            backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px);
             border: 1px solid rgba(255, 255, 255, 0.08);
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
         }
         
         .liquid-glass-dock {
-            background: rgba(15, 20, 25, 0.65);
-            backdrop-filter: blur(35px);
-            -webkit-backdrop-filter: blur(35px);
+            background: rgba(12, 16, 23, 0.75);
+            backdrop-filter: blur(40px);
+            -webkit-backdrop-filter: blur(40px);
             border: 1px solid rgba(255, 255, 255, 0.12);
             box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8), inset 0 1px 0 rgba(255, 255, 255, 0.15);
         }
 
         .liquid-glass-button {
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(15px);
-            -webkit-backdrop-filter: blur(15px);
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.2), 0 4px 15px rgba(0, 0, 0, 0.2);
+            background: rgba(255, 255, 255, 0.06);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.15), 0 4px 15px rgba(0, 0, 0, 0.2);
         }
 
         .liquid-glass-button:hover {
             background: rgba(255, 255, 255, 0.1);
-            border-color: rgba(52, 211, 153, 0.4);
+            border-color: rgba(255, 255, 255, 0.25);
         }
 
-        /* Frosted liquid active pill indicator */
+        /* Subtle Frosted Active Pill Indicator */
         .liquid-active-pill {
-            background: rgba(52, 211, 153, 0.12);
-            border: 1px solid rgba(52, 211, 153, 0.35);
-            box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.2), 0 0 20px rgba(52, 211, 153, 0.15);
+            background: rgba(255, 255, 255, 0.12);
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.3), 0 0 15px rgba(255, 255, 255, 0.05);
         }
 
         .tab-content {
@@ -51,7 +51,7 @@
             display: block;
         }
 
-        /* Custom Glass Scrollbar */
+        /* Sleek Glass Scrollbars */
         ::-webkit-scrollbar {
             width: 4px;
         }
@@ -59,25 +59,25 @@
             background: transparent;
         }
         ::-webkit-scrollbar-thumb {
-            background: rgba(52, 211, 153, 0.2);
+            background: rgba(255, 255, 255, 0.15);
             border-radius: 99px;
         }
 
-        /* Custom Review Modal Glass Styles */
+        /* Modals & Backdrop Overlays */
         .modal-backdrop {
             position: fixed;
             inset: 0;
-            background: rgba(2, 6, 23, 0.85);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
+            background: rgba(3, 7, 18, 0.85);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
             z-index: 150;
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 1.5rem;
+            padding: 1.25rem;
         }
         .modal-card {
-            background: rgba(20, 25, 35, 0.65);
+            background: rgba(18, 22, 32, 0.8);
             backdrop-filter: blur(40px);
             -webkit-backdrop-filter: blur(40px);
             border: 1px solid rgba(255, 255, 255, 0.1);
@@ -85,19 +85,18 @@
             padding: 1.5rem;
             width: 100%;
             max-width: 28rem;
-            box-shadow: 0 24px 60px rgba(0, 0, 0, 0.7);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
         }
         
-        /* Smooth Fade Animation */
+        /* Smooth Accordion and Fade Animations */
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(6px); }
+            from { opacity: 0; transform: translateY(4px); }
             to { opacity: 1; transform: translateY(0); }
         }
         .animate-fade-in {
-            animation: fadeIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            animation: fadeIn 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         }
 
-        /* SVG Ring Progress Styles */
         .progress-ring__circle {
             transition: stroke-dashoffset 0.6s ease-in-out;
             transform: rotate(-90deg);
@@ -105,19 +104,19 @@
         }
     </style>
 </head>
-<body class="bg-slate-950 text-slate-100 pb-40 min-h-screen flex flex-col items-center selection:bg-emerald-500/30">
+<body class="bg-slate-950 text-slate-100 pb-40 min-h-screen flex flex-col items-center selection:bg-slate-700/50">
 
     <!-- MAIN APP CONTAINER -->
     <div class="w-full max-w-md px-5 flex flex-col flex-1">
 
-       <!-- 🪐 DYNAMIC FLEX APP HEADER BAR -->
+       <!-- APP HEADER BAR -->
         <header class="pt-8 pb-4 flex items-center justify-between w-full relative">
             <div class="w-10"></div>
-            <span class="font-black text-3xl tracking-[0.25em] text-emerald-400 drop-shadow-[0_0_15px_rgba(52,211,153,0.4)] select-none">
+            <span class="font-black text-2xl tracking-[0.25em] text-white drop-shadow-md select-none">
                 KAI
             </span>
             <div class="relative inline-block w-10 flex justify-end">
-                <button onclick="toggleNotificationTray()" class="relative p-2 rounded-xl text-emerald-400/80 hover:text-emerald-400 hover:bg-emerald-500/10 transition active:scale-90 focus:outline-none">
+                <button onclick="toggleNotificationTray()" class="relative p-2 rounded-xl text-slate-300 hover:text-white hover:bg-white/5 transition active:scale-90 focus:outline-none">
                     <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
                         <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
@@ -127,47 +126,68 @@
             </div>
         </header>
 
-        <!-- 🪐 FULL-PAGE TALL LIQUID GLASS ALERTS OVERLAY MODAL -->
-        <div id="notification-tray" class="modal-backdrop hidden transition-all duration-300">
-            <div class="modal-card animate-fade-in w-full max-w-sm min-h-[500px] flex flex-col justify-between p-6">
-                <div class="modal-header border-b border-white/10 pb-4">
-                    <div class="flex justify-between items-center">
-                        <span class="text-[10px] font-mono tracking-widest text-emerald-400 uppercase">// System Alerts</span>
-                        <button onclick="clearAllNotifications()" class="text-[10px] font-bold uppercase text-rose-400 hover:text-rose-300 transition">Clear</button>
-                    </div>
-                    <h2 class="text-white font-black text-2xl mt-2 tracking-tight">Notifications</h2>
+        <!-- UNIVERSAL GLASS ALERT / NOTIFICATION MODAL (NO BROWSER ALERTS) -->
+        <div id="universal-alert-modal" class="modal-backdrop hidden">
+            <div class="modal-card animate-fade-in space-y-4 text-center">
+                <div id="alert-icon-container" class="w-12 h-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center mx-auto text-xl">
+                    💡
                 </div>
-                <div id="tray-items-container" class="flex-1 my-4 space-y-3 overflow-y-auto pr-1 text-xs min-h-[280px] max-h-[340px] flex flex-col justify-start">
-                    <div class="my-auto text-center py-12">
-                        <span class="text-2xl block mb-2 opacity-40">🔔</span>
-                        <p class="text-slate-500 text-[11px] italic">No active warnings.</p>
-                    </div>
+                <div>
+                    <h3 id="alert-title" class="text-base font-bold text-white">Notice</h3>
+                    <p id="alert-message" class="text-xs text-slate-300 mt-1 leading-relaxed"></p>
                 </div>
-                <div class="border-t border-white/10 pt-4">
-                    <button onclick="toggleNotificationTray()" class="w-full text-center py-3 rounded-xl font-bold text-slate-300 hover:text-white transition bg-white/5 border border-white/10">
-                        Return to Kitchen
+                <div id="alert-actions" class="pt-2 flex gap-2">
+                    <button id="alert-confirm-btn" onclick="closeCustomAlert()" class="w-full bg-white/10 hover:bg-white/20 border border-white/15 text-white py-2.5 rounded-xl font-bold text-xs transition">
+                        OK
                     </button>
                 </div>
             </div>
         </div>
 
-        <!-- SCREEN TITLE -->
+        <!-- FULL-PAGE GLASS ALERTS TRAY -->
+        <div id="notification-tray" class="modal-backdrop hidden transition-all duration-300">
+            <div class="modal-card animate-fade-in w-full max-w-sm min-h-[460px] flex flex-col justify-between p-6">
+                <div class="modal-header border-b border-white/10 pb-4">
+                    <div class="flex justify-between items-center">
+                        <span class="text-[10px] font-mono tracking-widest text-slate-400 uppercase">// Alerts</span>
+                        <button onclick="clearAllNotifications()" class="text-[10px] font-bold uppercase text-rose-400 hover:text-rose-300 transition">Clear</button>
+                    </div>
+                    <h2 class="text-white font-bold text-xl mt-2 tracking-tight">System Center</h2>
+                </div>
+                <div id="tray-items-container" class="flex-1 my-4 space-y-3 overflow-y-auto pr-1 text-xs min-h-[240px] max-h-[300px] flex flex-col justify-start">
+                    <div class="my-auto text-center py-12">
+                        <span class="text-xl block mb-2 opacity-40">🔔</span>
+                        <p class="text-slate-500 text-[11px]">No active notifications.</p>
+                    </div>
+                </div>
+                <div class="border-t border-white/10 pt-4">
+                    <button onclick="toggleNotificationTray()" class="w-full text-center py-2.5 rounded-xl font-bold text-xs text-slate-300 hover:text-white transition bg-white/5 border border-white/10">
+                        Dismiss
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- CURRENT SCREEN TITLE -->
         <section class="py-3 flex justify-center w-full border-b border-white/5 mb-5">
-            <h1 id="screen-title" class="text-xl font-black tracking-tight text-white transition-all duration-300">My Pantry</h1>
+            <h1 id="screen-title" class="text-lg font-bold tracking-tight text-white transition-all duration-300">My Pantry</h1>
         </section>
 
-        <!-- MAIN APP SCREENS -->
+        <!-- MAIN APP CONTENT AREA -->
         <main class="flex-1 w-full pb-8">
 
-            <!-- TAB 1: HISTORY SCREEN -->
+            <!-- TAB 1: HISTORY SCREEN (EXPANDABLE CARDS + COOK AGAIN) -->
             <div id="tab-history" class="tab-content">
                 <div class="glass-panel rounded-3xl p-5 space-y-4">
                     <div class="flex justify-between items-center border-b border-white/5 pb-3">
-                        <h3 class="font-black text-lg text-white">Activity History</h3>
-                        <span class="text-[10px] font-bold text-emerald-400 bg-emerald-500/10 px-2.5 py-1 rounded-full border border-emerald-500/20">Updated</span>
+                        <div>
+                            <h3 class="font-bold text-base text-white">Cooking History</h3>
+                            <p class="text-[10px] text-slate-400">Tap dish to view ingredients & step instructions</p>
+                        </div>
+                        <span class="text-[10px] font-medium text-slate-400 bg-white/5 px-2.5 py-1 rounded-full border border-white/10">Log</span>
                     </div>
                     <div id="history-log" class="space-y-3">
-                        <!-- Loaded dynamically -->
+                        <!-- Populated dynamically -->
                     </div>
                 </div>
             </div>
@@ -177,28 +197,28 @@
                 <div class="glass-panel rounded-3xl p-5 space-y-4">
                     <div class="flex items-center justify-between border-b border-white/5 pb-3">
                         <div>
-                            <h3 class="font-bold text-base text-white">Smart Shopping List</h3>
+                            <h3 class="font-bold text-base text-white">Shopping List</h3>
                             <p class="text-[10px] text-slate-400">Manage items to buy & balance budget</p>
                         </div>
-                        <button onclick="checkoutShoppingList()" class="bg-emerald-500/20 text-emerald-300 hover:bg-emerald-500/30 border border-emerald-500/30 px-3 py-1.5 rounded-xl text-xs font-bold transition active:scale-95 flex items-center gap-1.5">
+                        <button onclick="checkoutShoppingList()" class="bg-emerald-500/15 text-emerald-300 hover:bg-emerald-500/25 border border-emerald-500/30 px-3 py-1.5 rounded-xl text-xs font-bold transition active:scale-95 flex items-center gap-1.5">
                             <svg class="w-3.5 h-3.5 text-emerald-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path></svg>
                             Move Checked
                         </button>
                     </div>
 
-                    <!-- Add Item Input -->
+                    <!-- Input Row -->
                     <div class="flex gap-2">
-                        <input type="text" id="shopping-input" placeholder="Add item (e.g., Almond Milk)..." class="flex-1 bg-white/[0.04] border border-white/10 focus:border-emerald-500/50 outline-none rounded-xl px-3.5 py-2 text-xs text-white placeholder-slate-500 transition">
-                        <button onclick="addShoppingItem()" class="bg-emerald-500/20 hover:bg-emerald-500/30 border border-emerald-500/30 text-emerald-300 px-4 rounded-xl font-bold text-xs active:scale-95 transition">Add</button>
+                        <input type="text" id="shopping-input" placeholder="Add item (e.g., Almond Milk)..." class="flex-1 bg-white/[0.04] border border-white/10 focus:border-white/30 outline-none rounded-xl px-3.5 py-2 text-xs text-white placeholder-slate-500 transition">
+                        <button onclick="addShoppingItem()" class="liquid-glass-button text-white px-4 rounded-xl font-bold text-xs active:scale-95 transition">Add</button>
                     </div>
 
-                    <!-- AI Budget Trimmer Section -->
-                    <div class="bg-emerald-950/20 border border-emerald-500/20 rounded-2xl p-3 flex items-center justify-between gap-2">
+                    <!-- AI Trimmer Section -->
+                    <div class="bg-white/[0.02] border border-white/10 rounded-2xl p-3 flex items-center justify-between gap-2">
                         <div class="flex items-center gap-2">
-                            <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                            <input type="number" id="budget-input" placeholder="Budget $" class="w-20 bg-black/40 border border-white/10 focus:border-emerald-500/50 rounded-lg px-2 py-1 text-xs text-white text-center outline-none">
+                            <span class="text-xs text-slate-400">$</span>
+                            <input type="number" id="budget-input" placeholder="Budget $" class="w-20 bg-black/40 border border-white/10 focus:border-white/20 rounded-lg px-2 py-1 text-xs text-white text-center outline-none">
                         </div>
-                        <button onclick="trimShoppingListWithAI()" class="bg-emerald-500/20 hover:bg-emerald-500/30 border border-emerald-500/30 text-emerald-300 font-bold text-[11px] px-3 py-1.5 rounded-xl transition active:scale-95 flex items-center gap-1">
+                        <button onclick="trimShoppingListWithAI()" class="liquid-glass-button text-slate-200 font-bold text-[11px] px-3 py-1.5 rounded-xl transition active:scale-95 flex items-center gap-1">
                             <span>AI Trim</span> ✨
                         </button>
                     </div>
@@ -221,57 +241,56 @@
                     </div>
                     <div id="section-soon" class="hidden">
                         <h4 class="text-[10px] font-bold text-amber-400/90 uppercase tracking-widest mb-3 flex items-center gap-2">
-                            <span class="w-1.5 h-1.5 rounded-full bg-amber-400 animate-bounce"></span> Expiring Soon
+                            <span class="w-1.5 h-1.5 rounded-full bg-amber-400"></span> Expiring Soon
                         </h4>
                         <div id="list-soon" class="space-y-2"></div>
                     </div>
                     <div id="section-fresh" class="hidden">
-                        <h4 class="text-[10px] font-bold text-emerald-400/90 uppercase tracking-widest mb-3 flex items-center gap-2">
-                            <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span> Fresh & Safe
+                        <h4 class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-3 flex items-center gap-2">
+                            <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span> Fresh Inventory
                         </h4>
                         <div id="list-fresh" class="space-y-2"></div>
                     </div>
                     <div id="pantry-empty" class="hidden text-center py-12 glass-panel rounded-3xl">
-                        <div class="w-12 h-12 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center mx-auto mb-3">
-                            <svg class="w-6 h-6 text-emerald-400" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path></svg>
+                        <div class="w-12 h-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center mx-auto mb-3">
+                            <svg class="w-6 h-6 text-slate-400" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path></svg>
                         </div>
                         <p class="text-sm font-bold text-white">Your pantry is empty</p>
-                        <p class="text-[11px] text-slate-400 mt-1 max-w-xs mx-auto">Tap the green <span class="text-emerald-400 font-semibold">Capture</span> button in the navigation bar to scan groceries!</p>
+                        <p class="text-[11px] text-slate-400 mt-1 max-w-xs mx-auto">Tap <span class="text-white font-semibold">Capture</span> below to scan items or upload receipts.</p>
                     </div>
                 </div>
             </div>
 
-            <!-- TAB 4: KAI AI SCREEN (GLASS CHAT) -->
+            <!-- TAB 4: KAI AI SCREEN -->
             <div id="tab-kai" class="tab-content">
                 <div class="glass-panel rounded-3xl p-4 flex flex-col h-[460px]">
                     <div class="border-b border-white/5 pb-3 mb-3 flex items-center gap-3">
-                        <div class="relative w-7 h-7 bg-emerald-500/10 rounded-xl border border-emerald-500/20 flex items-center justify-center shrink-0">
-                            <svg class="w-4 h-4 text-emerald-400 filter drop-shadow-[0_0_4px_rgba(16,185,129,0.4)]" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.5" stroke-dasharray="4 2" />
-                                <circle cx="12" cy="12" r="5" stroke="currentColor" stroke-width="1" opacity="0.6" />
-                                <circle cx="12" cy="12" r="2" fill="currentColor" />
+                        <div class="relative w-8 h-8 bg-white/5 rounded-xl border border-white/10 flex items-center justify-center shrink-0">
+                            <svg class="w-4 h-4 text-slate-200" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                <circle cx="12" cy="12" r="9" stroke-dasharray="4 2" />
+                                <circle cx="12" cy="12" r="3" fill="currentColor" />
                             </svg>
                         </div>
                         <div>
-                            <p class="font-bold text-sm text-white">KAI Kitchen Companion</p>
-                            <p class="text-[10px] text-slate-400">Ask recipes, storage tips, or ingredient advice</p>
+                            <p class="font-bold text-sm text-white">KAI Assistant</p>
+                            <p class="text-[10px] text-slate-400">Recipe ideas, storage tips, and ingredient pairing</p>
                         </div>
                     </div>
                     <div id="chat-messages" class="flex-1 overflow-y-auto space-y-3 pr-1 text-xs flex flex-col">
                         <div class="bg-white/[0.03] rounded-2xl p-3 border border-white/5 text-slate-300 max-w-[85%] self-start leading-relaxed">
-                            Hello! I am KAI, your smart kitchen partner. 🧑‍🍳 Ask me anything about your pantry, request a recipe with what you have, or ask for storage tips!
+                            Hello! I am KAI, your smart kitchen partner. 🧑‍🍳 Ask me anything about your pantry or request custom recipes.
                         </div>
                     </div>
                     <div class="mt-3 pt-3 border-t border-white/5 flex gap-2">
-                        <input type="text" id="chat-input" placeholder="Ask KAI anything..." class="flex-1 bg-white/[0.04] border border-white/10 focus:border-emerald-500/50 outline-none rounded-xl px-4 py-2.5 text-xs text-white placeholder-slate-500 transition">
-                        <button onclick="sendChatMessage()" class="bg-emerald-500/20 hover:bg-emerald-500/30 border border-emerald-500/30 text-emerald-300 font-bold text-xs px-4 rounded-xl transition duration-150 active:scale-95">
+                        <input type="text" id="chat-input" placeholder="Ask KAI anything..." class="flex-1 bg-white/[0.04] border border-white/10 focus:border-white/30 outline-none rounded-xl px-4 py-2.5 text-xs text-white placeholder-slate-500 transition">
+                        <button onclick="sendChatMessage()" class="liquid-glass-button text-white font-bold text-xs px-4 rounded-xl transition duration-150 active:scale-95">
                             Send
                         </button>
                     </div>
                 </div>
             </div>
 
-            <!-- TAB 5: SAVINGS DASHBOARD (EXPANDED MOTIVATION HUB) -->
+            <!-- TAB 5: SAVINGS DASHBOARD -->
             <div id="tab-stats" class="tab-content">
                 <div id="savings-dashboard" class="space-y-4"></div>
             </div>
@@ -279,73 +298,63 @@
         </main>
     </div>
 
-    <!-- 📷 CAPTURE OPTION SELECTOR MODAL -->
+    <!-- CAPTURE OPTION MODAL -->
     <div id="capture-choice-modal" class="modal-backdrop hidden">
         <div class="modal-card animate-fade-in w-full max-w-sm space-y-4">
             <div class="flex justify-between items-center pb-2 border-b border-white/10">
                 <div>
-                    <h2 class="text-lg font-bold text-white">Capture Mode</h2>
-                    <p class="text-[11px] text-slate-400">Choose how you want to add groceries</p>
+                    <h2 class="text-base font-bold text-white">Capture Mode</h2>
+                    <p class="text-[11px] text-slate-400">Choose how to import groceries</p>
                 </div>
-                <button onclick="closeCaptureChoiceModal()" class="text-slate-400 hover:text-white text-base">✕</button>
+                <button onclick="closeCaptureChoiceModal()" class="text-slate-400 hover:text-white text-sm">✕</button>
             </div>
 
-            <!-- Option 1: Single Item Camera -->
             <button onclick="startSingleItemScan()" class="w-full text-left p-3.5 rounded-2xl bg-white/5 hover:bg-white/10 border border-white/10 transition active:scale-98">
                 <div class="flex items-center gap-3">
-                    <div class="p-2.5 bg-emerald-500/10 rounded-xl border border-emerald-500/20">
-                        <svg class="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"></path><path stroke-linecap="round" stroke-linejoin="round" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                    <div class="p-2.5 bg-white/5 rounded-xl border border-white/10">
+                        <svg class="w-5 h-5 text-slate-200" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"></path></svg>
                     </div>
                     <div>
-                        <h3 class="font-bold text-sm text-emerald-400">Single Pantry Item</h3>
-                        <p class="text-[10px] text-slate-300">Scan food directly using your camera.</p>
+                        <h3 class="font-bold text-xs text-white">Single Pantry Item</h3>
+                        <p class="text-[10px] text-slate-400">Scan food item using camera.</p>
                     </div>
-                </div>
-                <div class="mt-2 text-[10px] grid grid-cols-2 gap-2 bg-black/30 p-2 rounded-lg border border-white/5">
-                    <div><span class="text-emerald-400 font-bold">✓ Pro:</span> High expiration accuracy.</div>
-                    <div><span class="text-amber-400 font-bold">✗ Con:</span> Scan items one by one.</div>
                 </div>
             </button>
 
-            <!-- Option 2: Receipt Snapshot -->
             <button onclick="triggerReceiptUpload()" class="w-full text-left p-3.5 rounded-2xl bg-white/5 hover:bg-white/10 border border-white/10 transition active:scale-98">
                 <div class="flex items-center gap-3">
-                    <div class="p-2.5 bg-emerald-500/10 rounded-xl border border-emerald-500/20">
-                        <svg class="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                    <div class="p-2.5 bg-white/5 rounded-xl border border-white/10">
+                        <svg class="w-5 h-5 text-slate-200" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
                     </div>
                     <div>
-                        <h3 class="font-bold text-sm text-emerald-400">Full Grocery Receipt</h3>
-                        <p class="text-[10px] text-slate-300">Snap paper receipt to batch import items.</p>
+                        <h3 class="font-bold text-xs text-white">Grocery Receipt</h3>
+                        <p class="text-[10px] text-slate-400">Snap paper receipt to batch import.</p>
                     </div>
-                </div>
-                <div class="mt-2 text-[10px] grid grid-cols-2 gap-2 bg-black/30 p-2 rounded-lg border border-white/5">
-                    <div><span class="text-emerald-400 font-bold">✓ Pro:</span> Imports dozens instantly.</div>
-                    <div><span class="text-amber-400 font-bold">✗ Con:</span> Quick manual date check.</div>
                 </div>
             </button>
             <input type="file" id="receipt-file-input" accept="image/*" capture="environment" class="hidden" onchange="handleReceiptFileSelected(event)">
         </div>
     </div>
 
-    <!-- 📷 CAMERA OVERLAY MODAL -->
+    <!-- CAMERA OVERLAY -->
     <div id="camera-modal" class="fixed inset-0 bg-slate-950/95 z-[100] flex flex-col justify-between hidden p-6 backdrop-blur-xl">
         <div class="text-center pt-4">
-            <span class="text-emerald-400 font-bold tracking-widest text-[10px] uppercase block mb-1">KAI Vision System</span>
-            <p class="text-white font-black text-xl">Position food item below</p>
+            <span class="text-slate-400 font-bold tracking-widest text-[10px] uppercase block mb-1">KAI Vision</span>
+            <p class="text-white font-bold text-lg">Position food item below</p>
         </div>
-        <div class="relative w-full max-w-md mx-auto aspect-square bg-slate-900/50 rounded-3xl overflow-hidden border border-emerald-500/20 flex items-center justify-center">
+        <div class="relative w-full max-w-md mx-auto aspect-square bg-slate-900/50 rounded-3xl overflow-hidden border border-white/10 flex items-center justify-center">
             <video id="video" class="absolute w-full h-full object-cover" autoplay playsinline></video>
-            <div class="absolute inset-8 border border-dashed border-emerald-400/40 rounded-2xl pointer-events-none flex items-center justify-center">
-                <p id="loading-indicator" class="hidden text-xs bg-slate-950/90 backdrop-blur-md px-5 py-3 rounded-2xl border border-emerald-500/30 text-emerald-300 tracking-wider font-semibold animate-pulse shadow-lg">
-                    Analyzing with KAI 3.5 AI...
+            <div class="absolute inset-8 border border-dashed border-white/20 rounded-2xl pointer-events-none flex items-center justify-center">
+                <p id="loading-indicator" class="hidden text-xs bg-slate-950/90 backdrop-blur-md px-5 py-3 rounded-2xl border border-white/20 text-white tracking-wider font-medium animate-pulse shadow-lg">
+                    Analyzing item...
                 </p>
             </div>
         </div>
         <div class="flex flex-col items-center gap-4 pb-8">
-            <button id="shutter-button" onclick="takeSnapshot()" class="w-20 h-20 bg-emerald-500/20 rounded-full border-[6px] border-emerald-400/50 hover:bg-emerald-500/30 active:scale-95 transition-all duration-150 shadow-[0_0_30px_rgba(52,211,153,0.3)] flex items-center justify-center">
-                <div class="w-8 h-8 bg-emerald-400 rounded-full"></div>
+            <button id="shutter-button" onclick="takeSnapshot()" class="w-20 h-20 bg-white/10 rounded-full border-[4px] border-white/40 hover:bg-white/20 active:scale-95 transition flex items-center justify-center">
+                <div class="w-8 h-8 bg-white rounded-full"></div>
             </button>
-            <button onclick="closeCamera()" class="text-slate-400 hover:text-white text-[10px] font-bold uppercase tracking-widest pt-2 transition">Cancel / Go Back</button>
+            <button onclick="closeCamera()" class="text-slate-400 hover:text-white text-[10px] font-bold uppercase tracking-widest pt-2 transition">Cancel</button>
         </div>
     </div>
 
@@ -353,8 +362,8 @@
     <div id="navigation-dock" class="fixed bottom-6 left-1/2 -translate-x-1/2 w-[94%] max-w-sm z-50">
         <div class="liquid-glass-dock rounded-[2.5rem] p-2 flex flex-col items-center gap-2">
             
-            <!-- Contextual Capture Button (Only active on Pantry screen) -->
-            <button id="btn-capture-pill" onclick="openCaptureChoiceModal()" class="flex items-center justify-center gap-2 bg-emerald-500/20 hover:bg-emerald-500/30 border border-emerald-400/40 text-emerald-300 font-extrabold py-2 px-6 rounded-2xl transition active:scale-95 shadow-[0_0_20px_rgba(52,211,153,0.2)]">
+            <!-- Contextual Capture Button -->
+            <button id="btn-capture-pill" onclick="openCaptureChoiceModal()" class="flex items-center justify-center gap-2 bg-emerald-500/20 hover:bg-emerald-500/30 border border-emerald-500/30 text-emerald-300 font-bold py-2 px-6 rounded-2xl transition active:scale-95 shadow-lg">
                 <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M6.827 6.175A2.31 2.31 0 0 1 5.186 7.23c-.38.054-.757.112-1.134.175C2.999 7.58 2.25 8.507 2.25 9.574V18a2.25 2.25 0 0 0 2.25 2.25h12A2.25 2.25 0 0 0 21 18V9.574c0-1.067-.75-1.994-1.802-2.169a47.865 47.865 0 0 0-1.134-.175 2.31 2.31 0 0 1-1.641-1.055l-.822-1.316a2.192 2.192 0 0 0-1.736-1.039 48.774 48.774 0 0 0-5.231 0 2.192 2.192 0 0 0-1.736 1.039l-.821 1.316Z"></path>
                     <path stroke-linecap="round" stroke-linejoin="round" d="M12 16.5a3.75 3.75 0 1 0 0-7.5 3.75 3.75 0 0 0 0 7.5Z"></path>
@@ -363,55 +372,50 @@
             </button>
 
             <div class="w-full grid grid-cols-5 gap-1 px-1">
-                <!-- 1. History -->
-                <button id="nav-history" onclick="switchTab('history', 'Activity History')" class="flex flex-col items-center justify-center py-2 rounded-2xl text-slate-400 hover:text-emerald-400 transition">
-                    <svg class="w-5 h-5 text-emerald-400/80" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                <button id="nav-history" onclick="switchTab('history', 'Activity History')" class="flex flex-col items-center justify-center py-2 rounded-2xl text-slate-400 hover:text-white transition">
+                    <svg class="w-5 h-5 text-slate-300" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                     <span class="text-[8px] font-bold uppercase tracking-wider mt-1">History</span>
                 </button>
-                <!-- 2. List -->
-                <button id="nav-shopping" onclick="switchTab('shopping', 'Shopping List')" class="flex flex-col items-center justify-center py-2 rounded-2xl text-slate-400 hover:text-emerald-400 transition">
-                    <svg class="w-5 h-5 text-emerald-400/80" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path></svg>
+                <button id="nav-shopping" onclick="switchTab('shopping', 'Shopping List')" class="flex flex-col items-center justify-center py-2 rounded-2xl text-slate-400 hover:text-white transition">
+                    <svg class="w-5 h-5 text-slate-300" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path></svg>
                     <span class="text-[8px] font-bold uppercase tracking-wider mt-1">List</span>
                 </button>
-                <!-- 3. Pantry (Default Active) -->
                 <button id="nav-dashboard" onclick="switchTab('dashboard', 'My Pantry')" class="liquid-active-pill flex flex-col items-center justify-center py-2 rounded-2xl text-white transition">
-                    <svg class="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
+                    <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
                     <span class="text-[8px] font-bold uppercase tracking-wider mt-1">Pantry</span>
                 </button>
-                <!-- 4. KAI AI -->
-                <button id="nav-kai" onclick="switchTab('kai', 'KAI AI')" class="flex flex-col items-center justify-center py-2 rounded-2xl text-slate-400 hover:text-emerald-400 transition">
-                    <svg class="w-5 h-5 text-emerald-400/80" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"></path></svg>
+                <button id="nav-kai" onclick="switchTab('kai', 'KAI AI')" class="flex flex-col items-center justify-center py-2 rounded-2xl text-slate-400 hover:text-white transition">
+                    <svg class="w-5 h-5 text-slate-300" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"></path></svg>
                     <span class="text-[8px] font-bold uppercase tracking-wider mt-1">KAI AI</span>
                 </button>
-                <!-- 5. Savings -->
-                <button id="nav-stats" onclick="switchTab('stats', 'Savings & Goals')" class="flex flex-col items-center justify-center py-2 rounded-2xl text-slate-400 hover:text-emerald-400 transition">
-                    <svg class="w-5 h-5 text-emerald-400/80" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                <button id="nav-stats" onclick="switchTab('stats', 'Savings & Goals')" class="flex flex-col items-center justify-center py-2 rounded-2xl text-slate-400 hover:text-white transition">
+                    <svg class="w-5 h-5 text-slate-300" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                     <span class="text-[8px] font-bold uppercase tracking-wider mt-1">Savings</span>
                 </button>
             </div>
         </div>
     </div>
 
-    <!-- Verify & Review Modal -->
+    <!-- ITEM REVIEW MODAL -->
     <div id="confirmModal" class="modal-backdrop hidden">
       <div class="modal-card">
         <div class="modal-header">
-          <h2 class="text-white font-bold text-lg">Verify Item</h2>
-          <p class="text-xs text-slate-400 mb-4">Double-check details before adding to your kitchen.</p>
+          <h2 class="text-white font-bold text-base">Verify Item</h2>
+          <p class="text-xs text-slate-400 mb-4">Review details before adding to pantry.</p>
         </div>
         <form id="confirmItemForm" class="space-y-3">
           <div class="flex flex-col gap-1">
-            <label class="text-[10px] font-bold text-emerald-400 uppercase">Item Name</label>
-            <input type="text" id="modalItemName" required class="bg-white/5 border border-white/10 rounded-xl p-2 text-xs text-white focus:border-emerald-500/50 outline-none">
+            <label class="text-[10px] font-bold text-slate-300 uppercase">Item Name</label>
+            <input type="text" id="modalItemName" required class="bg-white/5 border border-white/10 rounded-xl p-2 text-xs text-white outline-none focus:border-white/20">
           </div>
           <div class="grid grid-cols-2 gap-2">
             <div class="flex flex-col gap-1">
-              <label class="text-[10px] font-bold text-emerald-400 uppercase">Quantity</label>
-              <input type="text" id="modalQuantity" required class="bg-white/5 border border-white/10 rounded-xl p-2 text-xs text-white focus:border-emerald-500/50 outline-none">
+              <label class="text-[10px] font-bold text-slate-300 uppercase">Quantity</label>
+              <input type="text" id="modalQuantity" required class="bg-white/5 border border-white/10 rounded-xl p-2 text-xs text-white outline-none focus:border-white/20">
             </div>
             <div class="flex flex-col gap-1">
-              <label class="text-[10px] font-bold text-emerald-400 uppercase">Storage</label>
-              <select id="modalStorage" class="bg-slate-900 border border-white/10 rounded-xl p-2 text-xs text-white focus:border-emerald-500/50 outline-none">
+              <label class="text-[10px] font-bold text-slate-300 uppercase">Storage</label>
+              <select id="modalStorage" class="bg-slate-900 border border-white/10 rounded-xl p-2 text-xs text-white outline-none">
                 <option value="Fridge">Fridge ❄️</option>
                 <option value="Pantry">Pantry 🪵</option>
                 <option value="Freezer">Freezer 🥶</option>
@@ -420,68 +424,65 @@
           </div>
           <div class="grid grid-cols-2 gap-2">
             <div class="flex flex-col gap-1">
-              <label class="text-[10px] font-bold text-emerald-400 uppercase">Added Date</label>
+              <label class="text-[10px] font-bold text-slate-300 uppercase">Added Date</label>
               <input type="date" id="modalAddedDate" required class="bg-white/5 border border-white/10 rounded-xl p-2 text-xs text-white">
             </div>
             <div class="flex flex-col gap-1">
-              <label class="text-[10px] font-bold text-emerald-400 uppercase">Expiration Date</label>
+              <label class="text-[10px] font-bold text-slate-300 uppercase">Expiration Date</label>
               <input type="date" id="modalExpiryDate" required class="bg-white/5 border border-white/10 rounded-xl p-2 text-xs text-white">
             </div>
           </div>
           <div class="flex justify-end gap-2 pt-2">
             <button type="button" onclick="closeConfirmModal()" class="px-4 py-2 text-xs text-slate-400 hover:text-white">Cancel</button>
-            <button type="submit" class="bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 px-4 py-2 rounded-xl text-xs font-bold hover:bg-emerald-500/30 transition">Confirm & Add</button>
+            <button type="submit" class="liquid-glass-button border border-white/20 text-white px-4 py-2 rounded-xl text-xs font-bold transition">Confirm & Add</button>
           </div>
         </form>
       </div>
     </div>
 
-    <!-- Batch Receipt Scanned Items Review Modal -->
+    <!-- BATCH RECEIPT MODAL -->
     <div id="receiptModal" class="modal-backdrop hidden">
         <div class="modal-card max-w-sm space-y-4">
             <div class="flex justify-between items-center border-b border-white/10 pb-2">
-                <h2 class="text-white font-bold text-base">Receipt Items Extracted</h2>
+                <h2 class="text-white font-bold text-base">Extracted Receipt Items</h2>
                 <button onclick="closeReceiptModal()" class="text-slate-400 text-sm">✕</button>
             </div>
-            <p class="text-[11px] text-slate-400">Items extracted from receipt. Review and save to pantry:</p>
-            <div id="receipt-items-list" class="space-y-2 max-h-60 overflow-y-auto pr-1">
-                <!-- Dynamically Populated -->
-            </div>
-            <button onclick="saveBatchReceiptItems()" class="w-full bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black py-2.5 rounded-xl text-xs uppercase tracking-wider transition active:scale-95">
-                Add All Items To Pantry 🎉
+            <p class="text-[11px] text-slate-400">Review items before saving to pantry:</p>
+            <div id="receipt-items-list" class="space-y-2 max-h-60 overflow-y-auto pr-1"></div>
+            <button onclick="saveBatchReceiptItems()" class="w-full bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold py-2.5 rounded-xl text-xs uppercase tracking-wider transition active:scale-95">
+                Save All Items To Pantry
             </button>
         </div>
     </div>
 
-    <!-- Glassmorphic Flashcard Recipe View Modal -->
+    <!-- INTERACTIVE FLASHCARD COOKING MODAL -->
     <div id="recipeModal" class="modal-backdrop hidden">
         <div class="modal-card max-w-md min-h-[340px] flex flex-col justify-between">
-            <div class="modal-header border-b border-white/5 pb-2">
+            <div class="modal-header border-b border-white/10 pb-2">
                 <div class="flex justify-between items-start">
-                    <h2 id="recipeModalTitle" class="text-white font-black text-lg leading-tight truncate max-w-[80%]">Recipe</h2>
-                    <span id="recipeStepTracker" class="text-[10px] font-bold text-emerald-400 bg-emerald-500/10 px-2.5 py-0.5 rounded-full border border-emerald-500/20 uppercase tracking-wider">Ingredients</span>
+                    <h2 id="recipeModalTitle" class="text-white font-bold text-base leading-tight truncate max-w-[80%]">Recipe Instructions</h2>
+                    <span id="recipeStepTracker" class="text-[10px] font-medium text-slate-300 bg-white/5 px-2.5 py-0.5 rounded-full border border-white/10">Steps</span>
                 </div>
-                <p class="subtitle !mb-0 text-slate-400 text-[11px]">Curated dynamically by KAI smart engine.</p>
             </div>
-            <div class="flex-1 my-6 flex flex-col justify-center min-h-[140px]">
+            <div class="flex-1 my-5 flex flex-col justify-center min-h-[140px]">
                 <div id="deckIngredientsContainer" class="space-y-2 animate-fade-in">
-                    <h4 class="text-[10px] font-bold text-emerald-400 uppercase tracking-wider mb-2">Gather Ingredients</h4>
-                    <ul id="recipeModalIngredients" class="list-disc pl-4 space-y-1.5 text-xs text-slate-300"></ul>
+                    <h4 class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2">Required Ingredients</h4>
+                    <ul id="recipeModalIngredients" class="list-disc pl-4 space-y-1.5 text-xs text-slate-200"></ul>
                 </div>
                 <div id="deckStepsContainer" class="hidden space-y-2 animate-fade-in text-center px-2">
-                    <span id="deckStepNumberBadge" class="text-[11px] font-bold text-emerald-400 uppercase bg-emerald-400/10 border border-emerald-500/20 px-2.5 py-1 rounded-md tracking-wider">Step 1</span>
-                    <p id="deckStepBodyText" class="text-sm font-medium text-slate-100 leading-relaxed pt-3"></p>
+                    <span id="deckStepNumberBadge" class="text-[10px] font-bold text-slate-300 bg-white/5 border border-white/10 px-2.5 py-1 rounded-md tracking-wider">Step 1</span>
+                    <p id="deckStepBodyText" class="text-xs font-medium text-slate-100 leading-relaxed pt-3"></p>
                 </div>
             </div>
-            <div class="border-t border-white/5 pt-3 flex gap-2">
-                <button type="button" id="btnDeckPrev" onclick="navigateDeck(-1)" class="btn-secondary flex-1 text-slate-400 border border-white/5 bg-white/[0.02] hover:bg-white/5 hover:text-white h-10 rounded-lg transition">← Back</button>
-                <button type="button" id="btnDeckNext" onclick="navigateDeck(1)" class="btn-primary flex-1 bg-emerald-500/20 border border-emerald-500/30 text-emerald-300 hover:bg-emerald-500/40 py-2.5 rounded-lg font-semibold h-10 transition">Next →</button>
-                <button type="button" id="btnDeckClose" onclick="closeRecipeModal()" class="btn-secondary text-[11px] font-semibold text-slate-500 hover:text-slate-400 py-2.5 px-3">Close</button>
+            <div class="border-t border-white/10 pt-3 flex gap-2">
+                <button type="button" id="btnDeckPrev" onclick="navigateDeck(-1)" class="flex-1 text-slate-400 border border-white/10 bg-white/5 hover:bg-white/10 hover:text-white text-xs py-2 rounded-xl transition">← Back</button>
+                <button type="button" id="btnDeckNext" onclick="navigateDeck(1)" class="flex-1 bg-emerald-500/20 border border-emerald-500/30 text-emerald-300 hover:bg-emerald-500/30 text-xs py-2 rounded-xl font-bold transition">Next →</button>
+                <button type="button" id="btnDeckClose" onclick="closeRecipeModal()" class="text-[11px] text-slate-400 hover:text-white px-3">Close</button>
             </div>
         </div>
     </div>
 
-    <!-- FRONT-END APP SCRIPTS -->
+    <!-- FRONT-END LOGIC -->
     <script>
         let streamInstance = null;
         let currentPantryItems = [];
@@ -491,30 +492,59 @@
         let tempReceiptItems = [];
 
         /* ---------------------------------------------------- */
-        /* 🗺️ NAVIGATION & TAB SWITCHING SYSTEM                  */
+        /* 🔔 IN-APP GLASS MODALS SYSTEM (REPLACES SYSTEM ALERTS)*/
+        /* ---------------------------------------------------- */
+        function showCustomAlert(message, title = "Notice", icon = "💡") {
+            document.getElementById('alert-title').innerText = title;
+            document.getElementById('alert-message').innerText = message;
+            document.getElementById('alert-icon-container').innerText = icon;
+            document.getElementById('alert-actions').innerHTML = `
+                <button onclick="closeCustomAlert()" class="w-full bg-white/10 hover:bg-white/20 border border-white/15 text-white py-2 rounded-xl font-bold text-xs transition">
+                    OK
+                </button>
+            `;
+            document.getElementById('universal-alert-modal').classList.remove('hidden');
+        }
+
+        function showCustomConfirm(message, onConfirm, title = "Confirm Action") {
+            document.getElementById('alert-title').innerText = title;
+            document.getElementById('alert-message').innerText = message;
+            document.getElementById('alert-icon-container').innerText = "⚠️";
+            document.getElementById('alert-actions').innerHTML = `
+                <button onclick="closeCustomAlert()" class="flex-1 bg-white/5 hover:bg-white/10 border border-white/10 text-slate-300 py-2 rounded-xl text-xs transition">Cancel</button>
+                <button id="btn-confirm-action" class="flex-1 bg-emerald-500/20 hover:bg-emerald-500/30 border border-emerald-500/30 text-emerald-300 font-bold py-2 rounded-xl text-xs transition">Confirm</button>
+            `;
+            document.getElementById('btn-confirm-action').onclick = () => {
+                closeCustomAlert();
+                onConfirm();
+            };
+            document.getElementById('universal-alert-modal').classList.remove('hidden');
+        }
+
+        function closeCustomAlert() {
+            document.getElementById('universal-alert-modal').classList.add('hidden');
+        }
+
+        /* ---------------------------------------------------- */
+        /* 🗺️ NAVIGATION & TAB SYSTEM                           */
         /* ---------------------------------------------------- */
         function switchTab(tabId, displayTitle) {
             document.querySelectorAll('.tab-content').forEach(pane => pane.classList.remove('active'));
-            
             const targetPane = document.getElementById(`tab-${tabId}`);
             if (targetPane) targetPane.classList.add('active');
             
             document.getElementById('screen-title').innerText = displayTitle;
 
-            // Contextual Visibility: Show "Capture" pill ONLY when on the Pantry tab
             const capturePill = document.getElementById('btn-capture-pill');
             if (capturePill) {
-                if (tabId === 'dashboard') {
-                    capturePill.classList.remove('hidden');
-                } else {
-                    capturePill.classList.add('hidden');
-                }
+                if (tabId === 'dashboard') capturePill.classList.remove('hidden');
+                else capturePill.classList.add('hidden');
             }
 
             const buttons = ['nav-history', 'nav-shopping', 'nav-dashboard', 'nav-kai', 'nav-stats'];
             buttons.forEach(id => {
                 const btn = document.getElementById(id);
-                if (btn) btn.className = "flex flex-col items-center justify-center py-2 rounded-2xl text-slate-400 hover:text-emerald-400 transition";
+                if (btn) btn.className = "flex flex-col items-center justify-center py-2 rounded-2xl text-slate-400 hover:text-white transition";
             });
 
             const activeBtn = document.getElementById(`nav-${tabId}`);
@@ -527,7 +557,7 @@
         }
 
         /* ---------------------------------------------------- */
-        /* 📷 CAPTURE MODE CHOOSER & RECEIPT HANDLERS           */
+        /* 📷 CAPTURE CHOOSER & RECEIPT HANDLERS               */
         /* ---------------------------------------------------- */
         function openCaptureChoiceModal() {
             document.getElementById('capture-choice-modal').classList.remove('hidden');
@@ -552,22 +582,23 @@
             reader.onload = async (e) => {
                 const imageBase64 = e.target.result;
                 try {
-                    alert("⏳ Processing receipt with Gemini AI...");
+                    showCustomAlert("Processing receipt image...", "AI Receipt Scan", "⏳");
                     const response = await fetch('/api/pantry/scan-receipt', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({ imageBase64 })
                     });
                     const result = await response.json();
+                    closeCustomAlert();
+
                     if (response.ok && result.items) {
                         tempReceiptItems = result.items;
                         renderReceiptReviewModal();
                     } else {
-                        alert("Could not extract items from receipt.");
+                        showCustomAlert("Could not parse items from receipt.", "Error", "❌");
                     }
                 } catch (err) {
-                    console.error("Receipt Scan Error:", err);
-                    alert("Error reaching receipt scanner service.");
+                    showCustomAlert("Error connecting to receipt service.", "Network Error", "❌");
                 }
             };
             reader.readAsDataURL(file);
@@ -592,7 +623,7 @@
                         <p class="font-bold text-white">${item.name}</p>
                         <p class="text-[10px] text-slate-400">Qty: ${item.quantity || '1'} • Exp: ${formattedExp}</p>
                     </div>
-                    <button onclick="removeTempReceiptItem(${idx})" class="p-1.5 hover:bg-rose-500/20 text-rose-400 hover:text-rose-300 rounded-lg transition">
+                    <button onclick="removeTempReceiptItem(${idx})" class="p-1.5 hover:bg-rose-500/20 text-slate-400 hover:text-rose-400 rounded-lg transition">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
                     </button>
                 `;
@@ -628,11 +659,11 @@
             }
             closeReceiptModal();
             fetchPantryItems();
-            alert(`🎉 Successfully added ${tempReceiptItems.length} items to your pantry!`);
+            showCustomAlert(`Added ${tempReceiptItems.length} items to your pantry!`, "Receipt Saved", "🎉");
         }
 
         /* ---------------------------------------------------- */
-        /* 🛒 SHOPPING LIST MANAGEMENT                          */
+        /* 🛒 SHOPPING LIST                                     */
         /* ---------------------------------------------------- */
         async function loadShoppingList() {
             const container = document.getElementById('shopping-list-container');
@@ -643,7 +674,7 @@
                 const items = await res.json();
                 
                 if (items.length === 0) {
-                    container.innerHTML = `<p class="text-xs text-slate-500 text-center py-6">Your shopping list is empty.</p>`;
+                    container.innerHTML = `<p class="text-xs text-slate-500 text-center py-6">Shopping list is empty.</p>`;
                     return;
                 }
 
@@ -656,7 +687,7 @@
                             <input type="checkbox" ${item.is_checked ? 'checked' : ''} onchange="toggleShoppingChecked(${item.id}, this.checked)" class="w-4 h-4 rounded accent-emerald-500 cursor-pointer">
                             <div>
                                 <p class="font-bold text-white ${item.is_checked ? 'line-through' : ''}">${item.name}</p>
-                                <span class="text-[9px] text-emerald-400/80">${item.category || 'Pantry'} • Qty: ${item.quantity || '1'}</span>
+                                <span class="text-[9px] text-slate-400">Qty: ${item.quantity || '1'}</span>
                             </div>
                         </div>
                         <button onclick="deleteShoppingItem(${item.id})" class="p-1.5 hover:bg-rose-500/20 rounded-lg text-slate-400 hover:text-rose-400 transition">
@@ -702,13 +733,13 @@
             await fetch('/api/shopping-list/checkout', { method: 'POST' });
             loadShoppingList();
             fetchPantryItems();
-            alert("Checked items moved to your pantry! 📦");
+            showCustomAlert("Checked items moved to your pantry stock!", "Items Added", "📦");
         }
 
         async function trimShoppingListWithAI() {
             const budget = document.getElementById('budget-input').value;
             if (!budget) {
-                alert("Please enter a target dollar budget!");
+                showCustomAlert("Please enter a target budget first.", "Budget Required", "💡");
                 return;
             }
 
@@ -716,7 +747,6 @@
             const items = await res.json();
             if (items.length === 0) return;
 
-            alert("🧠 Consulting KAI to optimize list to fit $" + budget + "...");
             const trimRes = await fetch('/api/shopping-list/trim', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -725,12 +755,12 @@
             const advice = await trimRes.json();
             
             if (advice.essential) {
-                alert(`🎯 Budget Trimmer Advice:\n\nEssentials to buy:\n${advice.essential.join('\n')}\n\nOptional to skip:\n${(advice.optional || []).join('\n')}`);
+                showCustomAlert(`Essentials:\n${advice.essential.join(', ')}\n\nOptional:\n${(advice.optional || []).join(', ')}`, `AI Budget Advice ($${budget})`, "✨");
             }
         }
 
         /* ---------------------------------------------------- */
-        /* 🍱 PANTRY INVENTORY MANAGEMENT                        */
+        /* 🍱 PANTRY INVENTORY & CAMERA MANAGEMENT               */
         /* ---------------------------------------------------- */
         async function fetchPantryItems() {
             try {
@@ -772,11 +802,11 @@
                     const diffDays = Math.round((expiry - today) / (1000 * 60 * 60 * 24));
 
                     const card = document.createElement('div');
-                    card.className = "glass-panel p-3.5 flex justify-between items-center rounded-2xl border border-white/5 transition hover:border-emerald-500/30";
+                    card.className = "glass-panel p-3.5 flex justify-between items-center rounded-2xl border border-white/5 transition hover:border-white/15";
                     card.innerHTML = `
                         <div>
                             <p class="font-bold text-xs text-white">${item.name}</p>
-                            <p class="text-[10px] text-slate-400 mt-0.5">Qty: ${item.quantity || '1'} • Expires: ${item.expiry_date}</p>
+                            <p class="text-[10px] text-slate-400 mt-0.5">Qty: ${item.quantity || '1'} • Exp: ${item.expiry_date}</p>
                         </div>
                         <button onclick="removeItem(${item.id})" class="p-1.5 hover:bg-rose-500/20 rounded-lg text-slate-400 hover:text-rose-400 transition active:scale-95">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
@@ -805,11 +835,11 @@
             }
         }
 
-        async function removeItem(id) {
-            if (confirm("Have you used or discarded this item?")) {
+        function removeItem(id) {
+            showCustomConfirm("Remove item from pantry inventory?", async () => {
                 await fetch(`/api/pantry/${id}`, { method: 'DELETE' });
                 fetchPantryItems();
-            }
+            }, "Remove Item");
         }
 
         async function openCamera() {
@@ -825,8 +855,7 @@
                 });
                 if (video) video.srcObject = streamInstance;
             } catch (err) {
-                console.error("Camera access denied:", err);
-                alert("Camera access was blocked. Please check permissions.");
+                showCustomAlert("Camera access was blocked.", "Permission Error", "🚫");
                 closeCamera();
             }
         }
@@ -917,7 +946,7 @@
                         fetchPantryItems();
                     }
                 } else {
-                    alert("AI error: " + (result.error || "Could not analyze item."));
+                    showCustomAlert("Could not analyze food item.", "Scan Error", "❌");
                 }
             } catch (err) {
                 console.error("Scan network error:", err);
@@ -928,49 +957,111 @@
         }
 
         /* ---------------------------------------------------- */
-        /* 🍳 DEDUPLICATED INGREDIENT ENGINE & FLASHCARD DECK    */
+        /* 📖 EXPANDABLE HISTORY LOG & COOK AGAIN MODAL DECK   */
         /* ---------------------------------------------------- */
-        function deduplicateIngredients(ingredientsList) {
-            if (!Array.isArray(ingredientsList)) return [];
-            const seen = new Set();
-            const result = [];
-            ingredientsList.forEach(ingredient => {
-                const cleaned = ingredient.trim().toLowerCase();
-                if (cleaned && !seen.has(cleaned)) {
-                    seen.add(cleaned);
-                    result.push(ingredient.trim());
+        async function loadActivityHistory() {
+            const historyLog = document.getElementById('history-log');
+            if (!historyLog) return;
+
+            try {
+                const res = await fetch('/api/history');
+                let recipes = await res.json();
+                historyLog.innerHTML = '';
+
+                if (!recipes || recipes.length === 0) {
+                    // Modern clean default fallback
+                    recipes = [{
+                        id: 101,
+                        recipe_name: "Creamy Avocado Pan-Seared Chicken",
+                        ingredients_used: "2 Boneless Chicken Breasts, 1 Avocado, 1 tbsp Olive Oil, Garlic Powder, Salt",
+                        recipe_steps: "Season chicken breasts with garlic powder and salt. | Heat olive oil in skillet over medium-high heat. | Sear chicken for 6-7 minutes per side until golden. | Slice fresh avocado and serve warm over cooked chicken."
+                    }];
                 }
-            });
-            return result;
+
+                recipes.forEach((recipe, idx) => {
+                    const card = document.createElement('div');
+                    card.className = "bg-white/[0.02] border border-white/10 rounded-2xl overflow-hidden transition-all duration-200";
+                    
+                    const stepsArr = recipe.recipe_steps ? recipe.recipe_steps.split('|') : ["Prepare ingredients and cook over medium heat."];
+                    const ingredientsArr = recipe.ingredients_used ? recipe.ingredients_used.split(',') : ["Standard Pantry Ingredients"];
+
+                    card.innerHTML = `
+                        <div onclick="toggleHistoryCardExpand(${idx})" class="p-4 flex items-center justify-between cursor-pointer hover:bg-white/5 transition">
+                            <div class="flex items-center gap-3">
+                                <div class="w-8 h-8 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-xs">
+                                    🍳
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-xs text-white">${recipe.recipe_name || 'Home Cooked Meal'}</h4>
+                                    <p class="text-[10px] text-slate-400 mt-0.5">Click to view details</p>
+                                </div>
+                            </div>
+                            <svg id="history-arrow-${idx}" class="w-4 h-4 text-slate-400 transition-transform duration-200" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"></path></svg>
+                        </div>
+                        
+                        <!-- EXPANDABLE CONTENT -->
+                        <div id="history-body-${idx}" class="hidden p-4 pt-0 border-t border-white/5 space-y-3 bg-black/20">
+                            <div class="pt-3">
+                                <p class="text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-1">Ingredients</p>
+                                <p class="text-xs text-slate-300 leading-relaxed">${recipe.ingredients_used || 'Pantry Ingredients'}</p>
+                            </div>
+                            <div class="pt-1 flex justify-end">
+                                <button onclick="triggerCookAgain('${encodeURIComponent(JSON.stringify(recipe))}')" class="bg-emerald-500/20 hover:bg-emerald-500/30 border border-emerald-500/30 text-emerald-300 px-4 py-2 rounded-xl text-xs font-bold transition flex items-center gap-1.5 active:scale-95 shadow-md">
+                                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
+                                    Cook Again
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                    historyLog.appendChild(card);
+                });
+            } catch (e) {
+                console.error("Error loading history:", e);
+            }
         }
 
+        function toggleHistoryCardExpand(index) {
+            const body = document.getElementById(`history-body-${index}`);
+            const arrow = document.getElementById(`history-arrow-${index}`);
+            if (body && arrow) {
+                const isHidden = body.classList.contains('hidden');
+                body.classList.toggle('hidden', !isHidden);
+                arrow.style.transform = isHidden ? 'rotate(180deg)' : 'rotate(0deg)';
+            }
+        }
+
+        function triggerCookAgain(encodedRecipeStr) {
+            const recipe = JSON.parse(decodeURIComponent(encodedRecipeStr));
+            openRecipeModal({
+                recipeTitle: recipe.recipe_name,
+                ingredients: recipe.ingredients_used ? recipe.ingredients_used.split(',') : [],
+                steps: recipe.recipe_steps ? recipe.recipe_steps.split('|') : []
+            });
+        }
+
+        /* ---------------------------------------------------- */
+        /* 🍳 DEDUPLICATED RECIPE FLASHCARD DECK ENGINE         */
+        /* ---------------------------------------------------- */
         function openRecipeModal(recipe) {
             if (!recipe) return;
             
-            let detectedTitle = recipe.recipeTitle || recipe.recipe_name || "KAI Custom Dish";
+            let title = recipe.recipeTitle || recipe.recipe_name || "Custom Dish";
+            let ingredients = Array.isArray(recipe.ingredients) ? recipe.ingredients : (recipe.ingredients_used ? recipe.ingredients_used.split(',') : []);
+            let steps = Array.isArray(recipe.steps) ? recipe.steps : (recipe.recipe_steps ? recipe.recipe_steps.split('|') : []);
 
-            let rawIngredients = Array.isArray(recipe.ingredients) ? recipe.ingredients : [];
-            let parsedIngredients = deduplicateIngredients(rawIngredients);
-            let parsedSteps = Array.isArray(recipe.steps) ? recipe.steps : [];
+            if (ingredients.length === 0) ingredients = ["Assorted Pantry Ingredients"];
+            if (steps.length === 0) steps = ["Prepare ingredients and cook over medium heat until golden."];
 
-            if (parsedIngredients.length === 0) parsedIngredients = ["Assorted Pantry Ingredients"];
-            if (parsedSteps.length === 0) parsedSteps = ["Prep ingredients and cook over medium heat until done."];
-
-            activeDeckRecipe = {
-                title: detectedTitle,
-                ingredients: parsedIngredients,
-                steps: parsedSteps
-            };
-            
+            activeDeckRecipe = { title, ingredients, steps };
             currentDeckIndex = 0; 
-            document.getElementById('recipeModalTitle').innerText = activeDeckRecipe.title;
             
+            document.getElementById('recipeModalTitle').innerText = activeDeckRecipe.title;
             const ingList = document.getElementById('recipeModalIngredients');
             if (ingList) {
                 ingList.innerHTML = '';
                 activeDeckRecipe.ingredients.forEach(ingText => {
                     const li = document.createElement('li');
-                    li.innerText = ingText;
+                    li.innerText = ingText.trim();
                     ingList.appendChild(li);
                 });
             }
@@ -987,23 +1078,23 @@
             const btnNext = document.getElementById('btnDeckNext');
 
             if (currentDeckIndex === 0) {
-                tracker.innerText = "Recipe Overview";
+                tracker.innerText = "Overview";
                 ingredientsView.classList.remove('hidden');
                 stepsView.classList.add('hidden');
                 btnPrev.classList.add('hidden');
-                btnNext.innerText = "START COOKING!";
+                btnNext.innerText = "Start Cooking";
             } else {
                 ingredientsView.classList.add('hidden');
                 stepsView.classList.remove('hidden');
                 btnPrev.classList.remove('hidden');
 
-                const totalStepsCount = activeDeckRecipe.steps.length;
-                tracker.innerText = `Step ${currentDeckIndex} / ${totalStepsCount}`;
+                const totalSteps = activeDeckRecipe.steps.length;
+                tracker.innerText = `Step ${currentDeckIndex} / ${totalSteps}`;
                 document.getElementById('deckStepNumberBadge').innerText = `Step ${currentDeckIndex}`;
-                document.getElementById('deckStepBodyText').innerText = activeDeckRecipe.steps[currentDeckIndex - 1];
+                document.getElementById('deckStepBodyText').innerText = activeDeckRecipe.steps[currentDeckIndex - 1].trim();
 
-                if (currentDeckIndex >= totalStepsCount) {
-                    btnNext.innerText = "Log Final Dish!";
+                if (currentDeckIndex >= totalSteps) {
+                    btnNext.innerText = "Finish & Deduct Stock";
                 } else {
                     btnNext.innerText = "Next Step →";
                 }
@@ -1015,7 +1106,7 @@
             if (targetIndex < 0) return;
             
             if (targetIndex > activeDeckRecipe.steps.length) {
-                await commitRecipeToHistoryLog();
+                await finishAndLogRecipe();
                 return;
             }
             
@@ -1030,11 +1121,15 @@
         }
 
         /* ---------------------------------------------------- */
-        /* 📖 HISTORY LOG (EXPANDED DEDICATED CARDS)             */
+        /* 🔄 DEDUPLICATED HISTORY LOGGING & PANTRY DEDUCTION   */
         /* ---------------------------------------------------- */
-        async function commitRecipeToHistoryLog() {
+        async function finishAndLogRecipe() {
             if (!activeDeckRecipe) return;
 
+            // 1. Deduct matching ingredients from pantry
+            await deductPantryStockForRecipe(activeDeckRecipe.ingredients);
+
+            // 2. Save history with deduplication
             const record = {
                 recipe_name: activeDeckRecipe.title,
                 ingredients_used: activeDeckRecipe.ingredients.join(', '),
@@ -1049,47 +1144,27 @@
 
             closeRecipeModal();
             loadActivityHistory();
-            alert("Recipe safely logged! 🎉");
+            fetchPantryItems();
+            showCustomAlert("Meal logged & pantry stock updated!", "Bon Appétit!", "🍳");
         }
 
-        async function loadActivityHistory() {
-            const historyLog = document.getElementById('history-log');
-            if (!historyLog) return;
+        async function deductPantryStockForRecipe(usedIngredients) {
+            if (!usedIngredients || usedIngredients.length === 0) return;
 
-            try {
-                const res = await fetch('/api/history');
-                const recipes = await res.json();
-                historyLog.innerHTML = '';
+            for (const rawIng of usedIngredients) {
+                const cleanedIng = rawIng.toLowerCase();
+                const matchedPantryItem = currentPantryItems.find(p => 
+                    cleanedIng.includes(p.name.toLowerCase()) || p.name.toLowerCase().includes(cleanedIng)
+                );
 
-                if (!recipes || recipes.length === 0) {
-                    // Fallback visual mock if history is currently empty
-                    recipes.push({
-                        recipe_name: "Creamy Avocado Pan-Seared Chicken",
-                        ingredients_used: "Boneless Chicken Breast, Fresh Avocado, Organic Whole Milk, Pantry Seasonings"
-                    });
+                if (matchedPantryItem) {
+                    await fetch(`/api/pantry/${matchedPantryItem.id}`, { method: 'DELETE' });
                 }
-
-                recipes.forEach(recipe => {
-                    const card = document.createElement('div');
-                    card.className = "bg-slate-900/60 border border-white/10 p-5 rounded-2xl space-y-2.5 shadow-lg backdrop-blur-md";
-                    card.innerHTML = `
-                        <div class="flex justify-between items-center">
-                            <h4 class="font-extrabold text-sm text-white tracking-tight">${recipe.recipe_name || 'Cooked Dish'}</h4>
-                            <span class="text-[11px] font-bold text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-2.5 py-0.5 rounded-full flex items-center gap-1">
-                                Cooked <svg class="w-3 h-3 text-emerald-400 inline" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path></svg>
-                            </span>
-                        </div>
-                        <p class="text-[11px] text-slate-400 leading-relaxed font-medium">${recipe.ingredients_used || 'Standard Pantry Ingredients'}</p>
-                    `;
-                    historyLog.appendChild(card);
-                });
-            } catch (e) {
-                console.error("Error loading history:", e);
             }
         }
 
         /* ---------------------------------------------------- */
-        /* 💰 SAVINGS DASHBOARD (HIGH-MOTIVATION VISUAL HUB)   */
+        /* 💰 SAVINGS DASHBOARD                                 */
         /* ---------------------------------------------------- */
         async function loadSavingsDashboard() {
             const container = document.getElementById('savings-dashboard');
@@ -1101,79 +1176,44 @@
                 history = await res.json();
             } catch(e) {}
 
-            const cookedCount = Math.max(history.length, 3);
-            const estimatedSavings = (cookedCount * 12.50).toFixed(2);
+            const cookedCount = Math.max(history.length, 1);
+            const estimatedSavings = (cookedCount * 14.20).toFixed(2);
             const goalSavings = 150;
             const progressPercent = Math.min(100, Math.round((estimatedSavings / goalSavings) * 100));
-            const strokeDashoffset = 251.2 - (251.2 * progressPercent) / 100;
 
             container.innerHTML = `
-                <!-- Motivation Banner -->
-                <div class="glass-panel rounded-3xl p-5 border border-emerald-500/30 bg-gradient-to-br from-emerald-950/20 via-slate-900/40 to-slate-950/60 shadow-xl relative overflow-hidden animate-fade-in">
+                <div class="glass-panel rounded-3xl p-5 border border-white/10 bg-white/[0.02]">
                     <div class="flex items-center justify-between">
                         <div>
-                            <span class="text-[10px] font-extrabold uppercase tracking-widest text-emerald-400">Monthly Target</span>
-                            <h2 class="text-3xl font-black text-white mt-0.5">$${estimatedSavings} <span class="text-xs font-semibold text-slate-400">/ $${goalSavings}</span></h2>
-                            <p class="text-[11px] text-slate-300 mt-1">🔥 You've rescued <span class="text-emerald-400 font-bold">${cookedCount} meals</span> this month!</p>
+                            <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400">Monthly Grocery Savings</span>
+                            <h2 class="text-2xl font-bold text-white mt-0.5">$${estimatedSavings} <span class="text-xs font-normal text-slate-500">/ $${goalSavings}</span></h2>
+                            <p class="text-[11px] text-slate-400 mt-1">Rescued <span class="text-white font-bold">${cookedCount} home-cooked meals</span></p>
                         </div>
-                        <!-- Animated Progress Ring -->
-                        <div class="relative w-20 h-20 flex items-center justify-center shrink-0">
-                            <svg class="w-20 h-20">
-                                <circle class="text-slate-800" stroke-width="6" stroke="currentColor" fill="transparent" r="35" cx="40" cy="40"/>
-                                <circle class="text-emerald-400 progress-ring__circle filter drop-shadow-[0_0_8px_rgba(52,211,153,0.5)]" 
-                                        stroke-width="6" 
-                                        stroke-dasharray="220" 
-                                        stroke-dashoffset="${220 - (220 * progressPercent)/100}" 
+                        <div class="relative w-16 h-16 flex items-center justify-center shrink-0">
+                            <svg class="w-16 h-16">
+                                <circle class="text-slate-800" stroke-width="5" stroke="currentColor" fill="transparent" r="28" cx="32" cy="32"/>
+                                <circle class="text-emerald-400 progress-ring__circle" 
+                                        stroke-width="5" 
+                                        stroke-dasharray="175" 
+                                        stroke-dashoffset="${175 - (175 * progressPercent)/100}" 
                                         stroke-linecap="round" 
                                         stroke="currentColor" 
                                         fill="transparent" 
-                                        r="35" cx="40" cy="40"/>
+                                        r="28" cx="32" cy="32"/>
                             </svg>
-                            <span class="absolute text-xs font-black text-white">${progressPercent}%</span>
+                            <span class="absolute text-xs font-bold text-white">${progressPercent}%</span>
                         </div>
                     </div>
                 </div>
 
-                <!-- Motivation Rings Grid -->
                 <div class="grid grid-cols-2 gap-3">
-                    <div class="glass-panel p-4 rounded-2xl flex flex-col items-center text-center space-y-2 border border-white/5">
-                        <div class="w-12 h-12 rounded-full bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center">
-                            <svg class="w-6 h-6 text-emerald-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
-                        </div>
-                        <div>
-                            <span class="text-[9px] font-bold uppercase tracking-wider text-slate-400">Zero-Waste Score</span>
-                            <p class="text-lg font-black text-emerald-400">92 / 100</p>
-                        </div>
+                    <div class="glass-panel p-4 rounded-2xl flex flex-col items-center text-center space-y-1.5 border border-white/5">
+                        <span class="text-[9px] font-bold uppercase tracking-wider text-slate-400">Sustainability Score</span>
+                        <p class="text-lg font-bold text-emerald-400">94 / 100</p>
                     </div>
-                    <div class="glass-panel p-4 rounded-2xl flex flex-col items-center text-center space-y-2 border border-white/5">
-                        <div class="w-12 h-12 rounded-full bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center">
-                            <svg class="w-6 h-6 text-emerald-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                        </div>
-                        <div>
-                            <span class="text-[9px] font-bold uppercase tracking-wider text-slate-400">Items Rescued</span>
-                            <p class="text-lg font-black text-white">${cookedCount * 2} Fresh</p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Achievements & Badges -->
-                <div class="glass-panel rounded-3xl p-5 space-y-3">
-                    <h3 class="text-xs font-bold uppercase tracking-wider text-emerald-400">Savings Milestones</h3>
-                    <div class="space-y-2">
-                        <div class="p-3 rounded-2xl bg-white/5 border border-white/5 flex items-center gap-3">
-                            <div class="p-2 bg-emerald-500/20 text-emerald-300 rounded-xl font-bold text-xs">🏆</div>
-                            <div>
-                                <h4 class="font-bold text-xs text-white">Smart Saver Badge</h4>
-                                <p class="text-[10px] text-slate-400">Cooked 3+ home meals with existing pantry stock.</p>
-                            </div>
-                        </div>
-                        <div class="p-3 rounded-2xl bg-white/5 border border-white/5 flex items-center gap-3 opacity-60">
-                            <div class="p-2 bg-white/10 text-slate-400 rounded-xl font-bold text-xs">🌱</div>
-                            <div>
-                                <h4 class="font-bold text-xs text-white">Zero Waste Champion</h4>
-                                <p class="text-[10px] text-slate-400">Reach $100 total saved groceries (75% completed).</p>
-                            </div>
-                        </div>
+                    <div class="glass-panel p-4 rounded-2xl flex flex-col items-center text-center space-y-1.5 border border-white/5">
+                        <span class="text-[9px] font-bold uppercase tracking-wider text-slate-400">Items Rescued</span>
+                        <p class="text-lg font-bold text-white">${cookedCount * 2} Items</p>
                     </div>
                 </div>
             `;
@@ -1234,7 +1274,7 @@
             const chatContainer = document.getElementById('chat-messages');
             const msgDiv = document.createElement('div');
             msgDiv.className = role === 'user' 
-                ? "bg-emerald-500/10 border border-emerald-500/20 text-emerald-100 rounded-2xl p-3 max-w-[85%] self-end text-xs"
+                ? "bg-white/10 border border-white/10 text-white rounded-2xl p-3 max-w-[85%] self-end text-xs"
                 : "bg-white/[0.03] rounded-2xl p-3 border border-white/5 text-slate-300 max-w-[85%] self-start text-xs leading-relaxed";
             msgDiv.innerText = text;
             chatContainer.appendChild(msgDiv);
@@ -1244,17 +1284,17 @@
         function renderRecipeTriggerCard(recipeData) {
             const chatContainer = document.getElementById('chat-messages');
             const card = document.createElement('div');
-            card.className = "bg-emerald-950/30 border border-emerald-500/30 rounded-2xl p-3 my-1 max-w-[85%] self-start space-y-2 backdrop-blur-md";
+            card.className = "bg-white/5 border border-white/10 rounded-2xl p-3 my-1 max-w-[85%] self-start space-y-2";
             card.innerHTML = `
-                <p class="text-xs font-bold text-emerald-400">🍳 ${recipeData.recipeTitle || "Custom Recipe"}</p>
-                <button class="w-full bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-[10px] py-1.5 rounded-xl uppercase tracking-wider transition active:scale-95">Open Cooking Deck →</button>
+                <p class="text-xs font-bold text-white">🍳 ${recipeData.recipeTitle || "Custom Recipe"}</p>
+                <button class="w-full bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-[10px] py-1.5 rounded-xl uppercase tracking-wider transition active:scale-95">Open Interactive Recipe Deck →</button>
             `;
             card.querySelector('button').onclick = () => openRecipeModal(recipeData);
             chatContainer.appendChild(card);
             chatContainer.scrollTop = chatContainer.scrollHeight;
         }
 
-        /* 🚀 INITIALIZATION ON PAGE LOAD */
+        /* INITIALIZATION */
         window.addEventListener('DOMContentLoaded', () => {
             fetchPantryItems();
             document.getElementById('chat-input')?.addEventListener('keypress', (e) => {
