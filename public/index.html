@@ -1406,49 +1406,33 @@
     `;
 
     // Handler: Main Cooking Deck Button
-const cookBtn = card.querySelector('#btn-cook-now');
-if (cookBtn) {
-    cookBtn.onclick = () => {
-        openRecipeModal({
-            recipeTitle: recipeTitle,
-            ingredients: ingredients.length > 0 ? ingredients : combinedIngredients,
-            steps: steps
-        });
-    };
-}
+    const cookBtn = card.querySelector('#btn-cook-now');
+    if (cookBtn) {
+        cookBtn.onclick = () => {
+            openRecipeModal({
+                recipeTitle: recipeTitle,
+                ingredients: ingredients.length > 0 ? ingredients : combinedIngredients,
+                steps: steps
+            });
+        };
+    }
 
-// Handler: Alternative Recipe Button
-const altCookBtn = card.querySelector('#btn-cook-alt');
-if (altCookBtn) {
-    altCookBtn.onclick = () => {
-        const altData = data.pantryAlternative || {};
-        
-        // 1. Resolve Ingredients List
-        let altIngredients = (altData.ingredients && altData.ingredients.length > 0)
-            ? altData.ingredients
-            : ingredients.filter(i => !missing.some(m => i.toLowerCase().includes(m.toLowerCase())));
+    // Handler: Alternative Recipe Button
+    const altCookBtn = card.querySelector('#btn-cook-alt');
+    if (altCookBtn) {
+        altCookBtn.onclick = () => {
+            const altData = data.pantryAlternative || {};
+            const altIngredients = (altData.ingredients && altData.ingredients.length > 0)
+                ? altData.ingredients
+                : ingredients.filter(i => !missing.some(m => i.toLowerCase().includes(m.toLowerCase())));
 
-        if (typeof altIngredients === 'string') {
-            altIngredients = altIngredients.split(',');
-        }
-
-        // 2. Resolve Steps with Fallback
-        let altSteps = (altData.steps && altData.steps.length > 0) 
-            ? altData.steps 
-            : [
-                "Gather your remaining pantry ingredients.",
-                "Prep ingredients and heat your skillet or pan over medium heat.",
-                "Cook ingredients together until done, seasoning to taste.",
-                "Plate and serve immediately!"
-            ];
-
-        openRecipeModal({
-            recipeTitle: altData.title || "Pantry Alternative Recipe",
-            ingredients: altIngredients,
-            steps: altSteps
-        });
-    };
-}
+            openRecipeModal({
+                recipeTitle: altData.title || "Alternative Recipe",
+                ingredients: altIngredients,
+                steps: altData.steps || []
+            });
+        };
+    }
 
     // Handler: Add Missing Items to Shopping List Button
     const missingBtn = card.querySelector('#btn-add-missing');
