@@ -18,7 +18,8 @@ export async function initDatabase() {
             name TEXT NOT NULL,
             quantity TEXT DEFAULT '1',
             expiry_date DATE NOT NULL,
-            added_date DATE DEFAULT CURRENT_DATE
+            added_date DATE DEFAULT CURRENT_DATE,
+            storage TEXT DEFAULT 'Pantry'
         )
     `);
 
@@ -32,13 +33,29 @@ export async function initDatabase() {
         )
     `);
 
-    // 🛒 3. Create the Shopping List Table (New!)
+    // 3. Create Shopping List Table (Enhanced with tags & essential flag)
     await db.exec(`
         CREATE TABLE IF NOT EXISTS shopping_list (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             name TEXT NOT NULL,
             quantity TEXT DEFAULT '1',
-            added_date DATE DEFAULT CURRENT_DATE
+            added_date DATE DEFAULT CURRENT_DATE,
+            category TEXT DEFAULT 'Custom Items',
+            is_essential INTEGER DEFAULT 0,
+            is_checked INTEGER DEFAULT 0,
+            source TEXT DEFAULT 'manual'
+        )
+    `);
+
+    // 4. Create Recipe Logs (for tracking cooked meals with steps & timing)
+    await db.exec(`
+        CREATE TABLE IF NOT EXISTS recipe_logs (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            recipe_name TEXT NOT NULL,
+            recipe_steps TEXT,
+            ingredients_used TEXT,
+            cooked_date DATE DEFAULT CURRENT_DATE,
+            time_taken_minutes INTEGER
         )
     `);
 
