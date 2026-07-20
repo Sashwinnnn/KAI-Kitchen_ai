@@ -231,8 +231,10 @@ STRICT DEDUPLICATION:
                         },
                         required: ["reply", "isRecipe"]
                     }
+                }
+            });
 
-                if (response && response.text) {
+            if (response && response.text) {
                     console.log(`✅ Success with model: ${modelName}`);
                     break;
                 }
