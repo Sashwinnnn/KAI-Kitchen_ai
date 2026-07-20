@@ -137,10 +137,15 @@ CRITICAL CONVERSATIONAL RULES:
 - Keep the "reply" brief, snappy, text-style, and match the user's energy.
 - NEVER ask the user what ingredients they have. You have live database access.
 
-CRITICAL RECIPE STEP GENERATION RULES (apply to BOTH "steps" and "pantryAlternative.steps" every single time — no exceptions):
+MODE GATING — decide this FIRST, before anything else:
+- Set "wantsRecipe" to true ONLY if the user is explicitly asking for a recipe, a meal/dish idea, "what should I cook/eat", to use up pantry items, or a similar food-preparation request.
+- Set "wantsRecipe" to false for everything else — greetings, small talk, storage tips, nutrition questions, general questions about an ingredient, thanks/goodbyes, or anything that isn't a request to cook or get a dish idea. Just reply conversationally like a normal chat assistant would; do not mention checking or scanning the pantry, and do not invent a recipe nobody asked for.
+- When "wantsRecipe" is false: "isRecipe" must be false, and "ingredients", "steps", "missingIngredients" must all be empty arrays, and "pantryAlternative" must be omitted/null. Do not run pantry-availability logic at all for these messages.
+
+CRITICAL RECIPE STEP GENERATION RULES (only apply when "wantsRecipe" is true; apply to BOTH "steps" and "pantryAlternative.steps" every single time — no exceptions):
 - ALWAYS populate "ingredients" with the FULL array of required ingredients for the recipe, each with a real quantity (e.g. "2 boneless chicken thighs", "1 tbsp olive oil", "1/2 tsp smoked paprika"). Never list a bare item name with no amount.
 - If items are missing from the user's pantry, list those exact item names inside "missingIngredients".
-- When "isRecipe" is false, you MUST still generate a full, cookable "pantryAlternative" using ONLY items already in the user's pantry (plus common staples like salt, pepper, oil, water). It MUST include "pantryAlternative.title", "pantryAlternative.ingredients" (with quantities), AND "pantryAlternative.steps" — never leave any of these empty.
+- When "isRecipe" is false (because ingredients are missing), you MUST still generate a full, cookable "pantryAlternative" using ONLY items already in the user's pantry (plus common staples like salt, pepper, oil, water). It MUST include "pantryAlternative.title", "pantryAlternative.ingredients" (with quantities), AND "pantryAlternative.steps" — never leave any of these empty.
 - EVERY recipe (main or alternative) needs a MINIMUM of 4 steps, each a real, actionable, chronological cooking instruction with specifics: actual cook times ("6-7 minutes"), temperatures ("medium-high heat", "375°F"), techniques ("sear", "simmer", "dice finely"), and doneness cues ("until golden and internal temp reaches 165°F").
 - BANNED phrases — never output these or anything equivalent, in "steps" or "pantryAlternative.steps": "cook as desired", "heat and serve", "combine ingredients according to taste", "prepare as you like", "serve fresh and enjoy" as a stand-in for real instructions, "follow standard preparation". If you catch yourself about to write something this vague, replace it with the actual technique and timing instead.
 - The "pantryAlternative" must be just as rigorous as the main recipe — it is a real recipe made from what's on hand, not a placeholder. Treat "cook with what you have" the same as any other requested dish.
@@ -191,16 +196,20 @@ STRICT DEDUPLICATION:
         };
         const isQualityResponse = (parsed) => {
             if (!parsed) return false;
-            if (parsed.isRecipe) {
-                if (!Array.isArray(parsed.ingredients) || parsed.ingredients.length === 0) return false;
-                if (!Array.isArray(parsed.steps) || parsed.steps.length < 4) return false;
-                if (parsed.steps.some(isVagueStep)) return false;
-            }
-            if (parsed.pantryAlternative) {
-                const alt = parsed.pantryAlternative;
-                if (!Array.isArray(alt.ingredients) || alt.ingredients.length === 0) return false;
-                if (!Array.isArray(alt.steps) || alt.steps.length < 4) return false;
-                if (alt.steps.some(isVagueStep)) return false;
+            if (parsed.wantsRecipe) {
+                if (parsed.isRecipe) {
+                    if (!Array.isArray(parsed.ingredients) || parsed.ingredients.length === 0) return false;
+                    if (!Array.isArray(parsed.steps) || parsed.steps.length < 4) return false;
+                    if (parsed.steps.some(isVagueStep)) return false;
+                } else if (parsed.pantryAlternative) {
+                    const alt = parsed.pantryAlternative;
+                    if (!Array.isArray(alt.ingredients) || alt.ingredients.length === 0) return false;
+                    if (!Array.isArray(alt.steps) || alt.steps.length < 4) return false;
+                    if (alt.steps.some(isVagueStep)) return false;
+                } else {
+                    // Asked for a recipe but got neither a full recipe nor an alternative — not acceptable.
+                    return false;
+                }
             }
             return true;
         };
@@ -222,6 +231,10 @@ STRICT DEDUPLICATION:
                         type: Type.OBJECT,
                         properties: {
                             reply: { type: Type.STRING },
+                            wantsRecipe: {
+                                type: Type.BOOLEAN,
+                                description: "True only if the user is explicitly asking for a recipe, meal idea, or what to cook. False for casual chat, questions, or anything else."
+                            },
                             isRecipe: { type: Type.BOOLEAN },
                             recipeTitle: { type: Type.STRING },
                             ingredients: {
@@ -257,7 +270,7 @@ STRICT DEDUPLICATION:
                                 required: ["title", "ingredients", "steps"]
                             }
                         },
-                        required: ["reply", "isRecipe", "ingredients", "steps", "missingIngredients"]
+                        required: ["reply", "wantsRecipe", "isRecipe", "ingredients", "steps", "missingIngredients"]
                     }
                 }
             });
@@ -310,6 +323,7 @@ STRICT DEDUPLICATION:
 
         res.json({
             reply: parsedResult.reply || "Here is what I found!",
+            wantsRecipe: parsedResult.wantsRecipe || false,
             isRecipe: parsedResult.isRecipe || false,
             recipeTitle: parsedResult.recipeTitle || '',
             ingredients: uniqueIngredients,
