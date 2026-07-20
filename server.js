@@ -141,23 +141,17 @@ app.post('/api/chat', async (req, res) => {
                 pantry.map(item => `- ${item.name} (Quantity: ${item.quantity || 1}, Expires: ${item.expiry_date || 'N/A'}, ID: ${item.id})`).join('\n');
         }
 
-        // 2. Define bulletproof instructions for KAI
+        // 2. Define strict instructions forcing SPECIFIC recipe steps and clean output
         const systemInstruction = `You are KAI, a helpful, witty, and highly knowledgeable AI kitchen companion ("Kitchen AI").
         
         CRITICAL CONVERSATIONAL RULES:
-        - Keep responses brief, snappy, text-style, and match the user's energy.
+        - Keep the "reply" brief, snappy, text-style, and match the user's energy.
         - NEVER ask the user what ingredients they have. You have live database access.
         
-        DYNAMIC CULINARY LOGIC (FUTURE-PROOF):
-        Before writing the "steps" array, evaluate the physical state of every item used:
-        
-        1. NO-COOK / READY-TO-EAT INGREDIENTS:
-           - If the ingredients are pre-packaged treats, snacks, dairy, fruits, raw vegetables, or ready-to-eat items (e.g., ice cream, cookies, chips, yogurt, berries, bread, nuts, deli meats), applying heat is strictly FORBIDDEN.
-           - Instead, you MUST use physical preparation and assembly verbs: "Crush," "Chop," "Slice," "Dice," "Layer," "Dollop," "Drizzle," "Toss," "Chill," or "Assemble."
-           - Make the instructions realistic to how a human handles snacks (e.g., crushing chips in a bag, dicing a cold bar, layering items in a glass).
-
-        2. COOKED INGREDIENTS:
-           - Only use heat verbs ("heat," "simmer," "boil," "fry") if the user is explicitly cooking raw foods that require heat to be edible (like raw meats, grains, eggs, pasta).
+        CRITICAL RECIPE STEP GENERATION RULES:
+        - When "isRecipe" is true, the "steps" array MUST contain detailed, step-by-step cooking instructions specifically tailored to the EXACT dish requested and ingredients used.
+        - NEVER give generic directions like "put everything in a bowl and serve." Break down structural prep, heat levels, timing, and order of ingredients cleanly.
+        - Evaluate the physical state of items: Only use heat verbs ("heat," "simmer," "boil," "fry") if the user is explicitly cooking raw foods that require heat to be edible. For ready-to-eat items, use prep verbs ("chop", "layer", "toss", "crush").
 
         INGREDIENT DEFICIT FLOW:
         If the user requests a meal or dish that their available pantry ingredients cannot plausibly support:
@@ -165,14 +159,26 @@ app.post('/api/chat', async (req, res) => {
         2. Populate the "shoppingList" array with the specific, crucial items they need to buy.
         3. Populate the "pantryAlternative" object with a title and step-by-step assembly instructions for something they CAN make right now using only their live pantry items.`;
 
-        const contextualizedUserMessage = `[SYSTEM NOTE: Live pantry database supplied] User's message: ${message}`;
+        // Provide the context along with today's date context securely to the user message block
+        const contextualizedUserMessage = `[SYSTEM NOTE: Live pantry database supplied]\n${pantryContext}\n\nUser's message: ${message}`;
 
         const contents = [];
         if (history && history.length > 0) {
-            history.forEach(turn => {
+            // Keep history lean (only last 4 turns) so duplicate items don't accumulate across massive chat states
+            const recentHistory = history.slice(-4);
+            recentHistory.forEach(turn => {
+                let contentText = "";
+                if (typeof turn.content === 'string') {
+                    contentText = turn.content;
+                } else if (turn.content && turn.content.reply) {
+                    contentText = turn.content.reply;
+                } else {
+                    contentText = JSON.stringify(turn.content);
+                }
+
                 contents.push({
                     role: turn.role === "assistant" ? "model" : "user",
-                    parts: [{ text: typeof turn.content === 'string' ? turn.content : JSON.stringify(turn.content) }]
+                    parts: [{ text: contentText }]
                 });
             });
         }
@@ -185,7 +191,7 @@ app.post('/api/chat', async (req, res) => {
             contents: contents,
             config: {
                 systemInstruction: systemInstruction, 
-                temperature: 0.1, 
+                temperature: 0.2, 
                 responseMimeType: "application/json",
                 responseSchema: {
                     type: Type.OBJECT,
@@ -201,7 +207,7 @@ app.post('/api/chat', async (req, res) => {
                                     id: { type: Type.INTEGER },
                                     name: { type: Type.STRING }
                                 },
-                                required: ["id", "name"]
+                                required: ["name"]
                             }
                         },
                         steps: {
@@ -231,7 +237,7 @@ app.post('/api/chat', async (req, res) => {
 
         const parsedResult = JSON.parse(response.text);
 
-        // 4. Sanitize and Filter Ingredients to Prevent Duplicates
+        // 4. Sanitize and Strict De-duplication of Used Ingredients
         const pantryNames = (pantry || []).map(p => (p.name || '').toLowerCase());
         let rawUsedIngredients = parsedResult.usedIngredients || [];
 
@@ -240,7 +246,7 @@ app.post('/api/chat', async (req, res) => {
 
         for (const item of rawUsedIngredients) {
             if (!item) continue;
-            const itemName = typeof item === 'string' ? item : (item.name || '').toString();
+            const itemName = typeof item === 'string' ? item : (item.name || '').toString().trim();
             if (!itemName || seenNames.has(itemName.toLowerCase())) continue;
             
             seenNames.add(itemName.toLowerCase());
@@ -255,7 +261,7 @@ app.post('/api/chat', async (req, res) => {
         
         let finalIsRecipe = parsedResult.isRecipe === true && (matched.length >= minNeeded);
 
-        // Map ingredients back to real database entry IDs
+        // Map ingredients cleanly back to real database entry IDs
         const usedWithIds = uniqueUsedIngredients.map(ui => {
             const match = pantry.find(p => {
                 const pn = (p.name || '').toLowerCase();
@@ -264,7 +270,12 @@ app.post('/api/chat', async (req, res) => {
             return { id: match ? match.id : ui.id, name: ui.name };
         });
 
-        const updatedHistory = [...history, { role: 'user', content: message }, { role: 'assistant', content: parsedResult.reply }];
+        // Save structural logs using text context to prevent history inflation loops
+        const updatedHistory = [
+            ...(history || []).slice(-4),
+            { role: 'user', content: message },
+            { role: 'assistant', content: parsedResult.reply || "Recipe loaded!" }
+        ];
 
         // 5. Send structured response back to frontend with safe fallback defaults
         res.json({
@@ -272,7 +283,7 @@ app.post('/api/chat', async (req, res) => {
             isRecipe: finalIsRecipe,
             recipeTitle: finalIsRecipe ? (parsedResult.recipeTitle || '') : '',
             usedIngredients: finalIsRecipe ? usedWithIds : [],
-            steps: parsedResult.steps || [],
+            steps: parsedResult.steps && parsedResult.steps.length > 0 ? parsedResult.steps : ["Prepare ingredients.", "Combine ingredients.", "Serve immediately."],
             shoppingList: parsedResult.shoppingList || [],
             pantryAlternative: parsedResult.pantryAlternative || null,
             history: updatedHistory
@@ -294,7 +305,6 @@ app.post('/api/chat', async (req, res) => {
         res.status(503).json({ error: { message: `Service temporarily unavailable. Error: ${error.message}` } });
     }
 });
-
 // DELETE: Remove single item
 app.delete('/api/pantry/:id', async (req, res) => {
     const { id } = req.params;
