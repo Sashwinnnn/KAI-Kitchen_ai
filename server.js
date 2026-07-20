@@ -137,11 +137,13 @@ CRITICAL CONVERSATIONAL RULES:
 - Keep the "reply" brief, snappy, text-style, and match the user's energy.
 - NEVER ask the user what ingredients they have. You have live database access.
 
-CRITICAL RECIPE STEP GENERATION RULES:
-- ALWAYS populate "ingredients" with the full array of required ingredients for the recipe.
+CRITICAL RECIPE STEP GENERATION RULES (apply to BOTH "steps" and "pantryAlternative.steps" every single time — no exceptions):
+- ALWAYS populate "ingredients" with the FULL array of required ingredients for the recipe, each with a real quantity (e.g. "2 boneless chicken thighs", "1 tbsp olive oil", "1/2 tsp smoked paprika"). Never list a bare item name with no amount.
 - If items are missing from the user's pantry, list those exact item names inside "missingIngredients".
-- When "isRecipe" is false and a "pantryAlternative" is generated, you MUST include both "pantryAlternative.ingredients" (items on hand) AND "pantryAlternative.steps".
-- ALL steps inside "steps" or "pantryAlternative.steps" MUST be clear, detailed, numbered instructions (minimum 4 steps). Never output generic steps like "Cook as desired".
+- When "isRecipe" is false, you MUST still generate a full, cookable "pantryAlternative" using ONLY items already in the user's pantry (plus common staples like salt, pepper, oil, water). It MUST include "pantryAlternative.title", "pantryAlternative.ingredients" (with quantities), AND "pantryAlternative.steps" — never leave any of these empty.
+- EVERY recipe (main or alternative) needs a MINIMUM of 4 steps, each a real, actionable, chronological cooking instruction with specifics: actual cook times ("6-7 minutes"), temperatures ("medium-high heat", "375°F"), techniques ("sear", "simmer", "dice finely"), and doneness cues ("until golden and internal temp reaches 165°F").
+- BANNED phrases — never output these or anything equivalent, in "steps" or "pantryAlternative.steps": "cook as desired", "heat and serve", "combine ingredients according to taste", "prepare as you like", "serve fresh and enjoy" as a stand-in for real instructions, "follow standard preparation". If you catch yourself about to write something this vague, replace it with the actual technique and timing instead.
+- The "pantryAlternative" must be just as rigorous as the main recipe — it is a real recipe made from what's on hand, not a placeholder. Treat "cook with what you have" the same as any other requested dish.
 
 STRICT DEDUPLICATION:
 - Return all required ingredients for the requested dish in the "ingredients" array.
@@ -177,6 +179,31 @@ STRICT DEDUPLICATION:
             "gemini-2.5-flash",
             "gemini-flash-latest"
         ];
+
+        // Guards against empty or "heat and serve"-style placeholder instructions slipping through.
+        const BANNED_STEP_PHRASES = [
+            'cook as desired', 'heat and serve', 'combine ingredients according to taste',
+            'prepare as you like', 'follow standard preparation', 'serve fresh and enjoy'
+        ];
+        const isVagueStep = (step) => {
+            const s = String(step).toLowerCase();
+            return BANNED_STEP_PHRASES.some(phrase => s.includes(phrase));
+        };
+        const isQualityResponse = (parsed) => {
+            if (!parsed) return false;
+            if (parsed.isRecipe) {
+                if (!Array.isArray(parsed.ingredients) || parsed.ingredients.length === 0) return false;
+                if (!Array.isArray(parsed.steps) || parsed.steps.length < 4) return false;
+                if (parsed.steps.some(isVagueStep)) return false;
+            }
+            if (parsed.pantryAlternative) {
+                const alt = parsed.pantryAlternative;
+                if (!Array.isArray(alt.ingredients) || alt.ingredients.length === 0) return false;
+                if (!Array.isArray(alt.steps) || alt.steps.length < 4) return false;
+                if (alt.steps.some(isVagueStep)) return false;
+            }
+            return true;
+        };
 
         let response = null;
         let lastError = null;
@@ -219,22 +246,40 @@ STRICT DEDUPLICATION:
                                     ingredients: {
                                         type: Type.ARRAY,
                                         items: { type: Type.STRING },
-                                        description: "Ingredients needed for alternative recipe using on-hand items."
+                                        description: "Ingredients needed for alternative recipe using on-hand items, each with a real quantity. Never empty."
                                     },
                                     steps: {
                                         type: Type.ARRAY,
                                         items: { type: Type.STRING },
-                                        description: "At least 4 explicit, chronological cooking instructions for the alternative recipe."
+                                        description: "At least 4 explicit, specific, chronological cooking instructions (real times/temps/techniques) for the alternative recipe. Never empty, never vague."
                                     }
-                                }
+                                },
+                                required: ["title", "ingredients", "steps"]
                             }
                         },
-                        required: ["reply", "isRecipe"]
+                        required: ["reply", "isRecipe", "ingredients", "steps", "missingIngredients"]
                     }
                 }
             });
 
             if (response && response.text) {
+                    let candidateParsed;
+                    try {
+                        candidateParsed = JSON.parse(response.text);
+                    } catch (parseErr) {
+                        console.warn(`⚠️ Model ${modelName} returned unparseable JSON. Trying next option...`);
+                        response = null;
+                        lastError = parseErr;
+                        continue;
+                    }
+
+                    if (!isQualityResponse(candidateParsed)) {
+                        console.warn(`⚠️ Model ${modelName} returned empty/vague recipe content. Trying next option...`);
+                        response = null;
+                        lastError = new Error(`Model ${modelName} returned low-quality recipe content.`);
+                        continue;
+                    }
+
                     console.log(`✅ Success with model: ${modelName}`);
                     break;
                 }
