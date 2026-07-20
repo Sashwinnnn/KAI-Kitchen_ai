@@ -542,23 +542,62 @@ app.delete('/api/shopping-list/:id', async (req, res) => {
 app.post('/api/shopping-list/checkout', async (req, res) => {
     try {
         const db = await getDbConnection();
-        
-        const checkedItems = await db.all("SELECT * FROM shopping_list WHERE is_checked = 1");
-        
+
+        const allItems = await db.all("SELECT * FROM shopping_list");
+        // Filter in JS instead of relying on a SQL "= 1" comparison, since the
+        // checked flag can come back as 1, true, or "1" depending on driver/schema.
+        const checkedItems = allItems.filter(item => {
+            const v = item.is_checked;
+            return v === 1 || v === true || v === '1' || v === 'true';
+        });
+
+        if (checkedItems.length === 0) {
+            return res.json({ success: true, message: "No checked items to move.", movedCount: 0 });
+        }
+
         const today = new Date().toISOString().split('T')[0];
         const futureDate = new Date();
         futureDate.setDate(futureDate.getDate() + 14);
-        
+        const expiryDate = futureDate.toISOString().split('T')[0];
+
+        const movedIds = [];
+        const failedItems = [];
+
         for (const item of checkedItems) {
-            await db.run(
-                `INSERT INTO pantry (name, quantity, expiry_date, added_date, storage) VALUES (?, ?, ?, ?, ?)`,
-                [item.name, item.quantity, futureDate.toISOString().split('T')[0], today, 'Pantry']
-            );
+            try {
+                await db.run(
+                    `INSERT INTO pantry (name, quantity, expiry_date, added_date, storage) VALUES (?, ?, ?, ?, ?)`,
+                    [item.name, item.quantity || '1', expiryDate, today, 'Pantry']
+                );
+                movedIds.push(item.id);
+            } catch (insertErr) {
+                // Legacy schema fallback — mirrors the fallback used in POST /api/pantry.
+                try {
+                    await db.run(
+                        "INSERT INTO pantry (name, quantity, expiry_date) VALUES (?, ?, ?)",
+                        [item.name, item.quantity || '1', expiryDate]
+                    );
+                    movedIds.push(item.id);
+                } catch (fallbackErr) {
+                    console.error(`❌ Failed to move "${item.name}" to pantry:`, fallbackErr.message);
+                    failedItems.push(item.name);
+                }
+            }
         }
 
-        await db.run("DELETE FROM shopping_list WHERE is_checked = 1");
-        
-        res.json({ success: true, message: `Moved ${checkedItems.length} items to pantry` });
+        // Only clear the items that actually made it into the pantry.
+        for (const id of movedIds) {
+            await db.run("DELETE FROM shopping_list WHERE id = ?", [id]);
+        }
+
+        res.json({
+            success: true,
+            message: failedItems.length > 0
+                ? `Moved ${movedIds.length} items to pantry. Failed: ${failedItems.join(', ')}`
+                : `Moved ${movedIds.length} items to pantry`,
+            movedCount: movedIds.length,
+            failedItems
+        });
     } catch (err) {
         console.error("❌ Error checking out items:", err);
         res.status(500).json({ error: err.message });
