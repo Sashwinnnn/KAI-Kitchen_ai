@@ -951,6 +951,15 @@
 
         /* EXPANDABLE HISTORY LOG */
         async function loadActivityHistory() {
+
+            /* Clean duplicate history entries visually on load */
+recipes = recipes.filter((recipe, index, self) =>
+    index === self.findIndex((r) => (
+        r.recipe_name === recipe.recipe_name && 
+        r.ingredients_used === recipe.ingredients_used
+    ))
+);
+            
             const historyLog = document.getElementById('history-log');
             if (!historyLog) return;
 
@@ -1298,6 +1307,57 @@
                 if (e.key === 'Enter') sendChatMessage();
             });
         });
+            /* DUPLICATE-PROTECTED RECIPE LOGGING ENGINE */
+let isLoggingRecipe = false;
+let lastLoggedMealName = "";
+let lastLoggedMealTimestamp = 0;
+
+async function finishAndLogRecipe() {
+    if (!activeDeckRecipe || isLoggingRecipe) return;
+
+    // Prevent duplicate entries triggered within 5 seconds of each other
+    const now = Date.now();
+    if (activeDeckRecipe.title === lastLoggedMealName && (now - lastLoggedMealTimestamp) < 5000) {
+        closeRecipeModal();
+        return;
+    }
+
+    isLoggingRecipe = true;
+
+    try {
+        // 1. Deduct ingredient stock from pantry
+        await deductPantryStockForRecipe(activeDeckRecipe.ingredients);
+
+        // 2. Prepare single log record
+        const record = {
+            recipe_name: activeDeckRecipe.title,
+            ingredients_used: activeDeckRecipe.ingredients.join(', '),
+            recipe_steps: activeDeckRecipe.steps.join(' | ')
+        };
+
+        // 3. Post once to history API
+        await fetch('/api/history', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(record)
+        });
+
+        // Track last logged recipe to block instant duplicate calls
+        lastLoggedMealName = activeDeckRecipe.title;
+        lastLoggedMealTimestamp = Date.now();
+
+        closeRecipeModal();
+        loadActivityHistory();
+        fetchPantryItems();
+        showCustomAlert("Meal logged & pantry stock updated!", "Bon Appétit!", "🍳");
+
+    } catch (err) {
+        console.error("Error logging recipe:", err);
+    } finally {
+        isLoggingRecipe = false;
+    }
+}
+        
     </script>
 </body>
 </html>
