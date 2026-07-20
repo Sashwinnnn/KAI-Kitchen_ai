@@ -1415,11 +1415,12 @@
     const altCookBtn = card.querySelector('#btn-cook-alt');
     if (altCookBtn) {
         altCookBtn.onclick = () => {
-            const altIngredients = ingredients.filter(i => !missing.some(m => i.toLowerCase().includes(m.toLowerCase())));
             openRecipeModal({
                 recipeTitle: data.pantryAlternative.title,
-                ingredients: altIngredients.length > 0 ? altIngredients : ["Pantry ingredients on hand"],
-                steps: data.pantryAlternative.steps
+                ingredients: (data.pantryAlternative && data.pantryAlternative.ingredients && data.pantryAlternative.ingredients.length > 0) 
+                    ? data.pantryAlternative.ingredients 
+                    : ingredients.filter(i => !missing.some(m => i.toLowerCase().includes(m.toLowerCase()))),
+                steps: (data.pantryAlternative && data.pantryAlternative.steps) || []
             });
         };
     }
