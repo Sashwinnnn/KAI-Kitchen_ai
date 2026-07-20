@@ -716,10 +716,28 @@
         }
 
         async function checkoutShoppingList() {
-            await fetch('/api/shopping-list/checkout', { method: 'POST' });
-            loadShoppingList();
-            fetchPantryItems();
-            showCustomAlert("Checked items moved to your pantry stock!", "Items Added", "📦");
+            try {
+                const res = await fetch('/api/shopping-list/checkout', { method: 'POST' });
+                const data = await res.json();
+                await loadShoppingList();
+                await fetchPantryItems();
+
+                if (!res.ok) {
+                    showCustomAlert(data?.error || "Couldn't move items to your pantry.", "Error", "⚠️");
+                    return;
+                }
+
+                if (data.movedCount === 0) {
+                    showCustomAlert("Check off items in your list first, then tap Move Checked.", "Nothing Checked", "☑️");
+                } else if (data.failedItems && data.failedItems.length > 0) {
+                    showCustomAlert(`Moved ${data.movedCount} item(s). Couldn't move: ${data.failedItems.join(', ')}`, "Partially Moved", "⚠️");
+                } else {
+                    showCustomAlert(`Moved ${data.movedCount} item(s) to your pantry stock!`, "Items Added", "📦");
+                }
+            } catch (err) {
+                console.error("Checkout error:", err);
+                showCustomAlert("Couldn't reach the server. Please check your connection!", "Error", "⚠️");
+            }
         }
 
         async function trimShoppingListWithAI() {
