@@ -1001,35 +1001,96 @@
         }
 
         async function loadActivityHistory() {
-            const historyLog = document.getElementById('history-log');
-            if (!historyLog) return;
+    const historyLog = document.getElementById('history-log');
+    if (!historyLog) return;
 
-            try {
-                const res = await fetch('/api/history');
-                const recipes = await res.json();
-                historyLog.innerHTML = '';
+    try {
+        const res = await fetch('/api/history');
+        const recipes = await res.json();
+        historyLog.innerHTML = '';
 
-                if (recipes.length === 0) {
-                    historyLog.innerHTML = `<p class="text-xs text-slate-500 text-center py-6">No history recorded yet.</p>`;
-                    return;
-                }
-
-                recipes.forEach(recipe => {
-                    const card = document.createElement('div');
-                    card.className = "bg-white/5 border border-white/10 p-4 rounded-2xl space-y-2";
-                    card.innerHTML = `
-                        <div class="flex justify-between items-center">
-                            <h4 class="font-bold text-sm text-white">${recipe.recipe_name}</h4>
-                            <span class="text-[10px] text-emerald-400 font-bold">Cooked ✓</span>
-                        </div>
-                        <p class="text-[10px] text-slate-400">${recipe.ingredients_used || 'Standard Pantry Ingredients'}</p>
-                    `;
-                    historyLog.appendChild(card);
-                });
-            } catch (e) {
-                console.error("Error loading history:", e);
-            }
+        if (!recipes || recipes.length === 0) {
+            historyLog.innerHTML = `
+                <div class="text-center py-8">
+                    <span class="text-2xl block mb-2 opacity-50">📖</span>
+                    <p class="text-xs text-slate-500 font-semibold">No saved recipes in history yet.</p>
+                    <p class="text-[10px] text-slate-600 mt-1">Cook a dish with KAI to log it here!</p>
+                </div>`;
+            return;
         }
+
+        recipes.forEach((recipe, index) => {
+            // Parse steps into array if stored as delimited string
+            const stepsArray = typeof recipe.recipe_steps === 'string' 
+                ? recipe.recipe_steps.split(' | ') 
+                : (recipe.steps || ["Follow standard preparation."]);
+
+            // Parse ingredients into array
+            const ingredientsArray = typeof recipe.ingredients_used === 'string' 
+                ? recipe.ingredients_used.split(', ') 
+                : (recipe.ingredients || ["Assorted Pantry Items"]);
+
+            const card = document.createElement('div');
+            card.className = "glass-panel rounded-2xl border border-white/10 overflow-hidden transition-all duration-200";
+            
+            card.innerHTML = `
+                <!-- Card Header (Click to Expand/Collapse) -->
+                <div onclick="toggleHistoryCard(${index})" class="p-4 flex items-center justify-between cursor-pointer hover:bg-white/[0.02] transition">
+                    <div class="flex items-center gap-3">
+                        <span class="text-lg">🍳</span>
+                        <div>
+                            <h4 class="font-bold text-sm text-white">${recipe.recipe_name || 'Custom KAI Recipe'}</h4>
+                            <p class="text-[10px] text-emerald-400 font-semibold mt-0.5">Cooked ✓</p>
+                        </div>
+                    </div>
+                    <span id="chevron-${index}" class="text-slate-500 text-xs transition-transform duration-200">▼</span>
+                </div>
+
+                <!-- Expandable Details Section -->
+                <div id="details-${index}" class="hidden px-4 pb-4 pt-1 border-t border-white/5 space-y-3 bg-black/20">
+                    <div>
+                        <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block mb-1">Ingredients:</span>
+                        <p class="text-xs text-slate-300 leading-relaxed">${ingredientsArray.join(', ')}</p>
+                    </div>
+                    
+                    <!-- Cook Again Action Button -->
+                    <button id="cook-again-btn-${index}" class="w-full bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-300 border border-emerald-500/30 py-2 rounded-xl text-xs font-bold transition active:scale-95 flex items-center justify-center gap-1.5">
+                        <span>🍳</span> Cook Again
+                    </button>
+                </div>
+            `;
+
+            // Attach event listener directly to prevent inline escaping bugs
+            const cookBtn = card.querySelector(`#cook-again-btn-${index}`);
+            if (cookBtn) {
+                cookBtn.onclick = (e) => {
+                    e.stopPropagation(); // Don't trigger card toggle
+                    openRecipeModal({
+                        recipeTitle: recipe.recipe_name,
+                        ingredients: ingredientsArray,
+                        steps: stepsArray
+                    });
+                };
+            }
+
+            historyLog.appendChild(card);
+        });
+    } catch (e) {
+        console.error("Error loading history:", e);
+        historyLog.innerHTML = `<p class="text-xs text-rose-400 text-center py-4">Failed to load history items.</p>`;
+    }
+}
+
+/* Helper function to expand/collapse history cards */
+function toggleHistoryCard(index) {
+    const details = document.getElementById(`details-${index}`);
+    const chevron = document.getElementById(`chevron-${index}`);
+    if (details && chevron) {
+        const isHidden = details.classList.contains('hidden');
+        details.classList.toggle('hidden', !isHidden);
+        chevron.style.transform = isHidden ? 'rotate(180deg)' : 'rotate(0deg)';
+    }
+}
 
         async function loadSavingsDashboard() {
             const container = document.getElementById('savings-dashboard');
