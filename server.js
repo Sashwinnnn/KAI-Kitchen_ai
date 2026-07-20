@@ -138,9 +138,13 @@ app.post('/api/chat', async (req, res) => {
         - NEVER ask the user what ingredients they have. You have live database access.
         
         CRITICAL RECIPE STEP GENERATION RULES:
-        - When "isRecipe" is true, the "steps" array MUST contain detailed, step-by-step cooking instructions specifically tailored to the EXACT dish requested and ingredients used.
-        - NEVER give generic directions. Break down structural prep, heat levels, timing, and order of ingredients.
-        - Detect cooking duration keywords and include them in steps (e.g., "Simmer for 10 minutes").
+        - When "isRecipe" is true, the "steps" array MUST contain detailed, specific cooking instructions ONLY for the dish they requested.
+        - Each step should be clear and actionable: timing, temperature, techniques. NO generic steps like "put everything in a bowl."
+        - Detect cooking durations in your instructions (e.g., "Simmer for 10 minutes") and include them in steps.
+        - Use EXACT measurements and ingredient order, not vague language.
+        - If a step involves a time duration, extract it and mention it prominently (e.g., "Bake for 25 minutes at 350°F").
+        
+        STRICT DEDUPLICATION: NEVER repeat ingredients in the "ingredients" array. Each ingredient should appear exactly ONCE.
         
         INGREDIENT DEFICIT FLOW:
         If the user requests a meal that their available pantry ingredients cannot plausibly support:
@@ -214,6 +218,15 @@ app.post('/api/chat', async (req, res) => {
         });
 
         const parsedResult = JSON.parse(response.text);
+        
+        // STRICT DEDUPLICATION ON BACKEND: Remove duplicate ingredients
+        const uniqueIngredients = Array.from(new Set(
+            (parsedResult.ingredients || []).map(i => i.trim().toLowerCase())
+        )).map(i => {
+            // Restore original casing by finding first match in parsed ingredients
+            const original = (parsedResult.ingredients || []).find(orig => orig.trim().toLowerCase() === i);
+            return original ? original.trim() : i;
+        });
 
         const updatedHistory = [
             ...(history || []).slice(-4),
@@ -225,7 +238,7 @@ app.post('/api/chat', async (req, res) => {
             reply: parsedResult.reply || "Here is what I found!",
             isRecipe: parsedResult.isRecipe || false,
             recipeTitle: parsedResult.recipeTitle || '',
-            ingredients: parsedResult.ingredients || [],
+            ingredients: uniqueIngredients,
             steps: parsedResult.steps && parsedResult.steps.length > 0 ? parsedResult.steps : [],
             missingIngredients: parsedResult.missingIngredients || [],
             pantryAlternative: parsedResult.pantryAlternative || null,
@@ -289,17 +302,26 @@ app.get('/api/history', async (req, res) => {
     }
 });
 
-// POST: Log history of a completed meal
+// POST: Log history of a completed meal (with recipe logs)
 app.post('/api/history', async (req, res) => {
-    const { recipe_name, ingredients_used } = req.body;
+    const { recipe_name, ingredients_used, recipe_steps, time_taken_minutes } = req.body;
     if (!recipe_name) return res.status(400).json({ error: "Missing recipe name." });
     
     try {
         const db = await getDbConnection();
+        
+        // Log to history table
         await db.run(
             "INSERT INTO history (recipe_name, ingredients_used) VALUES (?, ?)",
             [recipe_name, ingredients_used || '']
         );
+        
+        // Also log to recipe_logs with detailed info
+        await db.run(
+            "INSERT INTO recipe_logs (recipe_name, recipe_steps, ingredients_used, time_taken_minutes) VALUES (?, ?, ?, ?)",
+            [recipe_name, recipe_steps || '', ingredients_used || '', time_taken_minutes || 0]
+        );
+        
         res.json({ success: true });
     } catch (error) {
         res.status(500).json({ error: error.message });
