@@ -776,87 +776,69 @@
             }
             if (!detectedTitle) detectedTitle = "KAI Custom Dish";
 
-            // 2. Dynamic Text Parsing (Regex-driven instead of chicken fallbacks)
-            let parsedIngredients = [];
-            let parsedSteps = [];
-
+            // 2. Extract & Deduplicate Ingredients Strictly
+            let rawIngredients = [];
             if (Array.isArray(recipe.ingredients) && recipe.ingredients.length > 0) {
-                parsedIngredients = recipe.ingredients;
+                rawIngredients = recipe.ingredients;
+            } else if (typeof recipe.ingredients_used === 'string') {
+                rawIngredients = recipe.ingredients_used.split(',');
             }
+
+            // DEDUPLICATE INGREDIENTS HERE
+            const seenIngs = new Set();
+            let parsedIngredients = [];
+            rawIngredients.forEach(item => {
+                const cleanName = item.replace(/^[\s\-\*\•\d\.]+\s*/, '').trim();
+                if (cleanName && !seenIngs.has(cleanName.toLowerCase())) {
+                    seenIngs.add(cleanName.toLowerCase());
+                    parsedIngredients.push(cleanName);
+                }
+            });
+
+            // 3. Extract Steps Cleanly
+            let parsedSteps = [];
             if (Array.isArray(recipe.steps) && recipe.steps.length > 0) {
                 parsedSteps = recipe.steps;
             }
 
-            // Fallback to strict line-by-line regex if arrays aren't provided directly by JSON
-            if (rawText && (parsedIngredients.length === 0 || parsedSteps.length === 0)) {
+            // Fallback parsing from raw text if steps were not passed as array
+            if (rawText && parsedSteps.length === 0) {
                 const lines = rawText.split('\n').map(l => l.trim());
-                let parsingIngredientsSection = false;
                 let parsingStepsSection = false;
 
                 lines.forEach(line => {
                     if (!line) return;
 
-                    // Header check tags
-                    if (line.toLowerCase().includes('ingredients:') || line.toLowerCase().includes('need:')) {
-                        parsingIngredientsSection = true;
-                        parsingStepsSection = false;
-                        return;
-                    }
                     if (line.toLowerCase().includes('directions:') || line.toLowerCase().includes('steps:') || line.toLowerCase().includes('instructions:')) {
-                        parsingIngredientsSection = false;
                         parsingStepsSection = true;
                         return;
                     }
 
-                    // Extract items based on current context block
-                    if (parsingIngredientsSection) {
+                    if (parsingStepsSection) {
                         let cleaned = line.replace(/^[\s\-\*\•\d\.]+\s*/, '').trim();
-                        if (cleaned && !cleaned.toLowerCase().includes('recipe')) {
-                            parsedIngredients.push(cleaned);
-                        }
-                    } else if (parsingStepsSection) {
-                        let cleaned = line.replace(/^[\s\-\*\•\d\.]+\s*/, '').trim();
-                        if (cleaned) {
-                            parsedSteps.push(cleaned);
-                        }
-                    } else {
-                        // Guess structure if headers were omitted but lists are numeric or bulleted
-                        if (/^[-\*\•]\s+/.test(line)) {
-                            parsedIngredients.push(line.replace(/^[-\*\•]\s*/, ''));
-                        } else if (/^\d+[\.\)]\s+/.test(line)) {
-                            parsedSteps.push(line.replace(/^\d+[\.\)]\s*/, ''));
-                        }
+                        if (cleaned) parsedSteps.push(cleaned);
+                    } else if (/^\d+[\.\)]\s+/.test(line)) {
+                        parsedSteps.push(line.replace(/^\d+[\.\)]\s*/, ''));
                     }
                 });
             }
 
-            // Absolute clean fallback safeguards using dynamic data
+            // Safety Fallbacks
             if (parsedIngredients.length === 0) {
-                parsedIngredients = currentPantryItems.slice(0, 3).map(i => i.name);
+                parsedIngredients = (currentPantryItems || []).slice(0, 3).map(i => i.name);
                 if (parsedIngredients.length === 0) parsedIngredients = ["Assorted Pantry Ingredients"];
             }
-            if (parsedSteps.length === 0) {
-                const titleLower = (detectedTitle || '').toLowerCase();
-                const ingredientsText = parsedIngredients.join(' ').toLowerCase();
-                const coldKeywords = ['ice cream','frozen','chill','chilled','no-bake','no bake','scoop','cold','deconstructed','dessert','chocolate','mousse','pudding','parfait','whip','sundae','gelato'];
-                const isColdDessert = coldKeywords.some(k => titleLower.includes(k) || ingredientsText.includes(k));
 
-                if (isColdDessert) {
-                    parsedSteps = [
-                        `Prep your gathered assets: ${parsedIngredients.join(', ')}.`,
-                        `Assemble components without heating: layer or arrange items in a bowl or glass as desired.`,
-                        `Add sauces, toppings, or crumbles; chill briefly if needed, then serve immediately (cold).`
-                    ];
-                } else {
-                    parsedSteps = [
-                        `Prep your gathered assets: ${parsedIngredients.join(', ')}.`,
-                        `Combine items in a pan or mixing bowl and heat over medium until done.`,
-                        `Season to taste, portion out onto your plate, and serve warm!`
-                    ];
-                }
+            // Dynamic instruction steps tailored to dish
+            if (parsedSteps.length === 0) {
+                parsedSteps = [
+                    `Gather and organize ingredients: ${parsedIngredients.join(', ')}.`,
+                    `Follow standard prep for ${detectedTitle}: slice, chop, and assemble ingredients appropriately.`,
+                    `Cook or layer according to preference and serve immediately!`
+                ];
             }
 
-            // Mount values to global context state
+            // Mount cleaned values to active Deck state
             activeDeckRecipe = {
                 title: detectedTitle,
                 ingredients: parsedIngredients,
@@ -940,7 +922,7 @@
         }
 
         /* ---------------------------------------------------- */
-        /* 📖 ACTIVITY LOG HISTORY HANDLERS                    */
+        /* 📖 ACTIVITY LOG HISTORY HANDLERS                     */
         /* ---------------------------------------------------- */
         async function commitRecipeToHistoryLog() {
             if (!activeDeckRecipe) return;
@@ -950,9 +932,12 @@
                 r.recipe_name.toLowerCase().trim() === activeDeckRecipe.title.toLowerCase().trim()
             );
 
-            activeDeckRecipe.ingredients.forEach(ing => {
+            // Deduplicate saved string representation
+            const cleanIngList = [...new Set(activeDeckRecipe.ingredients)];
+
+            cleanIngList.forEach(ing => {
                 const ingLower = ing.toLowerCase();
-                const matchingItem = currentPantryItems.find(pantryItem => 
+                const matchingItem = (currentPantryItems || []).find(pantryItem => 
                     ingLower.includes(pantryItem.name.toLowerCase()) || 
                     pantryItem.name.toLowerCase().includes(ingLower)
                 );
@@ -976,7 +961,8 @@
             const record = {
                 id: Date.now(),
                 recipe_name: activeDeckRecipe.title,
-                ingredients_used: activeDeckRecipe.ingredients.join(', '),
+                ingredients_used: cleanIngList.join(', '),
+                steps: activeDeckRecipe.steps, // Save steps into local history record
                 cooked_date: targetDateStr
             };
 
@@ -1037,7 +1023,10 @@
                     const row = document.createElement('div');
                     row.className = "flex flex-col gap-3 rounded-2xl border border-white/10 bg-white/[0.04] p-4 shadow-[0_10px_30px_rgba(0,0,0,0.2)] cursor-pointer select-none transition hover:bg-white/[0.06]";
                     const dateStr = new Date(recipe.cooked_date || Date.now()).toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
-                    const ingredientsList = (recipe.ingredients_used || '').split(',').map(item => item.trim()).filter(Boolean);
+                    
+                    // Deduplicate raw stored string on render
+                    const rawList = (recipe.ingredients_used || '').split(',').map(item => item.trim()).filter(Boolean);
+                    const ingredientsList = [...new Set(rawList)];
 
                     row.innerHTML = `
                         <div class="flex items-start justify-between gap-4 w-full">
@@ -1072,12 +1061,13 @@
 
                     historyContainer.appendChild(row);
 
+                    // Re-cook button with deduplication & direct step restoration
                     document.getElementById(`re-cook-${index}`).addEventListener('click', (e) => {
                         e.stopPropagation();
                         openRecipeModal({
-                            reply: `Let's whip up ${recipe.recipe_name}!\nIngredients:\n${ingredientsList.map(i => `- ${i}`).join('\n')}`,
                             recipeTitle: recipe.recipe_name,
-                            ingredients: ingredientsList
+                            ingredients: ingredientsList,
+                            steps: recipe.steps || []
                         });
                     });
 
@@ -1091,7 +1081,7 @@
                             try { await fetch(`/api/history/${recipe.id}`, { method: 'DELETE' }); } catch (err) {}
                         }
                         loadActivityHistory();
-                        loadSavingsDashboard();
+                        if (typeof loadSavingsDashboard === 'function') loadSavingsDashboard();
                     });
                 });
             } catch (err) {
