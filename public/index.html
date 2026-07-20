@@ -1052,10 +1052,9 @@
             } else if (typeof recipe.recipe_steps === 'string' && recipe.recipe_steps.trim().length > 0) {
                 steps = recipe.recipe_steps.split('|');
             } else {
+                console.warn('KAI: No real cooking steps were provided for this recipe.', recipe);
                 steps = [
-                    "Review your available pantry items.",
-                    "Combine ingredients according to taste and desired portion size.",
-                    "Serve fresh and enjoy!"
+                    "KAI couldn't generate detailed steps for this recipe. Try asking KAI again in chat, or rephrase your request."
                 ];
             }
 
@@ -1108,7 +1107,7 @@
                 document.getElementById('deckStepNumberBadge').innerText = `Step ${currentDeckIndex} of ${totalSteps}`;
                 
                 const currentStepText = activeDeckRecipe.steps[currentDeckIndex - 1];
-                document.getElementById('deckStepBodyText').innerText = currentStepText || "Follow standard preparation for this step.";
+                document.getElementById('deckStepBodyText').innerText = currentStepText || "Step details unavailable — try regenerating this recipe from chat.";
 
                 if (currentDeckIndex >= totalSteps) {
                     btnNext.innerText = "Finish & Deduct Stock";
