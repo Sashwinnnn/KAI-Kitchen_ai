@@ -138,12 +138,10 @@ CRITICAL CONVERSATIONAL RULES:
 - NEVER ask the user what ingredients they have. You have live database access.
 
 CRITICAL RECIPE STEP GENERATION RULES:
-- When "isRecipe" is true, the "steps" array MUST contain detailed, specific cooking instructions ONLY for the dish requested.
-- When "isRecipe" is false and a "pantryAlternative" is provided, you MUST provide both "pantryAlternative.ingredients" (listing the exact pantry items used) and "pantryAlternative.steps" (containing 3-5 specific step-by-step instructions for that dish). Never use generic instructions or filler text.
-- Include measurements, times, and specific heat settings where appropriate.
-- "steps" MUST NOT be vague (e.g., NEVER say "Cook ingredients according to taste" or "Prepare as usual").
-- EVERY step inside "steps" or "pantryAlternative.steps" MUST be a concrete, detailed action (e.g., "Heat 1 tbsp oil in a skillet over medium heat for 2 minutes", "Sauté chopped onions and garlic until translucent").
-- Minimum 4 detailed, sequential steps are required for both the main recipe and the "pantryAlternative".
+- ALWAYS populate "ingredients" with the full array of required ingredients for the recipe.
+- If items are missing from the user's pantry, list those exact item names inside "missingIngredients".
+- When "isRecipe" is false and a "pantryAlternative" is generated, you MUST include both "pantryAlternative.ingredients" (items on hand) AND "pantryAlternative.steps".
+- ALL steps inside "steps" or "pantryAlternative.steps" MUST be clear, detailed, numbered instructions (minimum 4 steps). Never output generic steps like "Cook as desired".
 
 STRICT DEDUPLICATION:
 - Return all required ingredients for the requested dish in the "ingredients" array.
@@ -190,48 +188,49 @@ STRICT DEDUPLICATION:
                     model: modelName,
                     contents: contents,
                     config: {
-                        systemInstruction: systemInstruction, 
-                        temperature: 0.2, 
-                        responseMimeType: "application/json",
-                        responseSchema: {
-                            type: Type.OBJECT,
-                            properties: {
-                                reply: { type: Type.STRING },
-                                isRecipe: { type: Type.BOOLEAN },
-                                recipeTitle: { type: Type.STRING },
-                                ingredients: {
-                                    type: Type.ARRAY,
-                                    items: { type: Type.STRING }
-                                },
-                                steps: {
-                                    type: Type.ARRAY,
-                                    items: { type: Type.STRING }
-                                },
-                                missingIngredients: {
-                                    type: Type.ARRAY,
-                                    items: { type: Type.STRING }
-                                },
-                                pantryAlternative: {
-                                    type: Type.OBJECT,
-                                    properties: {
-                                        title: { type: Type.STRING },
-                                        ingredients: {
-                                            type: Type.ARRAY,
-                                            items: { type: Type.STRING },
-                                            description: "Specific list of available pantry ingredients needed for this alternative."
-                                        },
-                                        steps: {
-                                    type: Type.ARRAY,
-                                    items: { type: Type.STRING },
-                                    description: "Detailed step-by-step preparation and cooking instructions for the primary recipe."
-                                },
+                     systemInstruction: systemInstruction, 
+                    temperature: 0.2, 
+                    responseMimeType: "application/json",
+                    responseSchema: {
+                        type: Type.OBJECT,
+                        properties: {
+                            reply: { type: Type.STRING },
+                            isRecipe: { type: Type.BOOLEAN },
+                            recipeTitle: { type: Type.STRING },
+                            ingredients: {
+                                type: Type.ARRAY,
+                                items: { type: Type.STRING },
+                                description: "Full list of ingredients needed for the primary recipe."
+                            },
+                            steps: {
+                                type: Type.ARRAY,
+                                items: { type: Type.STRING },
+                                description: "At least 4 explicit, chronological cooking instructions for the primary recipe."
+                            },
+                            missingIngredients: {
+                                type: Type.ARRAY,
+                                items: { type: Type.STRING },
+                                description: "List of ingredients missing from pantry."
+                            },
+                            pantryAlternative: {
+                                type: Type.OBJECT,
+                                properties: {
+                                    title: { type: Type.STRING },
+                                    ingredients: {
+                                        type: Type.ARRAY,
+                                        items: { type: Type.STRING },
+                                        description: "Ingredients needed for alternative recipe using on-hand items."
+                                    },
+                                    steps: {
+                                        type: Type.ARRAY,
+                                        items: { type: Type.STRING },
+                                        description: "At least 4 explicit, chronological cooking instructions for the alternative recipe."
                                     }
                                 }
-                            },
-                            required: ["reply", "isRecipe"]
-                        }
+                            }
+                        },
+                        required: ["reply", "isRecipe"]
                     }
-                });
 
                 if (response && response.text) {
                     console.log(`✅ Success with model: ${modelName}`);
