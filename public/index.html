@@ -100,7 +100,7 @@
         <!-- APP HEADER BAR -->
         <header class="pt-8 pb-4 flex items-center justify-between w-full relative">
             <div class="w-10"></div>
-            <span class="font-black text-2xl tracking-[0.3em] text-white drop-shadow-md select-none pl-2">
+            <span class="font-black text-2xl tracking-[0.3em] text-emerald-50 drop-shadow-[0_0_14px_rgba(16,185,129,0.45)] select-none pl-2">
                 KAI
             </span>
             <div class="relative inline-block w-10 flex justify-end">
@@ -1287,7 +1287,7 @@
             const loadingDiv = document.createElement('div');
             loadingDiv.id = loadingId;
             loadingDiv.className = "bg-white/[0.03] rounded-2xl p-3.5 border border-white/5 text-slate-400 max-w-[88%] self-start text-xs animate-pulse";
-            loadingDiv.innerText = "KAI is scanning your pantry... 🍳";
+            loadingDiv.innerText = "KAI is thinking...";
             chatContainer.appendChild(loadingDiv);
             chatContainer.scrollTop = chatContainer.scrollHeight;
 
@@ -1313,7 +1313,7 @@
                         appendChatMessage('assistant', data.reply);
                     }
 
-                    if (data.isRecipe || (data.missingIngredients && data.missingIngredients.length > 0)) {
+                    if (data.wantsRecipe && (data.isRecipe || (data.missingIngredients && data.missingIngredients.length > 0))) {
                         renderRecipeTriggerCard(data);
                     }
                 } else {
