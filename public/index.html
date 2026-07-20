@@ -1040,52 +1040,67 @@ async function loadActivityHistory() {
         }
 
         /* FIXED INTERACTIVE FLASHCARD ENGINE */
-        function openRecipeModal(recipe) {
-            if (!recipe) return;
-            
-            let title = recipe.recipeTitle || recipe.recipe_name || "Custom Dish";
-            let ingredients = Array.isArray(recipe.ingredients) ? recipe.ingredients : (recipe.ingredients_used ? recipe.ingredients_used.split(',') : []);
-            
-            // Helper step parser to extract individual instructions cleanly
-            let steps = [];
-            if (Array.isArray(recipe.steps) && recipe.steps.length > 0) {
-                steps = recipe.steps;
-            } else if (typeof recipe.recipe_steps === 'string' && recipe.recipe_steps.trim().length > 0) {
-                steps = recipe.recipe_steps.split('|');
-            } else if (DEFAULT_RECIPE_STEPS[title]) {
-                steps = DEFAULT_RECIPE_STEPS[title];
-            } else {
-                steps = [
-                    "Prep all required fresh ingredients on your counter.",
-                    "Heat cooking pan or skillet over medium temperature.",
-                    "Cook items evenly for 8-10 minutes until done.",
-                    "Plate nicely, season to taste, and enjoy!"
-                ];
-            }
+function openRecipeModal(recipe) {
+    if (!recipe) return;
+    
+    // 1. Resolve Title (check recipeTitle, pantryAlternative title, recipe_name, or default)
+    let title = recipe.recipeTitle 
+        || (recipe.pantryAlternative ? recipe.pantryAlternative.title : null) 
+        || recipe.recipe_name 
+        || "Recipe Details";
+    
+    // 2. Resolve Ingredients (NO HARDCODED CHICKEN)
+    let rawIngredients = recipe.ingredients || [];
+    if (!Array.isArray(rawIngredients) && typeof rawIngredients === 'string') {
+        rawIngredients = rawIngredients.split(',');
+    }
+    
+    // If user is missing items for a recipe, filter to only show what they CAN use, or list the missing ones cleanly
+    let ingredients = rawIngredients.map(i => String(i).trim()).filter(i => i.length > 0);
 
-            if (ingredients.length === 0) ingredients = ["Boneless Chicken Breast", "Fresh Avocado", "Organic Whole Milk", "Pantry Seasonings"];
+    // 3. Resolve Steps (Prioritize KAI's specific steps or Alternative steps)
+    let steps = [];
+    if (Array.isArray(recipe.steps) && recipe.steps.length > 0) {
+        steps = recipe.steps;
+    } else if (recipe.pantryAlternative && Array.isArray(recipe.pantryAlternative.steps) && recipe.pantryAlternative.steps.length > 0) {
+        steps = recipe.pantryAlternative.steps;
+    } else if (typeof recipe.recipe_steps === 'string' && recipe.recipe_steps.trim().length > 0) {
+        steps = recipe.recipe_steps.split('|');
+    } else {
+        steps = [
+            "Review your available pantry items.",
+            "Combine ingredients according to taste and desired portion size.",
+            "Serve fresh and enjoy!"
+        ];
+    }
 
-            activeDeckRecipe = { 
-                title: title, 
-                ingredients: ingredients.map(i => i.trim()), 
-                steps: steps.map(s => s.trim()).filter(s => s.length > 0) 
-            };
-            currentDeckIndex = 0; 
-            
-            document.getElementById('recipeModalTitle').innerText = activeDeckRecipe.title;
-            const ingList = document.getElementById('recipeModalIngredients');
-            if (ingList) {
-                ingList.innerHTML = '';
-                activeDeckRecipe.ingredients.forEach(ingText => {
-                    const li = document.createElement('li');
-                    li.innerText = ingText;
-                    ingList.appendChild(li);
-                });
-            }
+    // 4. Set Active Deck State
+    activeDeckRecipe = { 
+        title: title, 
+        ingredients: ingredients.length > 0 ? ingredients : ["No ingredients specified"], 
+        steps: steps.map(s => String(s).trim()).filter(s => s.length > 0) 
+    };
+    currentDeckIndex = 0; 
+    
+    // 5. Update UI DOM Elements
+    const titleEl = document.getElementById('recipeModalTitle');
+    if (titleEl) titleEl.innerText = activeDeckRecipe.title;
 
-            renderDeckState();
-            document.getElementById('recipeModal').classList.remove('hidden');
-        }
+    const ingList = document.getElementById('recipeModalIngredients');
+    if (ingList) {
+        ingList.innerHTML = '';
+        activeDeckRecipe.ingredients.forEach(ingText => {
+            const li = document.createElement('li');
+            li.innerText = ingText;
+            ingList.appendChild(li);
+        });
+    }
+
+    renderDeckState();
+    
+    const modalEl = document.getElementById('recipeModal');
+    if (modalEl) modalEl.classList.remove('hidden');
+}
 
         function renderDeckState() {
             const tracker = document.getElementById('recipeStepTracker');
@@ -1317,79 +1332,82 @@ function renderRecipeTriggerCard(data) {
     const chatContainer = document.getElementById('chat-messages');
     if (!chatContainer) return;
 
+    // Extract structure from backend response
     const isRecipe = data.isRecipe;
-    const recipeTitle = data.recipeTitle || (data.pantryAlternative ? data.pantryAlternative.title : "Recipe Recommendation");
+    const recipeTitle = data.recipeTitle || (data.pantryAlternative ? data.pantryAlternative.title : "Recipe Suggestion");
     const ingredients = data.ingredients || [];
-    const steps = isRecipe ? (data.steps || []) : (data.pantryAlternative?.steps || []);
     const missing = data.missingIngredients || [];
+    const steps = isRecipe ? (data.steps || []) : (data.pantryAlternative?.steps || []);
 
-    // Format ingredients checklist
-    const ingredientListHTML = ingredients.map(item => {
+    // Build ingredient list with status badges
+    const ingredientListHTML = ingredients.length > 0 ? ingredients.map(item => {
         const isMissing = missing.some(m => item.toLowerCase().includes(m.toLowerCase()));
         return `
-            <li class="flex items-center justify-between text-[11px] py-0.5">
+            <li class="flex items-center justify-between text-[11px] py-1 border-b border-white/5 last:border-0">
                 <span class="flex items-center gap-1.5">
                     <span class="${isMissing ? 'text-amber-400' : 'text-emerald-400'} font-bold">•</span>
-                    <span class="${isMissing ? 'text-slate-300' : 'text-white'}">${item}</span>
+                    <span class="${isMissing ? 'text-slate-300' : 'text-slate-100'}">${item}</span>
                 </span>
                 ${isMissing 
                     ? '<span class="text-[9px] font-mono text-amber-400 bg-amber-400/10 px-1.5 py-0.5 rounded border border-amber-400/20">Missing</span>' 
-                    : '<span class="text-[9px] font-mono text-emerald-400">In Pantry</span>'}
+                    : '<span class="text-[9px] font-mono text-emerald-400 bg-emerald-400/10 px-1.5 py-0.5 rounded border border-emerald-400/20">In Pantry</span>'}
             </li>
         `;
-    }).join('');
+    }).join('') : `<li class="text-[11px] text-slate-400 italic">No specific ingredient breakdown provided.</li>`;
 
     const card = document.createElement('div');
-    card.className = "bg-white/[0.04] border border-white/10 rounded-2xl p-4 my-2 max-w-[92%] self-start space-y-3 shadow-xl backdrop-blur-md animate-fade-in text-white";
+    card.className = "bg-slate-900/80 border border-white/10 rounded-2xl p-4 my-2 max-w-[95%] self-start space-y-3.5 shadow-2xl backdrop-blur-md animate-fade-in text-white";
 
     card.innerHTML = `
-        <!-- Header -->
-        <div class="border-b border-white/10 pb-2.5">
-            <div class="flex items-center justify-between mb-1">
+        <!-- Card Header -->
+        <div class="border-b border-white/10 pb-3">
+            <div class="flex items-center justify-between gap-2 mb-1">
                 <div class="flex items-center gap-2">
-                    <span class="text-lg">🍳</span>
-                    <h4 class="font-bold text-sm text-white">${recipeTitle}</h4>
+                    <span class="text-xl">🍳</span>
+                    <h4 class="font-bold text-sm text-white tracking-wide">${recipeTitle}</h4>
                 </div>
                 ${isRecipe 
-                    ? '<span class="text-[9px] font-mono font-bold text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-full border border-emerald-500/20">Ready to Cook</span>' 
-                    : '<span class="text-[9px] font-mono font-bold text-amber-400 bg-amber-500/10 px-2 py-0.5 rounded-full border border-amber-500/20">Missing Items</span>'}
+                    ? '<span class="text-[9px] font-mono font-bold text-emerald-400 bg-emerald-500/10 px-2.5 py-1 rounded-full border border-emerald-500/20">Ready to Cook</span>' 
+                    : '<span class="text-[9px] font-mono font-bold text-amber-400 bg-amber-500/10 px-2.5 py-1 rounded-full border border-amber-500/20">Missing Items</span>'}
             </div>
-            ${data.pantryAlternative ? `<p class="text-[11px] text-amber-300/80 mt-1">Alternative meal created with your current pantry items.</p>` : ''}
+            ${!isRecipe && data.pantryAlternative ? `
+                <p class="text-[11px] text-amber-300/90 mt-1 leading-snug">
+                    ⚠️ You're missing key items for chicken. Here's an alternative meal you can assemble with what's in your pantry right now!
+                </p>
+            ` : ''}
         </div>
 
-        <!-- Ingredients List -->
-        ${ingredients.length > 0 ? `
-            <div>
-                <p class="text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-1.5">Ingredients</p>
-                <ul class="space-y-1 pl-1">
-                    ${ingredientListHTML}
-                </ul>
-            </div>
-        ` : ''}
+        <!-- Ingredients Section -->
+        <div>
+            <p class="text-[10px] font-bold uppercase tracking-wider text-emerald-400 mb-2">Recipe Breakdown</p>
+            <ul class="space-y-0.5 bg-black/20 rounded-xl p-2.5 border border-white/5">
+                ${ingredientListHTML}
+            </ul>
+        </div>
 
-        <!-- Actions -->
+        <!-- Action Buttons -->
         <div class="pt-1 flex flex-col gap-2">
             ${isRecipe ? `
-                <button id="btn-cook-now" class="w-full bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-[11px] py-2.5 px-3 rounded-xl uppercase tracking-wider transition active:scale-95 flex items-center justify-center gap-1.5 shadow-md">
+                <button id="btn-cook-now" class="w-full bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-[11px] py-2.5 px-3 rounded-xl uppercase tracking-wider transition active:scale-95 flex items-center justify-center gap-2 shadow-lg shadow-emerald-500/10">
                     <span>🔥 Open Cooking Deck</span>
                 </button>
             ` : ''}
 
             ${missing.length > 0 ? `
-                <button id="btn-add-missing" class="w-full bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 border border-amber-500/30 font-bold text-[11px] py-2 px-3 rounded-xl transition active:scale-95 flex items-center justify-center gap-1.5">
+                <button id="btn-add-missing" class="w-full bg-amber-500/15 hover:bg-amber-500/25 text-amber-300 border border-amber-500/30 font-bold text-[11px] py-2 px-3 rounded-xl transition active:scale-95 flex items-center justify-center gap-1.5">
                     <span>🛒 Add Missing (${missing.length}) to Shopping List</span>
                 </button>
             ` : ''}
 
             ${!isRecipe && data.pantryAlternative ? `
-                <button id="btn-cook-alt" class="w-full bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-300 border border-emerald-500/30 font-bold text-[11px] py-2.5 px-3 rounded-xl uppercase tracking-wider transition active:scale-95 flex items-center justify-center gap-1.5">
+                <button id="btn-cook-alt" class="w-full bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-[11px] py-2.5 px-3 rounded-xl uppercase tracking-wider transition active:scale-95 flex items-center justify-center gap-2 shadow-lg">
                     <span>🍳 Cook Alternative (${data.pantryAlternative.title})</span>
                 </button>
             ` : ''}
         </div>
     `;
 
-    // Action Handlers
+    // Click Handlers
     const cookBtn = card.querySelector('#btn-cook-now');
     if (cookBtn) {
         cookBtn.onclick = () => {
@@ -1416,7 +1434,11 @@ function renderRecipeTriggerCard(data) {
                     addToShoppingList(item);
                 }
             });
-            showCustomAlert(`Added missing item(s) to your shopping list!`, "Shopping List Updated", "🛒");
+            if (typeof showCustomAlert === 'function') {
+                showCustomAlert(`Added ${missing.length} missing item(s) to your shopping list!`, "Shopping List Updated", "🛒");
+            } else {
+                alert(`Added ${missing.length} item(s) to your shopping list!`);
+            }
         };
     }
 
