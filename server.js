@@ -137,15 +137,16 @@ CRITICAL CONVERSATIONAL RULES:
 - Keep the "reply" brief, snappy, text-style, and match the user's energy.
 - NEVER ask the user what ingredients they have. You have live database access.
 
-CRITICAL RECIPE STEP GENERATION RULES:
-- ALWAYS populate "ingredients" with the full array of required ingredients for the recipe.
-- If items are missing from the user's pantry, list those exact item names inside "missingIngredients".
-- When "isRecipe" is false and a "pantryAlternative" is generated, you MUST include both "pantryAlternative.ingredients" (items on hand) AND "pantryAlternative.steps".
-- ALL steps inside "steps" or "pantryAlternative.steps" MUST be clear, detailed, numbered instructions (minimum 4 steps). Never output generic steps like "Cook as desired".
+CRITICAL RECIPE GENERATION RULES:
+1. PRIMARY RECIPE:
+   - "ingredients": ALWAYS include every specific ingredient needed for the main dish.
+   - "steps": ALWAYS provide AT LEAST 4-6 explicit, detailed, step-by-step cooking instructions with temperatures/times. NEVER output vague summaries like "Cook as desired".
+   - "missingIngredients": List any items from "ingredients" that are NOT in the user's pantry.
 
-STRICT DEDUPLICATION:
-- Return all required ingredients for the requested dish in the "ingredients" array.
-- If ingredients are missing from the user's pantry, include those missing item names in the "missingIngredients" array.`;
+2. PANTRY ALTERNATIVE RECIPE (ALWAYS GENERATE THIS IF MISSING INGREDIENTS > 0):
+   - "pantryAlternative.title": Title of an alternative dish using ONLY on-hand pantry items.
+   - "pantryAlternative.ingredients": ALWAYS list the specific on-hand ingredients used.
+   - "pantryAlternative.steps": ALWAYS provide AT LEAST 4-6 explicit, detailed cooking instructions. NEVER output vague steps or filler text.`;
 
         const contextualizedUserMessage = `[SYSTEM NOTE: Live pantry database supplied]\n${pantryContext}\n\nUser's message: ${message}`;
 
@@ -174,8 +175,6 @@ STRICT DEDUPLICATION:
         const modelsToTry = [
             "gemini-3.5-flash",
             "gemini-3.1-flash-lite",
-            "gemini-2.5-flash",
-            "gemini-flash-latest"
         ];
 
         let response = null;
