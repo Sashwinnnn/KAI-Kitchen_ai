@@ -120,7 +120,7 @@ app.post('/api/pantry/scan', async (req, res) => {
     }
 });
 
-// 💬 POST: Chat with Contextual AI Agent
+// 💬 POST: Chat with Contextual AI Agent (Multi-Tier Fallback Edition)
 app.post('/api/chat', async (req, res) => {
     try {
         const { message, history, pantry } = req.body;
@@ -176,46 +176,75 @@ app.post('/api/chat', async (req, res) => {
         
         contents.push({ role: "user", parts: [{ text: contextualizedUserMessage }] });
 
-        const response = await ai.models.generateContent({
-            model: "gemini-3.5-flash",
-            contents: contents,
-            config: {
-                systemInstruction: systemInstruction, 
-                temperature: 0.2, 
-                responseMimeType: "application/json",
-                responseSchema: {
-                    type: Type.OBJECT,
-                    properties: {
-                        reply: { type: Type.STRING },
-                        isRecipe: { type: Type.BOOLEAN },
-                        recipeTitle: { type: Type.STRING },
-                        ingredients: {
-                            type: Type.ARRAY,
-                            items: { type: Type.STRING }
-                        },
-                        steps: {
-                            type: Type.ARRAY,
-                            items: { type: Type.STRING }
-                        },
-                        missingIngredients: {
-                            type: Type.ARRAY,
-                            items: { type: Type.STRING }
-                        },
-                        pantryAlternative: {
+        // ARRAY OF ACTIVE FALLBACK MODELS
+        const modelsToTry = [
+            "gemini-3.5-flash",
+            "gemini-3.1-flash-lite",
+            "gemini-2.5-flash",
+            "gemini-flash-latest"
+        ];
+
+        let response = null;
+        let lastError = null;
+
+        // MULTI-TIER ATTEMPT LOOP
+        for (const modelName of modelsToTry) {
+            try {
+                console.log(`📡 Attempting API call with model: ${modelName}...`);
+                response = await ai.models.generateContent({
+                    model: modelName,
+                    contents: contents,
+                    config: {
+                        systemInstruction: systemInstruction, 
+                        temperature: 0.2, 
+                        responseMimeType: "application/json",
+                        responseSchema: {
                             type: Type.OBJECT,
                             properties: {
-                                title: { type: Type.STRING },
+                                reply: { type: Type.STRING },
+                                isRecipe: { type: Type.BOOLEAN },
+                                recipeTitle: { type: Type.STRING },
+                                ingredients: {
+                                    type: Type.ARRAY,
+                                    items: { type: Type.STRING }
+                                },
                                 steps: {
                                     type: Type.ARRAY,
                                     items: { type: Type.STRING }
+                                },
+                                missingIngredients: {
+                                    type: Type.ARRAY,
+                                    items: { type: Type.STRING }
+                                },
+                                pantryAlternative: {
+                                    type: Type.OBJECT,
+                                    properties: {
+                                        title: { type: Type.STRING },
+                                        steps: {
+                                            type: Type.ARRAY,
+                                            items: { type: Type.STRING }
+                                        }
+                                    }
                                 }
-                            }
+                            },
+                            required: ["reply", "isRecipe"]
                         }
-                    },
-                    required: ["reply", "isRecipe"]
+                    }
+                });
+
+                if (response && response.text) {
+                    console.log(`✅ Success with model: ${modelName}`);
+                    break;
                 }
+            } catch (err) {
+                console.warn(`⚠️ Model ${modelName} failed or busy. Trying next option... (Error: ${err.message})`);
+                lastError = err;
             }
-        });
+        }
+
+        if (!response || !response.text) {
+            throw lastError || new Error("All Gemini models failed to respond.");
+        }
 
         const parsedResult = JSON.parse(response.text);
         
@@ -223,7 +252,6 @@ app.post('/api/chat', async (req, res) => {
         const uniqueIngredients = Array.from(new Set(
             (parsedResult.ingredients || []).map(i => i.trim().toLowerCase())
         )).map(i => {
-            // Restore original casing by finding first match in parsed ingredients
             const original = (parsedResult.ingredients || []).find(orig => orig.trim().toLowerCase() === i);
             return original ? original.trim() : i;
         });
@@ -255,7 +283,7 @@ app.post('/api/chat', async (req, res) => {
         );
 
         if (isQuotaError) {
-            return res.status(429).json({ error: { message: 'AI quota exceeded. Please try again later or configure a different API key.' } });
+            return res.status(429).json({ error: { message: 'AI quota exceeded across all fallback models. Please try again in a minute.' } });
         }
 
         res.status(503).json({ error: { message: `Service temporarily unavailable. Error: ${error.message}` } });
