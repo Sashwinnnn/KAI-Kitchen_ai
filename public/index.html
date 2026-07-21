@@ -1667,6 +1667,16 @@
             localStorage.setItem('kai-install-dismissed', 'true');
         }
 
+        /* SERVICE WORKER — required for real PWA installability (native browser
+           install prompt + Play Store packaging via PWABuilder/TWA) */
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js').catch((err) => {
+                    console.warn('KAI: service worker registration failed', err);
+                });
+            });
+        }
+
         /* AUTH */
         let authMode = 'login';
         let currentUser = null;
